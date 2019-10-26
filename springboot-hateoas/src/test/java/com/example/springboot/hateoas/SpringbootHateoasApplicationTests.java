@@ -1,6 +1,7 @@
-package com.example.springboot.springboothateoas;
+package com.example.springboot.hateoas;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest

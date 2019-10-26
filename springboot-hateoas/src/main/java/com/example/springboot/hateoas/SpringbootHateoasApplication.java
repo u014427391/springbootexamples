@@ -1,4 +1,4 @@
-package com.example.springboot.springboothateoas;
+package com.example.springboot.hateoas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
