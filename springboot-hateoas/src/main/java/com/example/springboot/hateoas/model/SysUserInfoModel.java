@@ -1,8 +1,9 @@
-package com.example.springboot.hateoas.bean;
+package com.example.springboot.hateoas.model;
 
+import com.example.springboot.hateoas.core.model.AbstractModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.core.Relation;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,7 +21,8 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="sys_user")
-public class SysUserInfo extends ResourceSupport implements Serializable{
+@Relation(value = "sysUser", collectionRelation = "sysUsers")
+public class SysUserInfoModel extends AbstractModel implements Serializable{
 
     @Id
     @GeneratedValue
@@ -32,13 +34,13 @@ public class SysUserInfo extends ResourceSupport implements Serializable{
     @Column(length=10,nullable=true)
     private String password;
 
-    public SysUserInfo(){
+    public SysUserInfoModel(){
 
     }
 
     @JsonCreator
-    public SysUserInfo(@JsonProperty("userId")Long userId,@JsonProperty("username")String username,
-                       @JsonProperty("sex")String sex,@JsonProperty("password")String password){
+    public SysUserInfoModel(@JsonProperty("userId")Long userId, @JsonProperty("username")String username,
+                       @JsonProperty("sex")String sex, @JsonProperty("password")String password){
         this.userId = userId;
         this.username = username;
         this.sex = sex;
@@ -69,12 +71,12 @@ public class SysUserInfo extends ResourceSupport implements Serializable{
         this.password = password;
     }
 
-    public Long getUserId() {
+    /*public Long getUserId() {
 
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
+    }*/
 }

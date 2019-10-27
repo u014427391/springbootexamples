@@ -1,6 +1,6 @@
 package com.example.springboot.hateoas.repository;
 
-import com.example.springboot.hateoas.model.SysUserInfo;
+import com.example.springboot.hateoas.model.SysUserInfoModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Repository;
  * </pre>
  */
 @Repository
-public interface SysUserInfoRepository extends JpaRepository<SysUserInfo,Long>{
+public interface SysUserInfoModelRepository extends JpaRepository<SysUserInfoModel,Long>{
 
-    @Query(value = "select u from SysUserInfo u where u.userId=:userId")
-    SysUserInfo findByUserId(@Param("userId") long userId);
+    @Query(value = "select u from SysUserInfoModel u where u.userId=:userId")
+    SysUserInfoModel findByUserId(@Param("userId") long userId);
 }
