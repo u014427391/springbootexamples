@@ -34,3 +34,5 @@ classes
 *.settings
 .project
 .classpath
+/springboot-properties-config/.mvn/wrapper/MavenWrapperDownloader.java
+/springboot-properties-config/.mvn/wrapper/maven-wrapper.properties
