@@ -1,4 +1,4 @@
-package com.example.springboot.config.bean;
+package com.example.springboot.properties.bean;
 
 /**
  * <pre>
