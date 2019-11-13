@@ -1,5 +1,6 @@
 package com.example.springboot.properties.bean;
 
+import com.example.springboot.properties.core.propertyResouceFactory.YamlPropertyResourceFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ import java.util.Map;
  * </pre>
  */
 @Component
-@PropertySource(value = "classpath:user.properties",encoding = "utf-8")
+@PropertySource(value = "classpath:user.yml",encoding = "utf-8",factory = YamlPropertyResourceFactory.class)
 @ConfigurationProperties(prefix = "user")
 public class User {
 
