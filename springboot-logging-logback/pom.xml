@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example.springboot</groupId>
-	<artifactId>springboot-logger</artifactId>
+	<artifactId>springboot-logging-logback</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot-logger</name>
+	<name>springboot-logging-logback</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
