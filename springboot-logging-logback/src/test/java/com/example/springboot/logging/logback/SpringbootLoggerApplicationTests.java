@@ -1,4 +1,4 @@
-package com.example.springboot.springbootlogger;
+package com.example.springboot.logging.logback;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
