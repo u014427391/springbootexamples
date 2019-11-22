@@ -28,6 +28,7 @@ hs_err_pid*
 *.iml
 target
 classes
+.mvn
 
 # Eclipse
 *.metadata
@@ -36,3 +37,4 @@ classes
 .classpath
 /springboot-properties-config/.mvn/wrapper/MavenWrapperDownloader.java
 /springboot-properties-config/.mvn/wrapper/maven-wrapper.properties
+
