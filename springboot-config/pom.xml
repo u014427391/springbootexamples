@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example.springboot</groupId>
-	<artifactId>springboot-properties-config</artifactId>
+	<artifactId>springboot-config</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot-properties-config</name>
+	<name>springboot-config</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
