@@ -1,17 +1,16 @@
 package com.example.springboot.i18n.config;
 
-import com.example.springboot.i18n.component.MessagesLocalResolver;
+import com.example.springboot.i18n.component.CustomLocalResolver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import java.util.Locale;
 
 /**
  * <pre>
@@ -25,7 +24,11 @@ import java.util.Locale;
  * </pre>
  */
 @Configuration
+@EnableConfigurationProperties({ WebMvcProperties.class})
 public class I18nConfig implements WebMvcConfigurer{
+
+    @Autowired
+    WebMvcProperties webMvcProperties;
 
     /**
      * 定义视图解析器，拦截/请求，都转跳到login页面
@@ -75,8 +78,9 @@ public class I18nConfig implements WebMvcConfigurer{
      */
     @Bean
     public LocaleResolver localeResolver(){
-        MessagesLocalResolver messagesLocalResolver = new MessagesLocalResolver();
-        return messagesLocalResolver;
+        CustomLocalResolver localResolver = new CustomLocalResolver();
+        localResolver.setDefaultLocale(webMvcProperties.getLocale());
+        return localResolver;
     }
 
     /**
