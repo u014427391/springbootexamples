@@ -15,17 +15,17 @@
 	<body class="text-center">
 		<form class="form-signin" action="dashboard.html">
 			<img class="mb-4" th:src="@{asserts/img/bootstrap-solid.svg}" alt="" width="72" height="72">
-			<h1 class="h3 mb-3 font-weight-normal" th:text="#{login.tip}">Please sign in</h1>
-			<label class="sr-only" th:text="#{login.username}">Username</label>
-			<input type="text" class="form-control" th:placeholder="#{login.username}" required="" autofocus="">
-			<label class="sr-only" th:text="#{login.password} ">Password</label>
-			<input type="password" class="form-control" th:placeholder="#{login.password}" required="">
+			<h1 class="h3 mb-3 font-weight-normal" th:text="#{messages.tip}">Please sign in</h1>
+			<label class="sr-only" th:text="#{messages.username}">Username</label>
+			<input type="text" class="form-control" th:placeholder="#{messages.username}" required="" autofocus="">
+			<label class="sr-only" th:text="#{messages.password} ">Password</label>
+			<input type="password" class="form-control" th:placeholder="#{messages.password}" required="">
 			<div class="checkbox mb-3">
 				<label>
-          <input type="checkbox" value="remember-me" > [[#{login.rememberMe}]]
+          <input type="checkbox" value="remember-me" > [[#{messages.rememberMe}]]
         </label>
 			</div>
-			<button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.loginBtnName}">Sign in</button>
+			<button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{messages.loginBtnName}">Sign in</button>
 			<p class="mt-5 mb-3 text-muted">© 2019</p>
 			<a class="btn btn-sm" th:href="@{/login(lang='zh_CN')} ">中文</a>
 			<a class="btn btn-sm" th:href="@{/login(lang='en_US')} ">English</a>
