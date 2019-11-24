@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,8 +27,8 @@
 			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{messages.loginBtnName}">Sign in</button>
 			<p class="mt-5 mb-3 text-muted">© 2019</p>
-			<a class="btn btn-sm" th:href="@{/login(lang='zh_CN')} ">中文</a>
-			<a class="btn btn-sm" th:href="@{/login(lang='en_US')} ">English</a>
+			<a class="btn btn-sm" th:href="@{/login(locale='zh_CN')} ">中文</a>
+			<a class="btn btn-sm" th:href="@{/login(locale='en_US')} ">English</a>
 		</form>
 
 	</body>

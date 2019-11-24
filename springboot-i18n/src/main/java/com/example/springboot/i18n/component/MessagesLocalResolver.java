@@ -1,5 +1,7 @@
 package com.example.springboot.i18n.component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
 
@@ -20,12 +22,15 @@ import java.util.Locale;
  */
 public class MessagesLocalResolver implements LocaleResolver {
 
+    Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
-        String lang = request.getParameter("lang");
+        String localeFlag = request.getParameter("locale");
+        LOG.info("localeFlag:{}",localeFlag);
         Locale locale = Locale.getDefault();
-        if (!StringUtils.isEmpty(lang)) {
-            String[] split = lang.split("_");
+        if (!StringUtils.isEmpty(localeFlag)) {
+            String[] split = localeFlag.split("_");
             locale = new Locale(split[0],split[1]);
         }
         return locale;
