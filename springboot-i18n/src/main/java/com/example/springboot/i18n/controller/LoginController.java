@@ -1,4 +1,4 @@
-package com.example.springboot.web.controller;
+package com.example.springboot.i18n.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

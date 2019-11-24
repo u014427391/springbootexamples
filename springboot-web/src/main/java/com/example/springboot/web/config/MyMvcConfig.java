@@ -1,6 +1,6 @@
 package com.example.springboot.web.config;
 
-import com.example.springboot.web.component.MessageLocalResolver;
+import com.example.springboot.web.component.MessagesLocalResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ public class MyMvcConfig implements WebMvcConfigurer{
 
     @Bean
     public LocaleResolver messageLocalResolver(){
-        MessageLocalResolver messageLocalResolver = new MessageLocalResolver();
+        MessagesLocalResolver messageLocalResolver = new MessagesLocalResolver();
         return messageLocalResolver;
     }
 

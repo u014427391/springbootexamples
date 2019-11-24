@@ -1,5 +1,4 @@
-package com.example.springboot.web.component;
-
+package com.example.springboot.i18n.component;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
@@ -19,7 +18,7 @@ import java.util.Locale;
  *    修改后版本:     修改人：  修改日期: 2019年11月23日  修改内容:
  * </pre>
  */
-public class MessageLocalResolver implements LocaleResolver {
+public class MessagesLocalResolver implements LocaleResolver {
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
