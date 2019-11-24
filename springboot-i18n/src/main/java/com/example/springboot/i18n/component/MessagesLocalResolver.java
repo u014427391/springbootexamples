@@ -27,7 +27,7 @@ public class MessagesLocalResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
         String localeFlag = request.getParameter("locale");
-        LOG.info("localeFlag:{}",localeFlag);
+        //LOG.info("localeFlag:{}",localeFlag);
         Locale locale = Locale.getDefault();
         if (!StringUtils.isEmpty(localeFlag)) {
             String[] split = localeFlag.split("_");
