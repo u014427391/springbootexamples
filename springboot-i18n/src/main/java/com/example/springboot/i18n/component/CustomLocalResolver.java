@@ -12,7 +12,7 @@ import java.util.Locale;
 
 /**
  * <pre>
- *
+ *  自定义LocaleResolver类
  * </pre>
  *
  * @author nicky
