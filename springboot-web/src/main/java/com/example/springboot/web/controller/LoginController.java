@@ -37,9 +37,5 @@ public class LoginController {
         return modelAndView;
     }
 
-    @GetMapping(value = {"/changeI18nLanguage"})
-    public ModelAndView changeI18nLanguage(){
-        return new ModelAndView();
-    }
 
 }
