@@ -22,7 +22,7 @@ import java.util.Optional;
  *    修改后版本:     修改人：  修改日期: 2019/11/25 10:35  修改内容:
  * </pre>
  */
-public class CommPropertyResourceFactory implements PropertySourceFactory {
+public class CommonPropertyResourceFactory implements PropertySourceFactory {
 
     /**
      * Create a {@link PropertySource} that wraps the given resource.
