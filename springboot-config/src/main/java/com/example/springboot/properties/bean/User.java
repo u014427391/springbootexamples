@@ -1,8 +1,10 @@
 package com.example.springboot.properties.bean;
 
+import com.example.springboot.properties.core.propertyResouceFactory.CommPropertyResourceFactory;
 import com.example.springboot.properties.core.propertyResouceFactory.YamlPropertyResourceFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.support.DefaultPropertySourceFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -21,7 +23,7 @@ import java.util.Map;
  * </pre>
  */
 @Component
-@PropertySource(value = "classpath:user.yml",encoding = "utf-8",factory = YamlPropertyResourceFactory.class)
+@PropertySource(value = "classpath:user.yml",encoding = "utf-8",factory = CommPropertyResourceFactory.class)
 @ConfigurationProperties(prefix = "user")
 public class User {
 
