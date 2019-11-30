@@ -21,6 +21,7 @@ public class HelloController {
     @RequestMapping(value = {"/index"})
     public ModelAndView toIndex(){
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("msg","This is <b>great!</b>");
         modelAndView.setViewName("index");
         return modelAndView;
     }
