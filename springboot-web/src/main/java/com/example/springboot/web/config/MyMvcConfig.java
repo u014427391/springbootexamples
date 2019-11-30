@@ -2,9 +2,7 @@ package com.example.springboot.web.config;
 
 import com.example.springboot.web.component.MessagesLocalResolver;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -35,11 +33,16 @@ public class MyMvcConfig implements WebMvcConfigurer{
         //registry.addViewController("/login.html").setViewName("login");
     }
 
-
+    /**
+     * 自定义LocalResolver
+     * @Author nicky.ma
+     * @Date 2019/11/24 13:45
+     * @return org.springframework.web.servlet.LocaleResolver
+     */
     @Bean
-    public LocaleResolver localResolver(){
-        MessagesLocalResolver messageLocalResolver = new MessagesLocalResolver();
-        return messageLocalResolver;
+    public LocaleResolver localeResolver(){
+        MessagesLocalResolver localResolver = new MessagesLocalResolver();
+        return localResolver;
     }
 
     @Bean
