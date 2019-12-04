@@ -1,7 +1,9 @@
 package com.example.springboot.web.controller;
 
+import com.example.springboot.web.exception.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -19,9 +21,20 @@ import org.springframework.web.servlet.ModelAndView;
 public class HelloController {
 
     @RequestMapping(value = {"/index"})
-    public ModelAndView toIndex(){
+    public ModelAndView toIndex() {
+
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("msg","This is <b>great!</b>");
         modelAndView.setViewName("index");
         return modelAndView;
+    }
+
+    @RequestMapping(value = {"/testException"})
+    @ResponseBody
+    public String testException(String tFlag){
+        if("1".equals(tFlag)) {
+            throw new NotFoundException("404异常",404);
+        }
+        return "hello!";
     }
 }
