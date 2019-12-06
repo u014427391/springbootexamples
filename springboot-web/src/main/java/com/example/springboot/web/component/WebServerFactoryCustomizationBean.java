@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * </pre>
  */
 //@Component
-public class TomcatCustomizationBean implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
+public class WebServerFactoryCustomizationBean implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
 
     @Override
     public void customize(ConfigurableServletWebServerFactory server) {
