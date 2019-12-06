@@ -36,10 +36,10 @@ public class MyServerConfig {
      * @return
      */
     @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(){
-        return new WebServerFactoryCustomizer<TomcatServletWebServerFactory>() {
+    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer(){
+        return new WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>() {
             @Override
-            public void customize(TomcatServletWebServerFactory factory) {
+            public void customize(ConfigurableServletWebServerFactory factory) {
                 factory.setPort(8082);
             }
         };

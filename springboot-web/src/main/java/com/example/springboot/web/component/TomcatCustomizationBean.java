@@ -2,6 +2,7 @@ package com.example.springboot.web.component;
 
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,10 +16,10 @@ import org.springframework.stereotype.Component;
  * </pre>
  */
 //@Component
-public class TomcatCustomizationBean implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
+public class TomcatCustomizationBean implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
 
     @Override
-    public void customize(TomcatServletWebServerFactory server) {
+    public void customize(ConfigurableServletWebServerFactory server) {
         server.setPort(8081);
     }
 
