@@ -6,7 +6,6 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     initialization-mode: always
     type: com.alibaba.druid.pool.DruidDataSource
-
     # 连接池设置
     initial-size: 5
     min-idle: 5
@@ -31,21 +30,10 @@ spring:
     connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     # 合并多个DruidDataSource的监控数据
     use-global-data-source-stat: true
-## hikari datasource config
-#    type: com.zaxxer.hikari.HikariDataSource
-#    hikari:
-#      jdbc-url: jdbc:mysql://127.0.0.1:3306/springboot?characterEncoding=utf8&useSSL=true
-#      minimum-idle: 5
-#      maximum-pool-size: 15
-#      auto-commit: true
-#      idle-timeout: 30000
-#      pool-name: DatebookHikariCP
-#      max-lifetime: 1800000
-#      connection-timeout: 30000
-#      connection-test-query: select 1
-#    schema:
-#      - classpath:schema.sql
-
-
+mybatis:
+    # 指定全局配置文件位置
+    config-location: classpath:mybatis/mybatis-config.xml
+    # 指定sql映射文件位置
+    mapper-locations: classpath:mybatis/mapper/*.xml
 
 

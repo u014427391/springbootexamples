@@ -1,5 +1,8 @@
 package com.example.springboot.mybatis.mapper;
 
+import com.example.springboot.mybatis.bean.User;
+import org.apache.ibatis.annotations.*;
+
 /**
  * <pre>
  *
@@ -12,4 +15,16 @@ package com.example.springboot.mybatis.mapper;
  * </pre>
  */
 public interface UserMapper {
+    @Select("select * from sys_user where userId=#{userId}")
+    public User getUserById(Integer userId);
+
+    @Delete("delete from sys_user where userId=#{userId}")
+    public int deleteUserById(Integer userId);
+
+    @Options(useGeneratedKeys = true,keyProperty = "userId")
+    @Insert("insert into sys_user(username,sex,password) values(#{username},#{sex},#{password})")
+    public int insertUser(User user);
+
+    @Update("update sys_user set username=#{username} where userId=#{userId}")
+    public int updateUser(User user);
 }
