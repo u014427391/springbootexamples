@@ -1,7 +1,10 @@
 package com.example.springboot.web.controller;
 
+import com.example.springboot.starter.service.HelloService;
 import com.example.springboot.web.exception.NotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,4 +40,11 @@ public class HelloController {
         }
         return "hello!";
     }
+
+    @GetMapping(value = {"/sayHello/{name}"})
+    @ResponseBody
+    public String sayHello(@PathVariable("name")String name){
+        return new HelloService().sayHello(name);
+    }
+
 }
