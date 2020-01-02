@@ -2,6 +2,7 @@ package com.example.springboot.web.controller;
 
 import com.example.springboot.starter.service.HelloService;
 import com.example.springboot.web.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class HelloController {
+
+    @Autowired
+    HelloService helloService;
 
     @RequestMapping(value = {"/index"})
     public ModelAndView toIndex() {
@@ -44,7 +48,7 @@ public class HelloController {
     @GetMapping(value = {"/sayHello/{name}"})
     @ResponseBody
     public String sayHello(@PathVariable("name")String name){
-        return new HelloService().sayHello(name);
+        return helloService.sayHello(name);
     }
 
 }
