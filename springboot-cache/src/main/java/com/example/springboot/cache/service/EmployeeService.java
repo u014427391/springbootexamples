@@ -52,7 +52,7 @@ public class EmployeeService {
      *              unless = "#a0==2":如果第一个参数的值是2，结果不缓存；
      *      sync：是否使用异步模式
      */
-    @Cacheable(/*value = {"emp"}, */keyGenerator = "myKeyGenerator",condition = "#a0>=1",unless = "#a0==2")
+    @Cacheable(value = {"emp"}, /*keyGenerator = "myKeyGenerator",*/key = "#id",condition = "#a0>=1",unless = "#a0==2")
     public Employee getEmp(Integer id) {
         Employee employee = this.employeeMapper.getEmpById(id);
         LOG.info("查询{}号员工数据",id);
@@ -61,11 +61,12 @@ public class EmployeeService {
 
     /**
      *  @CachePut：既调用方法，又更新缓存数据；同步更新缓存
+     *  修改了数据，同时更新缓存
      */
-    @CachePut(/*value = {"emp"}, */key = "#result.id",keyGenerator = "myKeyGenerator",condition = "#a0>=1",unless = "#a0==2")
+    @CachePut(value = {"emp"}, key = "#result.id")
     public Employee updateEmp(Employee employee){
         employeeMapper.updateEmp(employee);
-        LOG.info("更新{}号员工数据",employee.getdId());
+        LOG.info("更新{}号员工数据",employee.getId());
         return employee;
     }
 
