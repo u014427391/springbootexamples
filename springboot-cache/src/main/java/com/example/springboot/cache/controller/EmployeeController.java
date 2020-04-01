@@ -1,4 +1,4 @@
-package com.example.springboot.cache;
+package com.example.springboot.cache.controller;
 
 import com.example.springboot.cache.bean.Employee;
 import com.example.springboot.cache.service.EmployeeService;
@@ -28,6 +28,24 @@ public class EmployeeController {
     public Employee getEmp(@PathVariable("id")Integer id){
         Employee employee = this.employeeService.getEmp(id);
         return employee;
+    }
+
+    @GetMapping("/emp")
+    public Employee update(Employee employee){
+        Employee emp = employeeService.updateEmp(employee);
+
+        return emp;
+    }
+
+    @GetMapping("/delemp")
+    public String deleteEmp(Integer id){
+        employeeService.deleteEmp(id);
+        return "success";
+    }
+
+    @GetMapping("/emp/lastname/{lastName}")
+    public Employee getEmpByLastName(@PathVariable("lastName") String lastName){
+        return employeeService.getEmpByLastName(lastName);
     }
 
 }
