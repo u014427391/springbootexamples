@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
+import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Service;
 
@@ -43,11 +44,17 @@ public class DeptService {
     // 使用缓存管理器得到缓存，进行api调用
     public Department getDeptById(Integer id){
         LOG.info("查询id为{}的员工信息",id);
-        Department department = departmentMapper.getDeptById(id);
 
         //获取某个缓存
-        Cache dept = redisCacheManager.getCache("dept");
-        dept.put("dept:1",department);
+        Cache deptCache = redisCacheManager.getCache("dept");
+        Department department = null;
+        if(deptCache.get(id)==null){
+            department = departmentMapper.getDeptById(id);
+            deptCache.put(id,department);
+        } else {
+            SimpleValueWrapper valueWrapper = (SimpleValueWrapper) deptCache.get(id);
+            department = (Department)valueWrapper.get();
+        }
 
         return department;
     }
