@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * </pre>
  */
 @Component
-@RabbitListener(queues = {"simpleQueue"})
+@RabbitListener(queues = {"directQueue"})
 public class HelloReceiver {
     Logger LOG = LoggerFactory.getLogger(HelloReceiver.class);
 
