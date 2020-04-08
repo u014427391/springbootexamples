@@ -61,7 +61,7 @@ public class RabbitMQConfig {
      */
     @Bean("directExchange")
     public Exchange directExchange() {
-        return ExchangeBuilder.directExchange("exchanges.direct").durable(true).build();
+        return ExchangeBuilder.directExchange("amq.direct").durable(true).build();
     }
 
     @Bean("directQueue")
