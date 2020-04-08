@@ -4,6 +4,7 @@ import com.example.springboot.rabbitmq.component.direct.DirectReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
  * </pre>
  */
 @Component
+@RabbitListener(queues = {"topicQueueA"})
 public class TopicReceiverB {
     Logger LOG = LoggerFactory.getLogger(DirectReceiver.class);
 
