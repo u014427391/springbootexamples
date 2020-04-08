@@ -4,6 +4,7 @@ import com.example.springboot.rabbitmq.component.direct.DirectReceiver;
 import com.example.springboot.rabbitmq.component.direct.DirectSender;
 import com.example.springboot.rabbitmq.component.fanout.FanoutSender;
 import com.example.springboot.rabbitmq.component.topic.TopicSender;
+import com.example.springboot.rabbitmq.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,9 @@ class SpringbootRabbitmqApplicationTests {
 
     @Test
     void directSend(){
-        directSender.send(1);
+        //directSender.send(1);
+        User user = new User("nicky","123456");
+        directSender.send(user);
     }
 
     @Test

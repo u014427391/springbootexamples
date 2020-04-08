@@ -33,7 +33,7 @@ public class RabbitMQConfig {
     //@Primary
     public AmqpTemplate amqpTemplate(){
         Logger LOG = LoggerFactory.getLogger(AmqpTemplate.class);
-        //使用jackson 消息转换器
+        //使用jackson 消息转换器(发送对象时候才开启)
         //rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         rabbitTemplate.setEncoding("UTF-8");
         rabbitTemplate.setMandatory(true);

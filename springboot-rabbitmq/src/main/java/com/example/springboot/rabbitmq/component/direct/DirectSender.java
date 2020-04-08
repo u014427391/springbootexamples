@@ -1,5 +1,6 @@
 package com.example.springboot.rabbitmq.component.direct;
 
+import com.example.springboot.rabbitmq.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -36,6 +37,13 @@ public class DirectSender {
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
         LOG.info("class:{},message:{}","DirectSender",content);
         this.rabbitTemplate.convertAndSend("amq.direct","direct_routingKey",content,correlationData);
+    }
+
+    //发送者
+    public void send(User user) {
+        LOG.info("Sender object: " + user.toString());
+        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+        this.rabbitTemplate.convertAndSend("amq.direct","direct_routingKey",user,correlationData);
     }
 
 }

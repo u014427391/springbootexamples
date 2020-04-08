@@ -1,5 +1,6 @@
 package com.example.springboot.rabbitmq.component.direct;
 
+import com.example.springboot.rabbitmq.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -25,5 +26,11 @@ public class DirectReceiver {
     @RabbitHandler
     public void receiverMsg(String msg){
         LOG.info("class:{},message:{}","DirectReceiver",msg);
+    }
+
+    //接收者
+    @RabbitHandler
+    public void process(User user) {
+        LOG.info("Receiver object : " + user);
     }
 }
