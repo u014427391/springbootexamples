@@ -4,7 +4,7 @@ spring:
     port: 5672
     username: guest
     password: guest
-    virtual-host: /vhost
+    virtual-host: /
     #  支持发布确认
     publisher-confirms: true
     #  支持发布返回

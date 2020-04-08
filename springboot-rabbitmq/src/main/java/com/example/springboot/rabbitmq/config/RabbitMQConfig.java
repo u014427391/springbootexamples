@@ -34,7 +34,7 @@ public class RabbitMQConfig {
     public AmqpTemplate amqpTemplate(){
         Logger LOG = LoggerFactory.getLogger(AmqpTemplate.class);
         //使用jackson 消息转换器
-        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
+        //rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         rabbitTemplate.setEncoding("UTF-8");
         rabbitTemplate.setMandatory(true);
         // 开启returncallback    yml 需要配置publisher-returns: true
@@ -52,6 +52,8 @@ public class RabbitMQConfig {
         } ));
         return rabbitTemplate;
     }
+
+    /*  ****************************************** direct exchange ********************************************** */
 
     /**
      * 声明直连交换机 支持持久化.
@@ -72,6 +74,78 @@ public class RabbitMQConfig {
     public Binding directBinding(@Qualifier("directQueue")Queue queue,@Qualifier("directExchange")Exchange directExchange){
         return BindingBuilder.bind(queue).to(directExchange).with("direct_routingKey").noargs();
     }
+
+    /*  ****************************************** fanout exchange ********************************************** */
+
+    @Bean("fanoutQueueA")
+    public Queue fanoutQueueA(){
+        return new Queue("fanoutQueueA", true, true, true);
+    }
+
+    @Bean("fanoutQueueB")
+    public Queue fanoutQueueB(){
+        return new Queue("fanoutQueueB", true, true, true);
+    }
+
+    @Bean("fanoutQueueC")
+    public Queue fanoutQueueC(){
+        return new Queue("fanoutQueueC", true, true, true);
+    }
+
+    /**
+     * 声明一个Fanout类型的交换器
+     * @Author mazq
+     * @Date 2020/04/08 11:25
+     * @Param []
+     * @return org.springframework.amqp.core.FanoutExchange
+     */
+    @Bean("fanoutExchange")
+    public FanoutExchange fanoutExchange(){
+        return new FanoutExchange("fanoutExchange");
+    }
+
+    @Bean
+    public Binding fanoutABinding(@Qualifier("fanoutQueueA")Queue queue,FanoutExchange fanoutExchange){
+        return BindingBuilder.bind(queue).to(fanoutExchange);
+    }
+
+    @Bean
+    public Binding fanoutBBinding(@Qualifier("fanoutQueueB")Queue queue,FanoutExchange fanoutExchange){
+        return BindingBuilder.bind(queue).to(fanoutExchange);
+    }
+
+    @Bean
+    public Binding fanoutCBinding(@Qualifier("fanoutQueueC")Queue queue,FanoutExchange fanoutExchange){
+        return BindingBuilder.bind(queue).to(fanoutExchange);
+    }
+
+    /*  ****************************************** topic exchange ********************************************** */
+
+    @Bean("topicQueueA")
+    public Queue topicQueueA(){
+        return new Queue("topicQueueA",true, true, true);
+    }
+
+    @Bean("topicQueueB")
+    public Queue topicQueueB(){
+        return new Queue("topicQueueB",true, true, true);
+    }
+
+    @Bean("topicExchange")
+    public TopicExchange topicExchange(){
+        return new TopicExchange("topicExchange");
+    }
+
+    @Bean
+    public Binding topicABinding(@Qualifier("topicQueueA")Queue queue,TopicExchange topicExchange){
+        return BindingBuilder.bind(queue).to(topicExchange).with("topic.msg");
+    }
+
+    @Bean
+    public Binding topicBBinding(@Qualifier("topicQueueB")Queue queue,TopicExchange topicExchange){
+        return BindingBuilder.bind(queue).to(topicExchange).with("topic.#");
+    }
+
 
 
 }

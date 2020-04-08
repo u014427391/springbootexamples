@@ -1,8 +1,7 @@
-package com.example.springboot.rabbitmq.component;
+package com.example.springboot.rabbitmq.component.direct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,9 @@ import java.util.UUID;
  * </pre>
  */
 @Component
-public class HelloSender {
+public class DirectSender {
 
-    Logger LOG = LoggerFactory.getLogger(HelloSender.class);
+    Logger LOG = LoggerFactory.getLogger(DirectSender.class);
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -35,8 +34,8 @@ public class HelloSender {
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         String content = i+":hello!"+date;
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
-        LOG.info("class:{},message:{}","HelloSender",content);
-        this.rabbitTemplate.convertAndSend("exchanges.direct","direct_routingKey",content,correlationData);
+        LOG.info("class:{},message:{}","DirectSender",content);
+        this.rabbitTemplate.convertAndSend("amq.direct","direct_routingKey",content,correlationData);
     }
 
 }

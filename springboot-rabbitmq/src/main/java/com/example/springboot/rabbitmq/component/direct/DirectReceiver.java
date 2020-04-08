@@ -1,4 +1,4 @@
-package com.example.springboot.rabbitmq.component;
+package com.example.springboot.rabbitmq.component.direct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +19,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RabbitListener(queues = {"directQueue"})
-public class HelloReceiver {
-    Logger LOG = LoggerFactory.getLogger(HelloReceiver.class);
+public class DirectReceiver {
+    Logger LOG = LoggerFactory.getLogger(DirectReceiver.class);
 
     @RabbitHandler
     public void receiverMsg(String msg){
-        LOG.info("class:{},message:{}","HelloReceiver",msg);
+        LOG.info("class:{},message:{}","DirectReceiver",msg);
     }
 }

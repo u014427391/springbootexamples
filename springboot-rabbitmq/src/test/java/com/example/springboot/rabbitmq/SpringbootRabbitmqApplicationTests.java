@@ -1,20 +1,27 @@
 package com.example.springboot.rabbitmq;
 
-import com.example.springboot.rabbitmq.component.HelloReceiver;
-import com.example.springboot.rabbitmq.component.HelloSender;
+import com.example.springboot.rabbitmq.component.direct.DirectReceiver;
+import com.example.springboot.rabbitmq.component.direct.DirectSender;
+import com.example.springboot.rabbitmq.component.fanout.FanoutSender;
+import com.example.springboot.rabbitmq.component.topic.TopicSender;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 class SpringbootRabbitmqApplicationTests {
 
     @Autowired
-    private HelloSender helloSender;
+    private DirectSender directSender;
     @Autowired
-    private HelloReceiver helloReceiver;
+    private DirectReceiver directReceiver;
+
+    @Autowired
+    private FanoutSender fanoutSender;
+
+    @Autowired
+    private TopicSender topicSender;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -25,13 +32,24 @@ class SpringbootRabbitmqApplicationTests {
     }
 
     @Test
-    void helloSend(){
-        helloSender.send(1);
+    void directSend(){
+        directSender.send(1);
+    }
+
+    @Test
+    void fanoutSend(){
+        fanoutSender.send();
+    }
+
+    @Test
+    void topicSend(){
+        //topicSender.send1();
+        topicSender.send2();
     }
 
     @Test
     void helloReceive(){
-        Object o = rabbitTemplate.receiveAndConvert("hello");
+        Object o = rabbitTemplate.receiveAndConvert("fanoutQueueA");
         System.out.println(o.getClass());
         System.out.println(o);
     }
@@ -39,7 +57,7 @@ class SpringbootRabbitmqApplicationTests {
     @Test
     public void oneToMany() throws Exception {
         for (int i=0;i<100;i++){
-            helloSender.send(i);
+            directSender.send(i);
             Thread.sleep(300);
         }
     }
