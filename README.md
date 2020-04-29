@@ -45,8 +45,15 @@ TODO：文档整理ing....
 ## 七、分布式篇
 * [SpringBoot系列之集成Dubbo实现微服务教程](https://blog.csdn.net/u014427391/article/details/103848114)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-dubbo)
 * [SpringBoot系列之集成Dubbo的方式](https://blog.csdn.net/u014427391/article/details/103945442)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-dubbo)
+## 八、单点登录篇
+* [ 单点登录集群安装教程](http://blog.csdn.net/u014427391/article/details/78653482)
+* [CAS单点登录系列之原理简单介绍](https://blog.csdn.net/u014427391/article/details/82083995)
+* [CAS系列之使用cas overlay搭建服务端（一）](https://blog.csdn.net/u014427391/article/details/105818468)
+* [CAS 5.3.1系列之支持JDBC认证登录（二）](https://blog.csdn.net/u014427391/article/details/105603895)
+* [CAS 5.3.1系列之自定义JDBC认证策略（三）](https://blog.csdn.net/u014427391/article/details/105820486)
+* [CAS 5.3.1系列之自定义Shiro认证策略（四）](https://blog.csdn.net/u014427391/article/details/105820586)
 
-## 八、源码篇
+## 九、SpringBoot源码篇
 * [SpringBoot源码学习系列之异常处理自动配置](https://blog.csdn.net/u014427391/article/details/103334278)
 * [SpringBoot源码学习系列之嵌入式Servlet容器](https://blog.csdn.net/u014427391/article/details/103425427)
 * [SpringBoot源码学习系列之Locale自动配置](https://blog.csdn.net/u014427391/article/details/103258401)
