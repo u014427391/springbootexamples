@@ -52,6 +52,7 @@ TODO：文档整理ing....
 * [CAS 5.3.1系列之支持JDBC认证登录（二）](https://blog.csdn.net/u014427391/article/details/105603895)
 * [CAS 5.3.1系列之自定义JDBC认证策略（三）](https://blog.csdn.net/u014427391/article/details/105820486)
 * [CAS 5.3.1系列之自定义Shiro认证策略（四）](https://blog.csdn.net/u014427391/article/details/105820586)
+* [OAuth2.0系列之集成JWT实现单点登录SSO](https://smilenicky.blog.csdn.net/article/details/106017401)
 
 ## 九、SpringBoot源码篇
 * [SpringBoot源码学习系列之异常处理自动配置](https://blog.csdn.net/u014427391/article/details/103334278)
