@@ -1,9 +1,10 @@
-package com.example.springboot.authorizationcode.config;
+package com.example.oauth2.implicit.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
@@ -70,7 +71,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
                 //刷新token 时间 秒
                 .refreshTokenValiditySeconds(FREFRESH_TOKEN_VALIDITY_SECONDS)
                 //允许授权类型
-                .authorizedGrantTypes(AUTHORIZATION_CODE );
+                .authorizedGrantTypes(IMPLICIT );
     }
 
     @Override
