@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
  *    修改后版本:     修改人：  修改日期: 2020/06/15 14:48  修改内容:
  * </pre>
  */
-@Component
+//@Component
 public class JdbcTokenStoreUserApprovalHandler extends TokenStoreUserApprovalHandler {
 
     Logger LOG = LoggerFactory.getLogger(JdbcTokenStoreUserApprovalHandler.class);

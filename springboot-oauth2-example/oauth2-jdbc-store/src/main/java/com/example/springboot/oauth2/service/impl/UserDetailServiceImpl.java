@@ -26,7 +26,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
         if(user == null){
-            LOG.info("登录用户[{}]没注册!",username);
+            //LOG.info("登录用户[{}]没注册!",username);
             throw new UsernameNotFoundException("登录用户["+username + "]没注册!");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority());

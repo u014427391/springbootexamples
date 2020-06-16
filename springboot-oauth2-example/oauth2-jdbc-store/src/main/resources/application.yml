@@ -6,3 +6,5 @@ spring:
     username: root
     password: minstone
     driver-class-name: com.mysql.jdbc.Driver
+  main:
+    allow-bean-definition-overriding: true

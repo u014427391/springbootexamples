@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeSe
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -56,23 +57,21 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-    @Qualifier("jdbcTokenStore")
-    private TokenStore tokenStore;
+    private TokenStore jdbcTokenStore;
 
     @Autowired
     @Qualifier("jdbcAccessTokenConverter")
     private JdbcAccessTokenConverter accessTokenConverter;
 
     @Autowired
-    private ClientDetailsService clientDetailsService;
-
-    @Autowired
     private AuthorizationCodeServices authorizationCodeServices;
+
+    @Autowired(required = false)
+    private ClientDetailsService clientDetailsService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         // 配置数据从oauth_client_details表读取
-        //clients.jdbc(dataSource);
         clients.withClientDetails(clientDetailsService);
     }
 
@@ -109,12 +108,13 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public AuthorizationCodeServices authorizationCodeServices() {
+        Assert.state(dataSource != null, "DataSource must be provided");
         return new JdbcAuthorizationCodeServices(dataSource);
     }
 
-    @Bean("jdbcTokenStore")
-    @Primary
+    @Bean
     public TokenStore jdbcTokenStore() {
+        Assert.state(dataSource != null, "DataSource must be provided");
         return new JdbcTokenStore(dataSource);
     }
 
@@ -131,7 +131,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Bean
     public UserApprovalHandler userApprovalHandler() {
         JdbcTokenStoreUserApprovalHandler approvalHandler = new JdbcTokenStoreUserApprovalHandler();
-        approvalHandler.setTokenStore(tokenStore);
+            approvalHandler.setTokenStore(jdbcTokenStore);
         approvalHandler.setClientDetailsService(clientDetailsService);
         approvalHandler.setRequestFactory(oAuth2RequestFactory());
         return approvalHandler;
