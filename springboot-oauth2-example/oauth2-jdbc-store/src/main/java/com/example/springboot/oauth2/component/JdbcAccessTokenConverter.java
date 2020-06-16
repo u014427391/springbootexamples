@@ -1,5 +1,7 @@
 package com.example.springboot.oauth2.component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.common.*;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -12,6 +14,7 @@ import java.util.*;
 /**
  * <pre>
  *  自定义AccessTokenConverter
+ *  TODO
  * </pre>
  *
  * <pre>
@@ -22,6 +25,8 @@ import java.util.*;
  */
 @Component("jdbcAccessTokenConverter")
 public class JdbcAccessTokenConverter implements AccessTokenConverter {
+
+    Logger LOG = LoggerFactory.getLogger(JdbcAccessTokenConverter.class);
 
     private AccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
 
@@ -41,6 +46,8 @@ public class JdbcAccessTokenConverter implements AccessTokenConverter {
 
     @Override
     public Map<String, ?> convertAccessToken(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
+        oAuth2AccessToken = this.enhance(oAuth2AccessToken,oAuth2Authentication);
+        LOG.info(oAuth2AccessToken.getValue());
         return tokenConverter.convertAccessToken(oAuth2AccessToken, oAuth2Authentication);
     }
 

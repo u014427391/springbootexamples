@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Oauth2JdbcStoreApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Oauth2JdbcStoreApplication.class, args);
+        SpringApplication.run(Oauth2JdbcStoreApplication    .class, args);
     }
 
 }

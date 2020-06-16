@@ -1,12 +1,10 @@
 package com.example.springboot.oauth2.config;
 
-import com.example.springboot.oauth2.component.JdbcAccessTokenConverter;
 import com.example.springboot.oauth2.component.JdbcTokenStoreUserApprovalHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +20,8 @@ import org.springframework.security.oauth2.provider.client.JdbcClientDetailsServ
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.util.Assert;
@@ -56,34 +56,25 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Qualifier("dataSource")
     private DataSource dataSource;
 
-    @Autowired
-    private TokenStore jdbcTokenStore;
-
-    @Autowired
-    @Qualifier("jdbcAccessTokenConverter")
-    private JdbcAccessTokenConverter accessTokenConverter;
-
-    @Autowired
-    private AuthorizationCodeServices authorizationCodeServices;
-
-    @Autowired(required = false)
-    private ClientDetailsService clientDetailsService;
-
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        // 配置数据从oauth_client_details表读取
-        clients.withClientDetails(clientDetailsService);
+        // 配置数据从oauth_client_details表读取来存储
+        clients.withClientDetails(clientDetailsService());
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(jdbcTokenStore()).authenticationManager(authenticationManager)
                 //自定义AccessToken
-                .accessTokenConverter(accessTokenConverter)
+                //.accessTokenConverter(accessTokenConverter)
                 //设置userDetailsService
                 .userDetailsService(userDetailsService)
+                //授权码储存
+                .authorizationCodeServices(authorizationCodeServices())
                 //设置userApprovalHandler
                 .userApprovalHandler(userApprovalHandler())
+                //设置tokenServices
+                //.tokenServices(tokenServices())
                 //支持获取token方式
                 .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST,HttpMethod.PUT,HttpMethod.DELETE,HttpMethod.OPTIONS)
                 //刷新token
@@ -120,21 +111,31 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public ClientDetailsService clientDetailsService() {
+        Assert.state(dataSource != null, "DataSource must be provided");
         return new JdbcClientDetailsService(dataSource);
     }
 
     @Bean
     public OAuth2RequestFactory oAuth2RequestFactory() {
-        return new DefaultOAuth2RequestFactory(clientDetailsService);
+        return new DefaultOAuth2RequestFactory(clientDetailsService());
     }
 
     @Bean
     public UserApprovalHandler userApprovalHandler() {
         JdbcTokenStoreUserApprovalHandler approvalHandler = new JdbcTokenStoreUserApprovalHandler();
-            approvalHandler.setTokenStore(jdbcTokenStore);
-        approvalHandler.setClientDetailsService(clientDetailsService);
+            approvalHandler.setTokenStore(jdbcTokenStore());
+        approvalHandler.setClientDetailsService(clientDetailsService());
         approvalHandler.setRequestFactory(oAuth2RequestFactory());
         return approvalHandler;
+    }
+
+    @Bean
+    AuthorizationServerTokenServices tokenServices() {
+        DefaultTokenServices services = new DefaultTokenServices();
+        services.setClientDetailsService(clientDetailsService());
+        services.setSupportRefreshToken(true);
+        services.setTokenStore(jdbcTokenStore());
+        return services;
     }
 
 }
