@@ -52,9 +52,19 @@ TODO：文档整理ing....
 * [CAS 5.3.1系列之支持JDBC认证登录（二）](https://blog.csdn.net/u014427391/article/details/105603895)
 * [CAS 5.3.1系列之自定义JDBC认证策略（三）](https://blog.csdn.net/u014427391/article/details/105820486)
 * [CAS 5.3.1系列之自定义Shiro认证策略（四）](https://blog.csdn.net/u014427391/article/details/105820586)
-* [OAuth2.0系列之集成JWT实现单点登录SSO](https://smilenicky.blog.csdn.net/article/details/106017401)
+* [OAuth2.0系列之集成JWT实现单点登录](https://smilenicky.blog.csdn.net/article/details/106017401)
 
-## 九、SpringBoot源码篇
+## 九、OAuth2.0篇
+* [OAuth2.0系列之基本概念和运作流程（一）](https://smilenicky.blog.csdn.net/article/details/106543396)
+* [OAuth2.0系列之授权码模式实践教程（二）](https://smilenicky.blog.csdn.net/article/details/106551368)
+* [OAuth2.0系列之简化模式实践教程（三）](https://smilenicky.blog.csdn.net/article/details/106686607)
+* [OAuth2.0系列之密码模式实践教程（四）](https://smilenicky.blog.csdn.net/article/details/106687880)
+* [OAuth2.0系列之客户端模式实践教程（五）](https://smilenicky.blog.csdn.net/article/details/106689987)
+* [OAuth2.0系列之信息数据库存储教程（六）](https://smilenicky.blog.csdn.net/article/details/106757121)
+* [OAuth2.0系列之信息Redis存储教程（七）](https://smilenicky.blog.csdn.net/article/details/106790398)
+* [OAuth2.0系列之JWT令牌实践教程（八）](https://smilenicky.blog.csdn.net/article/details/106805642)
+
+## 十、SpringBoot源码篇
 * [SpringBoot源码学习系列之异常处理自动配置](https://blog.csdn.net/u014427391/article/details/103334278)
 * [SpringBoot源码学习系列之嵌入式Servlet容器](https://blog.csdn.net/u014427391/article/details/103425427)
 * [SpringBoot源码学习系列之Locale自动配置](https://blog.csdn.net/u014427391/article/details/103258401)
