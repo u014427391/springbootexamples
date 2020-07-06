@@ -2,6 +2,7 @@ package com.example.springboot.jwt.core.userdetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,6 +22,7 @@ import java.util.Collection;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class JWTUserDetails implements UserDetails {
     /**
      * 用户ID
@@ -41,15 +43,15 @@ public class JWTUserDetails implements UserDetails {
     /**
      * 账号是否过期
      */
-    private final Boolean isAccountNonExpired;
+    private  Boolean isAccountNonExpired;
     /**
      * 账户是否锁定
      */
-    private final Boolean isAccountNonLocked;
+    private  Boolean isAccountNonLocked;
     /**
      * 密码是否过期
      */
-    private final Boolean isCredentialsNonExpired;
+    private  Boolean isCredentialsNonExpired;
     /**
      * 账号是否激活
      */
@@ -57,7 +59,7 @@ public class JWTUserDetails implements UserDetails {
     /**
      * 上次密码重置时间
      */
-    private final Instant lastPasswordResetDate;
+    private  Instant lastPasswordResetDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

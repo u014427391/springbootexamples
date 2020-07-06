@@ -12,8 +12,9 @@ jwt:
   access-token: 3600
   # 刷新token时间 单位秒
   refresh-token: 3600
-  route:
-    authentication:
-      path: login
-      refresh: oauth/refresh
-      register: login/account
+  # 允许访问的uri
+  permit-all: /oauth/**, /login/** , /logout/**
+  # 需要校验的uri
+  authenticate-uri: /**
+
+

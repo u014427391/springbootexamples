@@ -57,5 +57,13 @@ public class JWTProperties {
      */
     private Duration refreshToken =Duration.ofMinutes(3600);
 
+    /*
+     * 允许访问的uri
+     */
+    private String permitAll;
 
+    /*
+     * 需要校验的uri
+     */
+    private String authenticateUri;
 }
