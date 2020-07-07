@@ -62,7 +62,7 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
             final String token = _authHeader.substring(7);
             log.info("acceptToken:[{}]",token);
             if (!jwtTokenUtil.validateToken(token)) {
-                //return;
+                return;
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);

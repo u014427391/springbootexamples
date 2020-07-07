@@ -4,3 +4,14 @@ spring:
     username: root
     password: minstone
     driver-class-name: com.mysql.jdbc.Driver
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    com:
+      example:
+        springboot:
+          jwt:
+            mapper: DEBUG

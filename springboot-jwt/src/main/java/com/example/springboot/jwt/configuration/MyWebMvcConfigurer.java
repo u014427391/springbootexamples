@@ -30,7 +30,8 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SecurityHandlerInterceptor());
+        registry.addInterceptor(new SecurityHandlerInterceptor())
+                .addPathPatterns("/**");
     }
 
     @Bean
@@ -42,7 +43,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
     public FilterRegistrationBean jwtFilter() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(jwtAuthenticationTokenFilter());
-        registrationBean.setUrlPatterns(Arrays.asList("/**"));
+        //registrationBean.setUrlPatterns(Arrays.asList("/**"));
         return registrationBean;
     }
 
