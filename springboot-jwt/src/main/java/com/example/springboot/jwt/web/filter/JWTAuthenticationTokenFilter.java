@@ -33,7 +33,6 @@ import java.util.concurrent.ConcurrentMap;
  * </pre>
  */
 @Slf4j
-@EnableConfigurationProperties(JWTProperties.class)
 public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
 
     private static final ConcurrentMap<String,Boolean> URI_CACHE_MAP = new ConcurrentHashMap<String,Boolean>();
@@ -41,7 +40,7 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
     private final List<String> authenticateUris;
 
     @Autowired
-    private JWTProperties jwtProperties;
+    JWTProperties jwtProperties;
 
     @Autowired
     JWTTokenUtil jwtTokenUtil;

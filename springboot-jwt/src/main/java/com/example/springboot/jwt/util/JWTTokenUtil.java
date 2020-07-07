@@ -8,10 +8,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -28,7 +30,6 @@ import java.util.*;
  * </pre>
  */
 @Component
-@EnableConfigurationProperties(JWTProperties.class)
 @Slf4j
 public class JWTTokenUtil {
 
@@ -41,7 +42,8 @@ public class JWTTokenUtil {
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
 
 
-    private static JWTProperties jwtProperties;
+    @Autowired
+    JWTProperties jwtProperties;
 
     /**
      * 生成acceptToken
@@ -162,7 +164,9 @@ public class JWTTokenUtil {
         claims.put(CLAIM_KEY_ACCOUNT_ENABLED, user.isEnabled());
         claims.put(CLAIM_KEY_ACCOUNT_NON_LOCKED, user.isAccountNonLocked());
         claims.put(CLAIM_KEY_ACCOUNT_NON_EXPIRED, user.isAccountNonExpired());
-        claims.put(CLAIM_KEY_AUTHORITIES , JSON.toJSON(getAuthorities(user.getAuthorities())));
+        if (!CollectionUtils.isEmpty(user.getAuthorities())) {
+            claims.put(CLAIM_KEY_AUTHORITIES , JSON.toJSON(getAuthorities(user.getAuthorities())));
+        }
         return claims;
     }
 

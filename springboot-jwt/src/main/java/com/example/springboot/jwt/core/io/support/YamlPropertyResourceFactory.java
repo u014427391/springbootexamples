@@ -1,7 +1,6 @@
 package com.example.springboot.jwt.core.io.support;
 
 import org.springframework.boot.env.YamlPropertySourceLoader;
-import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.support.DefaultPropertySourceFactory;
 import org.springframework.core.io.support.EncodedResource;
@@ -11,7 +10,6 @@ import org.springframework.lang.Nullable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
 /**
  * <pre>

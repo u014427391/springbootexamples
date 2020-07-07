@@ -43,19 +43,19 @@ public class JWTUserDetails implements UserDetails {
     /**
      * 账号是否过期
      */
-    private  Boolean isAccountNonExpired;
+    private  Boolean isAccountNonExpired = false;
     /**
      * 账户是否锁定
      */
-    private  Boolean isAccountNonLocked;
+    private  Boolean isAccountNonLocked = false;
     /**
      * 密码是否过期
      */
-    private  Boolean isCredentialsNonExpired;
+    private  Boolean isCredentialsNonExpired = false;
     /**
      * 账号是否激活
      */
-    private  Boolean isEnabled;
+    private  Boolean isEnabled = true;
     /**
      * 上次密码重置时间
      */
