@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example.springboot</groupId>
-    <artifactId>oauth2-redis-store</artifactId>
+    <artifactId>oauth2-jwt</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>oauth2-redis-store</name>
+    <name>oauth2-jwt</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -20,7 +20,6 @@
     </properties>
 
     <dependencies>
-      
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -36,11 +35,6 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
@@ -50,7 +44,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
     </dependencies>
 
     <dependencyManagement>
