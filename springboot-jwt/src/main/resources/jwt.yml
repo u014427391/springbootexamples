@@ -13,7 +13,7 @@ jwt:
   # 刷新token时间 单位秒
   refresh-token: 3600
   # 允许访问的uri
-  permit-all: /oauth/**,/login/**,/logout/**
+  permit-all: /oauth/**,/login/**,/logout/**,/jwt/**
   # 需要校验的uri
   authenticate-uri: /api/**
 

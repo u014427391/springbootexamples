@@ -61,8 +61,8 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
             }
             final String token = _authHeader.substring(7);
             log.info("acceptToken:[{}]",token);
-            if (!jwtTokenUtil.validateToken(token,new JWTUserDetails())) {
-                return;
+            if (!jwtTokenUtil.validateToken(token)) {
+                //return;
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);

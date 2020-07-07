@@ -102,11 +102,25 @@ public class JWTTokenUtil {
     }
 
     /**
+     * 校验acceptToken
+     * @param token
+     * @return
+     */
+    public boolean validateToken(String token) {
+        try {
+            return getClaimsFromToken(token) != null
+                    && !isTokenExpired(token);
+        } catch (Exception e) {
+            throw new IllegalStateException("Invalid Token!"+e);
+        }
+    }
+
+    /**
      * 解析token 信息
      * @param token
      * @return
      */
-    private Claims  getClaimsFromToken(String token){
+    public Claims  getClaimsFromToken(String token){
         Claims claims = Jwts.parser()
                     .setSigningKey(jwtProperties.getSecret())
                     .parseClaimsJws(token)
@@ -119,7 +133,7 @@ public class JWTTokenUtil {
      * @param token
      * @return
      */
-    private String getUserIdFromClaims(String token) {
+    public String getUserIdFromClaims(String token) {
         String userId = getClaimsFromToken(token).getSubject();
         return userId;
     }
@@ -129,7 +143,7 @@ public class JWTTokenUtil {
      * @param token
      * @return
      */
-    private Date getExpirationDateFromClaims(String token) {
+    public Date getExpirationDateFromClaims(String token) {
         Date expiration = getClaimsFromToken(token).getExpiration();
         return expiration;
     }
@@ -139,7 +153,7 @@ public class JWTTokenUtil {
      * @param token
      * @return
      */
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         final Date expirationDate = getExpirationDateFromClaims(token);
         return expirationDate.before(new Date());
     }
@@ -149,7 +163,7 @@ public class JWTTokenUtil {
      * @param expiration
      * @return
      */
-    private Date generateExpirationDate(long expiration) {
+    public Date generateExpirationDate(long expiration) {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
@@ -158,7 +172,7 @@ public class JWTTokenUtil {
      * @Param user
      * @return
      */
-    private Map<String, Object> generateClaims(JWTUserDetails user) {
+    public Map<String, Object> generateClaims(JWTUserDetails user) {
         Map<String, Object> claims = new HashMap<>(16);
         claims.put(CLAIM_KEY_USER_ID, user.getUserId());
         claims.put(CLAIM_KEY_ACCOUNT_ENABLED, user.isEnabled());
@@ -175,7 +189,7 @@ public class JWTTokenUtil {
      * @param authorities
      * @return
      */
-    private List<String> getAuthorities(Collection<? extends GrantedAuthority> authorities){
+    public List<String> getAuthorities(Collection<? extends GrantedAuthority> authorities){
         List<String> list = new ArrayList<>();
         for (GrantedAuthority ga : authorities) {
             list.add(ga.getAuthority());
