@@ -43,7 +43,6 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
     public FilterRegistrationBean jwtFilter() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(jwtAuthenticationTokenFilter());
-        //registrationBean.setUrlPatterns(Arrays.asList("/**"));
         return registrationBean;
     }
 

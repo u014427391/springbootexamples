@@ -2,6 +2,7 @@ package com.example.springboot.jwt.configuration;
 
 
 import com.example.springboot.jwt.component.CustomPasswordEncoder;
+import com.example.springboot.jwt.web.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.annotation.Resource;
 
 /**
  * <pre>
@@ -58,13 +57,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         //解决静态资源被拦截的问题
         web.ignoring().antMatchers("/asserts/**");
-
+        web.ignoring().antMatchers("/favicon.ico");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http   // 配置登录页并允许访问
                 .formLogin().permitAll()
+                // 登录成功被调用
+                //.successHandler(new MyAuthenticationSuccessHandler())
                 // 配置登出页面
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
                 .and().authorizeRequests().antMatchers("/oauth/**", "/login/**", "/logout/**").permitAll()
