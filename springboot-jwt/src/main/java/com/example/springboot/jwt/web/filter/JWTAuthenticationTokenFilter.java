@@ -1,11 +1,15 @@
 package com.example.springboot.jwt.web.filter;
 
 import com.example.springboot.jwt.configuration.JWTProperties;
-import com.example.springboot.jwt.core.userdetails.JWTUserDetails;
-import com.example.springboot.jwt.util.JWTTokenUtil;
+import com.example.springboot.jwt.core.jwt.userdetails.JWTUserDetails;
+import com.example.springboot.jwt.core.jwt.util.JWTTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
@@ -41,9 +45,11 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     JWTProperties jwtProperties;
-
     @Autowired
     JWTTokenUtil jwtTokenUtil;
+    @Autowired
+    @Qualifier("jwtUserService")
+    UserDetailsService userDetailsService;
 
     public JWTAuthenticationTokenFilter(JWTProperties jwtProperties) {
         this.permitAllUris = Arrays.asList(jwtProperties.getPermitAll().split(","));
@@ -53,16 +59,25 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                     FilterChain filterChain) throws ServletException, IOException {
-        if (isAllowUri(httpServletRequest)) {
-            final String _authHeader = httpServletRequest.getHeader(jwtProperties.getHeaderKey());
+        if (!isAllowUri(httpServletRequest)) {
+            final String _authHeader = httpServletRequest.getHeader(jwtProperties.getTokenKey());
             log.info("Authorization:[{}]",_authHeader);
-            if (StringUtils.isEmpty(_authHeader) || ! _authHeader.startsWith(jwtProperties.getHeaderValuePrefix())) {
-                return;
+            if (StringUtils.isEmpty(_authHeader) || ! _authHeader.startsWith(jwtProperties.getTokenPrefix())) {
+                throw new RuntimeException("无token，请重新登录");
             }
             final String token = _authHeader.substring(7);
             log.info("acceptToken:[{}]",token);
             if (!jwtTokenUtil.validateToken(token)) {
-                return;
+                throw new RuntimeException("401 Exception，token校验失败");
+            }
+            if (jwtTokenUtil.validateToken(token)) {
+                String username = jwtTokenUtil.getUsernameFromClaims(token);
+                JWTUserDetails userDetails = (JWTUserDetails)userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken
+                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -86,12 +101,12 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
         for (String permitUri : permitAllUris) {
             if (pathMatcher.match(permitUri, requestUri)) {
                 // permit all的链接直接放过
-                filter = false;
+                filter = true;
             }
         }
         for (String authUri : authenticateUris) {
             if (pathMatcher.match(authUri, requestUri)) {
-                filter = true;
+                filter = false;
             }
         }
         return filter;

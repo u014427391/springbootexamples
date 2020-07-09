@@ -1,5 +1,6 @@
-package com.example.springboot.jwt.core.userdetails;
+package com.example.springboot.jwt.core.jwt.userdetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * <pre>
@@ -24,6 +26,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JWTUserDetails implements UserDetails {
+
     /**
      * 用户ID
      */
@@ -61,6 +64,13 @@ public class JWTUserDetails implements UserDetails {
      */
     private  Instant lastPasswordResetDate;
 
+    public JWTUserDetails(Long id, String username, String password, List<GrantedAuthority> mapToGrantedAuthorities) {
+        this.userId = id;
+        this.username = username;
+        this.password = password;
+        this.authorities = mapToGrantedAuthorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -76,21 +86,25 @@ public class JWTUserDetails implements UserDetails {
         return username;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return isAccountNonExpired;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return isAccountNonLocked;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return isCredentialsNonExpired;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return isEnabled;

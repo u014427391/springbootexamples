@@ -1,6 +1,6 @@
 package com.example.springboot.jwt.web.handler;
 
-import com.example.springboot.jwt.annotation.JWTPermitAll;
+import com.example.springboot.jwt.core.jwt.annotation.JWTPermitAll;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

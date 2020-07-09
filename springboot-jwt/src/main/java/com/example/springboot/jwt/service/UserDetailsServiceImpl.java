@@ -1,10 +1,11 @@
 package com.example.springboot.jwt.service;
 
-import com.example.springboot.jwt.core.userdetails.JWTUserDetails;
+import com.example.springboot.jwt.core.jwt.userdetails.JWTUserDetails;
 import com.example.springboot.jwt.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,10 +41,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.info("登录用户[{}]没注册!",username);
             throw new UsernameNotFoundException("登录用户["+username + "]没注册!");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority());
+        return new JWTUserDetails(1L,user.getUsername(), user.getPassword(), getAuthority());
     }
 
-    private List getAuthority() {
+    private List<GrantedAuthority> getAuthority() {
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 }

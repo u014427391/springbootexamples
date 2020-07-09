@@ -1,15 +1,13 @@
-package com.example.springboot.jwt.util;
+package com.example.springboot.jwt.core.jwt.util;
 
 import com.alibaba.fastjson.JSON;
-import com.auth0.jwt.interfaces.Claim;
 import com.example.springboot.jwt.configuration.JWTProperties;
-import com.example.springboot.jwt.core.userdetails.JWTUserDetails;
+import com.example.springboot.jwt.core.jwt.userdetails.JWTUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -58,14 +56,14 @@ public class JWTTokenUtil {
 
     /**
      * 生成acceptToken
-     * @param userId
+     * @param username
      * @param claims
      * @return
      */
-    public String generateToken(String userId, Map<String, Object> claims) {
+    public String generateToken(String username, Map<String, Object> claims) {
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
-                .setSubject(userId)
+                .setSubject(username)
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate(jwtProperties.getExpiration().toMillis()))
@@ -146,6 +144,15 @@ public class JWTTokenUtil {
     public Date getExpirationDateFromClaims(String token) {
         Date expiration = getClaimsFromToken(token).getExpiration();
         return expiration;
+    }
+
+    /**
+     * 从token获取username
+     * @param token
+     * @return
+     */
+    public String getUsernameFromClaims(String token) {
+        return  getClaimsFromToken(token).getSubject();
     }
 
     /**

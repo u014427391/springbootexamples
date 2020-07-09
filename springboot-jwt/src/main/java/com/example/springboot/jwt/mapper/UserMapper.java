@@ -1,7 +1,7 @@
 package com.example.springboot.jwt.mapper;
 
 
-import com.example.springboot.jwt.core.userdetails.JWTUserDetails;
+import com.example.springboot.jwt.core.jwt.userdetails.JWTUserDetails;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;

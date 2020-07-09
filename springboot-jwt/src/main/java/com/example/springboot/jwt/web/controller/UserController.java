@@ -1,18 +1,12 @@
 package com.example.springboot.jwt.web.controller;
 
-import com.example.springboot.jwt.annotation.JWTPermitAll;
 import com.example.springboot.jwt.configuration.JWTProperties;
-import com.example.springboot.jwt.core.userdetails.JWTUserDetails;
-import com.example.springboot.jwt.model.dto.UserDto;
-import com.example.springboot.jwt.util.JWTTokenUtil;
+import com.example.springboot.jwt.core.jwt.util.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * <pre>
@@ -36,7 +30,7 @@ public class UserController {
 
     @GetMapping("/auth-info")
     public ResponseEntity authInfo(HttpServletRequest request) {
-        String authHeader = request.getHeader(jwtProperties.getHeaderKey());
+        String authHeader = request.getHeader(jwtProperties.getTokenKey());
         String token = authHeader.substring(7);
         return ResponseEntity.ok(jwtTokenUtil.getUserIdFromClaims(token));
     }

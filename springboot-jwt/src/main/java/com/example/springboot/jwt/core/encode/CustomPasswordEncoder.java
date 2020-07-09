@@ -1,4 +1,4 @@
-package com.example.springboot.jwt.component;
+package com.example.springboot.jwt.core.encode;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 

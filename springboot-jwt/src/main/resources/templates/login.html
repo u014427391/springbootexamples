@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<title>Signin Template for Bootstrap</title>
+		<!-- Bootstrap core CSS -->
+		<link href="../static/asserts/css/bootstrap.min.css" th:href="@{asserts/css/bootstrap.min.css}" rel="stylesheet" />
+		<!-- Custom styles for this template -->
+		<link href="../static/asserts/css/signin.css" th:href="@{asserts/css/signin.css}" rel="stylesheet"/>
+	</head>
+
+	<body class="text-center">
+		<form class="form-signin" th:action="@{/authenticate}" method="post">
+			<img class="mb-4" th:src="@{asserts/img/bootstrap-solid.svg}" alt="" width="72" height="72" />
+			<h1 class="h3 mb-3 font-weight-normal" th:text="#{messages.tip}">Oauth2.0 Login</h1>
+			<label class="sr-only" th:text="#{messages.username}">Username</label>
+			<input type="text" class="form-control" name="username" id="username" th:placeholder="#{messages.username}" required="" autofocus="" value="nicky" />
+			<label class="sr-only" th:text="#{messages.password} ">Password</label>
+			<input type="password" class="form-control" name="password" id="password" th:placeholder="#{messages.password}" required="" value="123" />
+			<div class="checkbox mb-3">
+				<label>
+          <input type="checkbox" value="remember-me"  /> remember me
+        </label>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" id="btnSave" type="submit" th:text="#{messages.loginBtnName}">Sign in</button>
+			<p class="mt-5 mb-3 text-muted">© 2019</p>
+			<a class="btn btn-sm" th:href="@{/login(lang='zh_CN')} ">中文</a>
+			<a class="btn btn-sm" th:href="@{/login(lang='en_US')} ">English</a>
+		</form>
+		<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.js"></script>
+		<script>
+            $(function() {
+               /* $("#btnSave").click(function () {
+                    var username=$("#username").val();
+                    var password=$("#password").val();
+                    $.ajax({
+                        cache: true,
+                        type: "POST",
+                        url: "/authenticate",
+                        contentType: "application/json;charset=UTF-8",
+                        data:JSON.stringify({"username":username ,"password" : password}),
+                        dataType: "json",
+                        async: false,
+                        error: function (request) {
+                            console.log("Connection error");
+                        },
+                        success: function (data) {
+                            //save token
+                            localStorage.setItem("token",data);
+                        }
+                    });
+                });*/
+            });
+		</script>
+
+	</body>
+
+</html>

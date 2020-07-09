@@ -1,9 +1,8 @@
 package com.example.springboot.jwt;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.springboot.jwt.configuration.JWTProperties;
-import com.example.springboot.jwt.core.userdetails.JWTUserDetails;
-import com.example.springboot.jwt.util.JWTTokenUtil;
+import com.example.springboot.jwt.core.jwt.userdetails.JWTUserDetails;
+import com.example.springboot.jwt.core.jwt.util.JWTTokenUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

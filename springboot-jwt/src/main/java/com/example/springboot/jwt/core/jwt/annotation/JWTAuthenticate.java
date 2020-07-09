@@ -1,4 +1,4 @@
-package com.example.springboot.jwt.annotation;
+package com.example.springboot.jwt.core.jwt.annotation;
 
 import java.lang.annotation.*;
 
