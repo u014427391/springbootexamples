@@ -32,6 +32,7 @@ import java.util.*;
 public class JWTTokenUtil {
 
     private static final String CLAIM_KEY_USER_ID = "user_id";
+    private static final String CLAIM_KEY_USER_NAME ="user_name";
     private static final String CLAIM_KEY_ACCOUNT_ENABLED = "enabled";
     private static final String CLAIM_KEY_ACCOUNT_NON_LOCKED = "non_locked";
     private static final String CLAIM_KEY_ACCOUNT_NON_EXPIRED = "non_expired";
@@ -132,7 +133,7 @@ public class JWTTokenUtil {
      * @return
      */
     public String getUserIdFromClaims(String token) {
-        String userId = getClaimsFromToken(token).getSubject();
+        String userId = getClaimsFromToken(token).getId();
         return userId;
     }
 
@@ -152,7 +153,7 @@ public class JWTTokenUtil {
      * @return
      */
     public String getUsernameFromClaims(String token) {
-        return  getClaimsFromToken(token).getSubject();
+        return  getClaimsFromToken(token).get(CLAIM_KEY_USER_NAME).toString();
     }
 
     /**
@@ -182,6 +183,7 @@ public class JWTTokenUtil {
     public Map<String, Object> generateClaims(JWTUserDetails user) {
         Map<String, Object> claims = new HashMap<>(16);
         claims.put(CLAIM_KEY_USER_ID, user.getUserId());
+        claims.put(CLAIM_KEY_USER_NAME, user.getUsername());
         claims.put(CLAIM_KEY_ACCOUNT_ENABLED, user.isEnabled());
         claims.put(CLAIM_KEY_ACCOUNT_NON_LOCKED, user.isAccountNonLocked());
         claims.put(CLAIM_KEY_ACCOUNT_NON_EXPIRED, user.isAccountNonExpired());
