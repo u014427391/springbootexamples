@@ -32,6 +32,6 @@ public class UserController {
     public ResponseEntity authInfo(HttpServletRequest request) {
         String authHeader = request.getHeader(jwtProperties.getTokenKey());
         String token = authHeader.substring(7);
-        return ResponseEntity.ok(jwtTokenUtil.getUserIdFromClaims(token));
+        return ResponseEntity.ok(jwtTokenUtil.getUsernameFromClaims(token));
     }
 }
