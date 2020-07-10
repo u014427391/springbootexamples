@@ -53,6 +53,7 @@ TODO：文档整理ing....
 * [CAS 5.3.1系列之自定义JDBC认证策略（三）](https://blog.csdn.net/u014427391/article/details/105820486)
 * [CAS 5.3.1系列之自定义Shiro认证策略（四）](https://blog.csdn.net/u014427391/article/details/105820586)
 * [OAuth2.0系列之集成JWT实现单点登录](https://smilenicky.blog.csdn.net/article/details/106017401)
+* [SpringBoot系列之前后端接口安全技术JWT](https://smilenicky.blog.csdn.net/article/details/107099840)
 
 ## 九、OAuth2.0篇
 * [OAuth2.0系列之基本概念和运作流程（一）](https://smilenicky.blog.csdn.net/article/details/106543396)
