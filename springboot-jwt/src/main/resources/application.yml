@@ -27,7 +27,7 @@ logging:
   level:
     org:
       springframework:
-        security: DEBUG
+        security: info
     com:
       example:
         springboot:

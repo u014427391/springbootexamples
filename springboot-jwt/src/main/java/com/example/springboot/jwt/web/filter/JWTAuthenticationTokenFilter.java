@@ -63,12 +63,12 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
             final String _authHeader = httpServletRequest.getHeader(jwtProperties.getTokenKey());
             log.info("Authorization:[{}]",_authHeader);
             if (StringUtils.isEmpty(_authHeader) || ! _authHeader.startsWith(jwtProperties.getTokenPrefix())) {
-                throw new RuntimeException("无token，请重新登录");
+                throw new RuntimeException("Unable to get JWT Token");
             }
             final String token = _authHeader.substring(7);
             log.info("acceptToken:[{}]",token);
             if (!jwtTokenUtil.validateToken(token)) {
-                throw new RuntimeException("401 Exception，token校验失败");
+                throw new RuntimeException("Invalid token");
             }
             if (jwtTokenUtil.validateToken(token)) {
                 String username = jwtTokenUtil.getUsernameFromClaims(token);

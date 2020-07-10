@@ -33,15 +33,15 @@
 		<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.js"></script>
 		<script>
             $(function() {
-               /* $("#btnSave").click(function () {
+                $("#btnSave").click(function () {
                     var username=$("#username").val();
                     var password=$("#password").val();
                     $.ajax({
-                        cache: true,
+                        cache: false,
                         type: "POST",
                         url: "/authenticate",
-                        contentType: "application/json;charset=UTF-8",
-                        data:JSON.stringify({"username":username ,"password" : password}),
+                        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+                        data:{"username":username ,"password" : password},
                         dataType: "json",
                         async: false,
                         error: function (request) {
@@ -52,7 +52,7 @@
                             localStorage.setItem("token",data);
                         }
                     });
-                });*/
+                });
             });
 		</script>
 
