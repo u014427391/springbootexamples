@@ -75,7 +75,7 @@ TODO：文档整理ing....
 * [OAuth2.0系列之JWT令牌实践教程（八）](https://smilenicky.blog.csdn.net/article/details/106805642)
 
 ## 十、搜索引擎篇
-* [SpringBoot系列之Elasticsearch极速入门与实际教程](https://smilenicky.blog.csdn.net/article/details/107365858)
+* [SpringBoot系列之Elasticsearch极速入门与实践教程](https://smilenicky.blog.csdn.net/article/details/107365858)
 
 ## 十一、源码学习记录篇
 * [SpringBoot源码学习系列之自动配置原理简介](https://blog.csdn.net/u014427391/article/details/102844681)
