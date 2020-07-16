@@ -77,7 +77,7 @@ TODO：文档整理ing....
 ## 十、搜索引擎篇
 * [SpringBoot系列之Elasticsearch极速入门与实际教程](https://smilenicky.blog.csdn.net/article/details/107365858)
 
-## 十、源码学习记录篇
+## 十一、源码学习记录篇
 * [SpringBoot源码学习系列之自动配置原理简介](https://blog.csdn.net/u014427391/article/details/102844681)
 * [SpringBoot源码学习系列之异常处理自动配置](https://blog.csdn.net/u014427391/article/details/103334278)
 * [SpringBoot源码学习系列之嵌入式Servlet容器](https://blog.csdn.net/u014427391/article/details/103425427)
@@ -86,11 +86,4 @@ TODO：文档整理ing....
 * [SpringBoot源码学习系列之SpringMVC自动配置](https://blog.csdn.net/u014427391/article/details/103240199)
 
 
-
-微信打赏
-![微信](https://img-blog.csdnimg.cn/20200707134011377.png)
-技术博客公众号
-![微信](https://img-blog.csdnimg.cn/20200707134024524.png)
-计算机编程QQ群
-![qq](https://img-blog.csdnimg.cn/20200707134038159.png)
 
