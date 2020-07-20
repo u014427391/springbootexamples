@@ -12,10 +12,10 @@ import java.util.concurrent.Future;
 /**
  * <pre>
  *  CommandLineRunner
+ *  Copy @https://spring.io/guides/gs/async-method/
  * </pre>
  *
  * <pre>
- * @author mazq
  * 修改记录
  *    修改后版本:     修改人：  修改日期: 2020/07/20 10:25  修改内容:
  * </pre>
