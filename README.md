@@ -5,7 +5,6 @@ Springboot学习例子，对应的博客专栏：[SpringBoot系列博客专栏](
 
 TODO：文档整理ing....
 
-
 对应[SpringBoot系列博客专栏](https://blog.csdn.net/u014427391/category_9195353.html)，[例子代码](https://github.com/u014427391/springbootexamples)，本博客不定时更新
 
 
@@ -75,15 +74,17 @@ TODO：文档整理ing....
 * [OAuth2.0系列之JWT令牌实践教程（八）](https://smilenicky.blog.csdn.net/article/details/106805642)
 
 ## 十、搜索引擎篇
-* [SpringBoot系列之Elasticsearch极速入门与实践教程](https://smilenicky.blog.csdn.net/article/details/107365858)
+* [SpringBoot系列之Elasticsearch极速入门与实践教程](https://smilenicky.blog.csdn.net/article/details/107365858)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-elasticsearch)
 
-## 十一、源码学习记录篇
+## 十一、Task任务篇
+* [SpringBoot系列之异步任务@Async使用教程](https://smilenicky.blog.csdn.net/article/details/107458630)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-async)
+
+## 十二、源码学习篇
 * [SpringBoot源码学习系列之自动配置原理简介](https://blog.csdn.net/u014427391/article/details/102844681)
 * [SpringBoot源码学习系列之异常处理自动配置](https://blog.csdn.net/u014427391/article/details/103334278)
 * [SpringBoot源码学习系列之嵌入式Servlet容器](https://blog.csdn.net/u014427391/article/details/103425427)
 * [SpringBoot源码学习系列之Locale自动配置](https://blog.csdn.net/u014427391/article/details/103258401)
 * [SpringBoot源码学习系列之@PropertySource注解实现](https://blog.csdn.net/u014427391/article/details/103258216)
 * [SpringBoot源码学习系列之SpringMVC自动配置](https://blog.csdn.net/u014427391/article/details/103240199)
-
 
 
