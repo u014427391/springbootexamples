@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class TaskService {
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 10000)
     public void testFixedDelay() {
         log.info("fixedDelay test,thread name:[{}],execute time:[{}]",Thread.currentThread().getName(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -35,7 +35,7 @@ public class TaskService {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(initialDelay = 5000, fixedRate = 10000)
     public void testFixedRate() {
         log.info("fixedRate test,thread name:[{}],execute time:[{}]",Thread.currentThread().getName(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));

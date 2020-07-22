@@ -1,0 +1,10 @@
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 5
+      thread-name-prefix: ThreadPoolTaskScheduler-
+    execution:
+      pool:
+        allow-core-thread-timeout: true
+
