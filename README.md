@@ -96,7 +96,7 @@
 * [OAuth2.0系列之简化模式实践教程（三）](https://smilenicky.blog.csdn.net/article/details/106686607)
 * [OAuth2.0系列之密码模式实践教程（四）](https://smilenicky.blog.csdn.net/article/details/106687880)
 * [OAuth2.0系列之客户端模式实践教程（五）](https://smilenicky.blog.csdn.net/article/details/106689987)
-### 9.3 OAuth2.0信息存储教程
+### 9.3 OAuth2.0信息存储
 * [OAuth2.0系列之信息数据库存储教程（六）](https://smilenicky.blog.csdn.net/article/details/106757121)
 * [OAuth2.0系列之信息Redis存储教程（七）](https://smilenicky.blog.csdn.net/article/details/106790398)
 * [OAuth2.0系列之JWT令牌实践教程（八）](https://smilenicky.blog.csdn.net/article/details/106805642)
@@ -108,6 +108,10 @@
 ## 十一、Task任务篇
 ### 11.1 异步任务使用
 * [SpringBoot系列之异步任务@Async使用教程](https://smilenicky.blog.csdn.net/article/details/107458630)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-async)
+### 11.2 定时任务使用
+* [SpringBoot系列之使用Spring Task实现定时任务](https://smilenicky.blog.csdn.net/article/details/107488534)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-scheduler-task)
+### 11.3 邮件任务使用
+* [SpringBoot系列之发送邮件极速入门与实践](https://smilenicky.blog.csdn.net/article/details/107517585)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-email)
 
 ## 十二、源码学习篇
 ### 12.1 SpringBoot自动配置原理
