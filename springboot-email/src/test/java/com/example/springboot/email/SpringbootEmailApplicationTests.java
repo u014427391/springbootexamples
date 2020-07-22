@@ -76,7 +76,7 @@ class SpringbootEmailApplicationTests {
         context.setVariable("username", "admin");
         context.setVariable("id", "123456789");
         EmailDto emailDto = new EmailDto();
-        emailDto.setSendTo("2284087296@qq.com");
+        emailDto.setSendTo("your_emial@qq.com");
         emailDto.setSubject("发送模板html邮件");
         emailDto.setContent(templateEngine.process("test",context));
         emailService.sendHtmlMail(emailDto);
