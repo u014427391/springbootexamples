@@ -5,7 +5,11 @@ import com.example.springboot.email.service.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.annotation.Resource;
 import javax.mail.MessagingException;
 
 @SpringBootTest
@@ -13,6 +17,8 @@ class SpringbootEmailApplicationTests {
 
     @Autowired
     EmailService emailService;
+    @Resource
+    TemplateEngine templateEngine;
 
     @Test
     void contextLoads() {}
@@ -62,5 +68,17 @@ class SpringbootEmailApplicationTests {
                 "</body></html>";
         emailDto.setContent(html);
         emailService.sendInLineImgMail(emailDto);
+    }
+
+    @Test
+    void testSendTemplateEmail() throws MessagingException {
+        Context context = new Context();
+        context.setVariable("username", "admin");
+        context.setVariable("id", "123456789");
+        EmailDto emailDto = new EmailDto();
+        emailDto.setSendTo("2284087296@qq.com");
+        emailDto.setSubject("发送模板html邮件");
+        emailDto.setContent(templateEngine.process("test",context));
+        emailService.sendHtmlMail(emailDto);
     }
 }
