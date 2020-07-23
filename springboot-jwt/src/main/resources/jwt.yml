@@ -1,13 +1,13 @@
 # jwt configuration
 jwt:
   # 存放Token的Header key值
-  headerKey: Authorization
+  token-key: Authorization
   # 自定义密钥，加盐
   secret: mySecret
   # 超时时间 单位秒
   expiration: 3600
   # 自定义token 前缀字符
-  headerValuePrefix: Bearer-
+  token-prefix: Bearer-
   # accessToken超时时间 单位秒
   access-token: 3600
   # 刷新token时间 单位秒

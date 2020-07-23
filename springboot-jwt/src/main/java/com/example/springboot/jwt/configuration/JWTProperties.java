@@ -30,7 +30,7 @@ public class JWTProperties {
     /**
      * 存放Token的Header key值
      */
-    private String headerKey;
+    private String tokenKey;
 
     /*
      * 自定义密钥，加盐
@@ -45,7 +45,7 @@ public class JWTProperties {
     /*
      * 自定义token 前缀字符
      */
-    private String headerValuePrefix;
+    private String tokenPrefix;
 
     /*
      * accessToken超时时间 单位秒

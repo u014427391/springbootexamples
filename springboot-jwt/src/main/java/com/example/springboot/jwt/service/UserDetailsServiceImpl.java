@@ -1,10 +1,19 @@
 package com.example.springboot.jwt.service;
 
+import com.example.springboot.jwt.core.jwt.userdetails.JWTUserDetails;
+import com.example.springboot.jwt.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <pre>
@@ -21,8 +30,21 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    @Autowired
+    @Qualifier("userMapper")
+    UserMapper userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        JWTUserDetails user = userRepository.findByUsername(username);
+        if(user == null){
+            log.info("登录用户[{}]没注册!",username);
+            throw new UsernameNotFoundException("登录用户["+username + "]没注册!");
+        }
+        return new JWTUserDetails(1L,user.getUsername(), user.getPassword(), getAuthority());
+    }
+
+    private List<GrantedAuthority> getAuthority() {
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 }
