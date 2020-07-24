@@ -48,12 +48,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http   // 配置登录页并允许访问
-                .formLogin().loginPage("/login").permitAll()
+                .formLogin().usernameParameter("username").passwordParameter("password").loginPage("/login").permitAll()
                 // 配置Basic登录
                 //.and().httpBasic()
                 // 配置登出页面
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
+                // 开放接口访问权限，不需要登录授权就可以访问
                 .and().authorizeRequests().antMatchers("/oauth/**", "/login/**", "/logout/**").permitAll()
+                // api接口需要admin管理员才能访问
+                .antMatchers("/api/**").hasRole("admin")
                 // 其余所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 // 关闭跨域保护;
