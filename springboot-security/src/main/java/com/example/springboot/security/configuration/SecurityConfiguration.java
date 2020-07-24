@@ -61,6 +61,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 // 关闭跨域保护;
                 .and().csrf().disable();
+
+        //开启记住我功能，登陆成功以后，将cookie发给浏览器保存，以后访问页面带上这个cookie，只要通过检查就可以免登录
+        http.rememberMe().rememberMeParameter("remeber");
     }
 
     @Bean
