@@ -1,0 +1,14 @@
+## spring security配置
+spring:
+  security:
+    user:
+      name: nicky
+      password: 123
+  thymeleaf:
+    cache: false
+## logback配置
+logging:
+  level:
+    org:
+      springframework:
+        security: info
