@@ -121,11 +121,11 @@
 ### 12.1 热部署实践
 * [SpringBoot系统之devtools热部署实现教程](https://smilenicky.blog.csdn.net/article/details/107531226)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-deploy)
 
-[Spring Boot Actuator系统监控与管理入门教程](https://smilenicky.blog.csdn.net/article/details/107535188)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-actuator)
+* [Spring Boot Actuator系统监控与管理入门教程](https://smilenicky.blog.csdn.net/article/details/107535188)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-actuator)
 
 ## 十三、安全授权篇
 ### 13.1 SpringSecurity使用
-[Spring Security系列之极速入门与实践教程](https://smilenicky.blog.csdn.net/article/details/107559687)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-security)
+* [Spring Security系列之极速入门与实践教程](https://smilenicky.blog.csdn.net/article/details/107559687)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-security)
 ## 十四、源码学习篇
 ### 14.1 SpringBoot自动配置原理
 * [SpringBoot源码学习系列之自动配置原理简介](https://blog.csdn.net/u014427391/article/details/102844681)
@@ -139,8 +139,8 @@
 * [SpringBoot源码学习系列之@PropertySource注解实现](https://blog.csdn.net/u014427391/article/details/103258216)
 
 微信打赏
-![微信](https://img-blog.csdnimg.cn/20200707134011377.png)
+![微信](https://img-blog.csdnimg.cn/20200707134011377.png)<br>
 技术博客公众号
-![微信](https://img-blog.csdnimg.cn/20200707134024524.png)
+![微信](https://img-blog.csdnimg.cn/20200707134024524.png)<br>
 计算机编程QQ群
 ![qq](https://img-blog.csdnimg.cn/20200707134038159.png)
