@@ -2,14 +2,14 @@
 
 
 对应[SpringBoot系列博客专栏](https://blog.csdn.net/u014427391/category_9195353.html)，[例子代码](https://github.com/u014427391/springbootexamples)，本博客不定时更新
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200722230650596.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQ0MjczOTE=,size_16,color_FFFFFF,t_70)
 
 
 * Spring框架：作为JavaEE框架领域的一款重要的开源框架，在企业应用开发中有着很重要的作用，同时Spring框架及其子框架很多，所以知识量很广。
 
 * Spring Boot：一款Spring框架的子框架，也可以叫微框架，是2014年推出的一款使Spring框架开发变得容易的框架。学过Spring框架的都知识，Spring框架难以避免地需要配置不少XMl，而使用Spring Boot框架的话，就可以使用注解开发，极大地简化基于Spring框架的开发。Spring Boot充分利用了JavaConfig的配置模式以及“约定优于配置”的理念，能够极大的简化基于Spring MVC的Web应用和REST服务开发。
 
-[TOC]
-
+@[toc]
 ## 一、配置使用篇
 
 ### 1.1 配置文件用法
@@ -111,17 +111,36 @@
 * [SpringBoot系列之异步任务@Async使用教程](https://smilenicky.blog.csdn.net/article/details/107458630)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-async)
 ### 11.2 定时任务使用
 * [SpringBoot系列之使用Spring Task实现定时任务](https://smilenicky.blog.csdn.net/article/details/107488534)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-scheduler-task)
+
+
 ### 11.3 邮件任务使用
 * [SpringBoot系列之发送邮件极速入门与实践](https://smilenicky.blog.csdn.net/article/details/107517585)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-email)
 
-## 十二、源码学习篇
-### 12.1 SpringBoot自动配置原理
+
+## 十二、部署监控篇
+### 12.1 热部署实践
+* [SpringBoot系统之devtools热部署实现教程](https://smilenicky.blog.csdn.net/article/details/107531226)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-deploy)
+
+[Spring Boot Actuator系统监控与管理入门教程](https://smilenicky.blog.csdn.net/article/details/107535188)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-actuator)
+
+## 十三、安全授权篇
+### 13.1 SpringSecurity使用
+[Spring Security系列之极速入门与实践教程](https://smilenicky.blog.csdn.net/article/details/107559687)&nbsp;&nbsp;&nbsp; &nbsp;>> [source download](https://github.com/u014427391/springbootexamples/tree/master/springboot-security)
+## 十四、源码学习篇
+### 14.1 SpringBoot自动配置原理
 * [SpringBoot源码学习系列之自动配置原理简介](https://blog.csdn.net/u014427391/article/details/102844681)
 * [SpringBoot源码学习系列之异常处理自动配置](https://blog.csdn.net/u014427391/article/details/103334278)
 * [SpringBoot源码学习系列之Locale自动配置](https://blog.csdn.net/u014427391/article/details/103258401)
 * [SpringBoot源码学习系列之SpringMVC自动配置](https://blog.csdn.net/u014427391/article/details/103240199)
-### 12.2 SpringBoot嵌入式Servlet容器
+### 14.2 SpringBoot嵌入式Servlet容器
 * [SpringBoot源码学习系列之嵌入式Servlet容器](https://blog.csdn.net/u014427391/article/details/103425427)
 
-### 12.3 SpringBoot注解系列
+### 14.3 SpringBoot注解系列
 * [SpringBoot源码学习系列之@PropertySource注解实现](https://blog.csdn.net/u014427391/article/details/103258216)
+
+微信打赏
+![微信](https://img-blog.csdnimg.cn/20200707134011377.png)
+技术博客公众号
+![微信](https://img-blog.csdnimg.cn/20200707134024524.png)
+计算机编程QQ群
+![qq](https://img-blog.csdnimg.cn/20200707134038159.png)
