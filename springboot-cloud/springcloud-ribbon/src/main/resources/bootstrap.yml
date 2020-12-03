@@ -1,0 +1,42 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: ribbon-service-consumer
+#  cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: false
+    fetch-registry: true
+    register-with-eureka: false
+  instance:
+    status-page-url-path: http://localhost:8761/actuator/info
+    health-check-url-path: http://localhost:8761/actuator/health
+    prefer-ip-address: true
+    instance-id: ribbon-service-consumer8082
+
+
+#ribbon:
+#  eureka:
+#    enabled: true
+#  eager-load:
+#    enabled: true
+#    clients: ribbon-service-consumer
+
+
+#eureka-service-provider:
+#  ribbon:
+#    ConnectTimeout: 3000
+#    ReadTimeout: 60000
+#    MaxAutoRetries: 1 #对第一次请求的服务的重试次数
+#    MaxAutoRetriesNextServer: 1 #要重试的下一个服务的最大数量（不包括第一个服务）
+#    OkToRetryOnAllOperations: true
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule
+
+

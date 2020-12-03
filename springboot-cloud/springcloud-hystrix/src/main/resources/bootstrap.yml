@@ -1,0 +1,39 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: ribbon-hystrix-service-consumer
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: false
+    fetch-registry: true
+    register-with-eureka: false
+  instance:
+    status-page-url-path: http://localhost:8761/actuator/info
+    health-check-url-path: http://localhost:8761/actuator/health
+    prefer-ip-address: false
+    instance-id: ribbon-hystrix-service-consumer8082
+    metadata-map:
+      cluster: ribbon
+#feign:
+#  hystrix:
+#    enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,hystrix.stream
+  endpoint:
+   health:
+    show-details: always
+
+
+turbine:
+  aggregator:
+    cluster-config: ribbon
+  app-config: ribbon-hystrix-service-consumer,eureka-service-provider
+  cluster-name-expression:  metadata['cluster']
+#  cluster-name-expression: new String("default")

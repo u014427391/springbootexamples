@@ -1,0 +1,54 @@
+server:
+  port: 8082
+# 指定application name，这个是微服务注册的serviceId
+spring:
+  application:
+    name: zuul-api-gateway
+
+eureka:
+  client:
+    # 服务注册中心url
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    # 网关服务注册、发现都开放，所以 register-with-eureka、fetch-registry都是true
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    status-page-url-path: http://localhost:8761/actuator/info
+    health-check-url-path: http://localhost:8761/actuator/health
+    prefer-ip-address: true
+    instance-id: zuul-api-gateway8082
+
+zuul:
+  # 配置前缀
+  prefix: /api-gateway
+  routes:
+    provider: # 路由标识，可以自己定义
+      service-id: eureka-service-provider # 服务id
+      path: /provider/** # 映射的路径，一般和routes.provider一致
+      url: http://localhost:8083 # 路由到的url
+  host:
+    # 配置连接超时时间
+    connect-timeout-millis: 15000
+    # socker发送超时时间
+    socket-timeout-millis: 60000
+  # 请求url编码
+  decode-url: true
+  # 查询字符串编码
+  force-original-query-string-encoding: false
+  # 配置过滤敏感的请求头信息，设置为空就不会过滤
+  sensitive-headers: Cookie,Set-Cookie,Authorization
+  # 重定向会添加host请求头
+  add-proxy-headers: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 默认只支持info,health，开启对routes的监控
+        include: info,health,routes
+  # 开启健康检查详细信息
+  endpoint:
+    health:
+      show-details: always

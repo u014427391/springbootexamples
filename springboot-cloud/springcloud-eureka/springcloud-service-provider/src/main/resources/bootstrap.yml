@@ -1,0 +1,21 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: eureka-service-provider
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: false
+    healthcheck:
+      enabled: false
+  instance:
+    status-page-url-path: http://localhost:8761/actuator/info
+    health-check-url-path: http://localhost:8761/actuator/health
+    prefer-ip-address: false
+    instance-id: eureka-service-provider8083
+    metadata-map:
+      cluster: ribbon
+

@@ -1,0 +1,9 @@
+#management:
+#  endpoints:
+#    web:
+#      base-path: /actuator
+#      exposure:
+#        include: info,health,refresh
+#  endpoint:
+#    health:
+#      show-details: always

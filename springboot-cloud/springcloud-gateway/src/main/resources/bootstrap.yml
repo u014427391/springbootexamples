@@ -1,0 +1,133 @@
+server:
+  port: 8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # 配置eureka服务地址
+    healthcheck:
+      enabled: false  # 关闭eureka健康检查
+    register-with-eureka: true # Eureka服务注册开启
+    fetch-registry: true # Eureka服务发现开启
+  instance:
+    status-page-url-path: http://localhost:8761/actuator/info
+    health-check-url-path: http://localhost:8761/actuator//health
+    prefer-ip-address: true  # 显示ip
+    instance-id: api-gateway8082  # eureka实例id
+
+spring:
+  application:
+    name: api-gateway  # 指定application name
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+  cloud:
+    gateway:
+      routes:
+        # 根据Path路径路由
+        - id: user-service-provider # 配置路由id
+          uri: http://127.0.0.1:8083/api/users/{username}  # 路由到的地址
+          predicates:
+            - Path=/api/users/{username} # 设置谓词，路径匹配的进行路由
+        # 根据After指定datetime之后的匹配
+        - id: after_route  # 路由id
+          uri: http://127.0.0.1:8083/api/findUser # 路由到的uri
+          predicates:
+            - After=2029-01-01T16:30:00+08:00[Asia/Shanghai]  # 设置After谓词，在指定的datetime后
+        # 根据cookie路由
+        - id: cookie_route # 配置路由id
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Cookie=chocolate, ch.p # Cookie : chocolate = ch.p
+        # 根据请求Header路由
+        - id: header_route
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Header=X-Request-Id, \d+
+        # 根据请求host路由
+        - id: host_route
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Host=192.168.9.30
+        # 根据Method路由
+        - id: method_route
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Method=GET
+        # 根据请求参数路由
+        - id: query_route
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Query=username
+        # 根据远程ip地址路由
+        - id: remoteaddr_route
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - RemoteAddr=192.168.0.152/22
+        # 根据权重进行路由
+        - id: weight_high
+          uri: http://127.0.0.1:8083
+          predicates:
+            - Weight=group1, 8
+        - id: weight_low
+          uri: http://127.0.0.1:8082
+          predicates:
+            - Weight=group1, 2
+        # AddRequestHeader GatewayFilter
+        - id: add_request_header_route
+          uri: http://127.0.0.1:8083
+          filters:
+            - AddRequestHeader=username,admin
+          predicates:
+             - Header=X-Request-Id, \d+
+        # PrefixPath GatewayFilter
+        - id: prefixpath_route
+          uri: http://127.0.0.1:8083
+          filters:
+            - PrefixPath=/api
+          predicates:
+            - Header=X-Request-Id, \d+
+        # Hystrix GatewayFilter容错保护
+        - id: hystrix_route
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Method=GET
+          filters:
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/fallback
+        # RequestRateLimiter GatewayFilter简单限流
+        - id: requestratelimiter_route
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Method=GET
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1 # 每秒允许处理的请求数量
+                redis-rate-limiter.burstCapacity: 2 # 每秒最大处理的请求数量
+                redis-rate-limiter.requestedTokens: 1  #每秒最大处理token数量
+                key-resolver: "#{@ipKeyResolver}" # 限流策略，对应策略的BeanName
+        # RetryFilter 重试过滤器
+        - id: retry_test
+          uri: http://127.0.0.1:8083/api/findUser
+          predicates:
+            - Method=GET
+          filters:
+            - name: Retry
+              args:
+                retries: 3 # 重试次数
+                statuses: BAD_GATEWAY
+                methods: GET,POST
+                backoff:
+                  firstBackoff: 10ms
+                  maxBackoff: 50ms
+                  factor: 2
+                  basedOnPreviousValue: false
+
+# 修改网关日志级别
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
