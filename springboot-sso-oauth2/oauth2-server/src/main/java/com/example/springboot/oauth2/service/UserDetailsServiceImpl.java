@@ -34,10 +34,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if(user == null){
-            log.info("登录用户[{}]没注册!",username);
-            throw new UsernameNotFoundException("登录用户["+username + "]没注册!");
-        }
+        /*if(user == null){
+            //log.info("登录用户{}，用户名或密码错误!",username);
+            throw new UsernameNotFoundException("登录用户["+username + "]用户名或密码错误!");
+        }*/
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority());
     }
 
