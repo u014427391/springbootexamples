@@ -105,6 +105,11 @@
 * [SpringCloud系列之分布式配置中心极速入门与实践
 ](https://blog.csdn.net/u014427391/article/details/108491861) 
 
+### 7.3 微服务之Spring Cloud Alibaba
+* [Spring Cloud Alibaba系列之快速开始搭建Nacos环境](https://smilenicky.blog.csdn.net/article/details/111628299)
+* [Spring Cloud Alibaba系列之Nacos服务注册与发现](https://smilenicky.blog.csdn.net/article/details/111518470)
+* [Spring Cloud Alibaba系列之Nacos分布式配置中心](https://smilenicky.blog.csdn.net/article/details/111519080)
+
 ## 八、单点登录篇
 ### 8.1 单点登录入门
 * [ 单点登录集群安装教程](http://blog.csdn.net/u014427391/article/details/78653482)
