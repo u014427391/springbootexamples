@@ -15,7 +15,7 @@
 
 本专栏基于Springboot2.0，配套自己写的代码例子，内容设计基本的配置用法，web，数据库，Redis，也涉及到企业级开发的消息队列，dubbo，搜索引擎等方面，并有源码的简单分析，适合作为入门教程
 
-@[toc]
+[toc]
 ## 学习入门前言
 [SpringBoot系列之快速创建项目教程](https://blog.csdn.net/u014427391/article/details/102870300)
 ## 一、配置使用篇
