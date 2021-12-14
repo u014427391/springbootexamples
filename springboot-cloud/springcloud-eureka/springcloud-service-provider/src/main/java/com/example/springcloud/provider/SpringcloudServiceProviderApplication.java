@@ -11,6 +11,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @SpringBootApplication
 @EnableEurekaClient
 @RestController
@@ -43,7 +45,7 @@ public class SpringcloudServiceProviderApplication {
 
     @GetMapping({"/api/findUser"})
     @ResponseBody
-    public User findUserByName(@RequestParam(value = "username",required = false)String username) throws InterruptedException{
+    public User findUserByName(@RequestParam(value = "username",required = false)String username, HttpServletRequest request) throws InterruptedException{
         User user = new User("nicky","http://smilenicky.blog.csdn.net");
         return user;
     }

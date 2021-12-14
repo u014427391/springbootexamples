@@ -9,11 +9,13 @@ eureka:
       enabled: false  # 关闭eureka健康检查
     register-with-eureka: true # Eureka服务注册开启
     fetch-registry: true # Eureka服务发现开启
+    enabled: false
   instance:
     status-page-url-path: http://localhost:8761/actuator/info
     health-check-url-path: http://localhost:8761/actuator//health
     prefer-ip-address: true  # 显示ip
     instance-id: api-gateway8082  # eureka实例id
+    instance-enabled-onit: false
 
 spring:
   application:
@@ -126,6 +128,17 @@ spring:
                   maxBackoff: 50ms
                   factor: 2
                   basedOnPreviousValue: false
+        - id : get_user_info
+          uri : http://127.0.0.1:8083
+          predicates:
+            - Path=/api/findUser
+          filters:
+          - AddRequestHeader=accessToken,a68f3eac-5b9c-4fc1-a900-98ee18574576
+          - name: Custom
+            args:
+              passid : 7a11600c-403c-4260-9165-659e138ada9c
+              serviceId : d8c6ce4c-1b2c-4826-9044-4197d17aad87
+
 
 # 修改网关日志级别
 logging:

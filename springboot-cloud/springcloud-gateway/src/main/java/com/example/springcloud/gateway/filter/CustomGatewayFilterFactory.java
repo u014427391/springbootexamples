@@ -4,6 +4,7 @@ import com.example.springcloud.gateway.util.EncryptUtils;
 import lombok.Data;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import java.util.Date;
@@ -19,8 +20,12 @@ import java.util.Date;
  *    修改后版本:     修改人：  修改日期: 2021/12/14 09:59  修改内容:
  * </pre>
  */
-public class MyGatewayFilterFactory extends AbstractGatewayFilterFactory<MyGatewayFilterFactory.Config> {
+public class CustomGatewayFilterFactory extends AbstractGatewayFilterFactory<CustomGatewayFilterFactory.Config>
+implements Ordered {
 
+    CustomGatewayFilterFactory() {
+        super(Config.class);
+    }
 
     @Override
     public GatewayFilter apply(Config config) {
@@ -41,6 +46,11 @@ public class MyGatewayFilterFactory extends AbstractGatewayFilterFactory<MyGatew
                     .build();
             return chain.filter(exchange.mutate().request(request).build());
         });
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
     }
 
     @Data
