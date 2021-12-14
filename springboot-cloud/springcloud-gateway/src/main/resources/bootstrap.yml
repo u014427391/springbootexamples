@@ -133,7 +133,7 @@ spring:
           predicates:
             - Path=/api/findUser
           filters:
-          - AddRequestHeader=accessToken,a68f3eac-5b9c-4fc1-a900-98ee18574576
+          - AddRequestHeader=passToken,a68f3eac-5b9c-4fc1-a900-98ee18574576
           - name: Custom
             args:
               passid : 7a11600c-403c-4260-9165-659e138ada9c
