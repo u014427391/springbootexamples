@@ -11,14 +11,14 @@ public class MyEventPublisher {
 
     private KafkaTemplate<String, Object> kafkaTemplate;
 
-    @Value("${app.ebus.topic:abus}")
+    @Value("${app.ebus.topic:ebus}")
     private String topic;
 
     public MyEventPublisher(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publishEvent(ApplicationEvent event) {
+    public void publishEvent(Object event) {
         if (log.isInfoEnabled()) {
             log.info("topic发送:{}", event.getClass().getName());
         }

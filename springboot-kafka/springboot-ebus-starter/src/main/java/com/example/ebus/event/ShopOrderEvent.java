@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SendEmailEvent {
+public class ShopOrderEvent {
 
-    private String title;
-    private String content;
-    private String receiveUser;
-    private String sendUser;
+    private String orderCode;
+    private String productName;
+    private float price;
+    private String productDesc;
 
 
 }
