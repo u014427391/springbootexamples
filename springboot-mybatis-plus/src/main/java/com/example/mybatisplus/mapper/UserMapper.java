@@ -1,10 +1,11 @@
 package com.example.mybatisplus.mapper;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.mybatisplus.model.User;
+import org.apache.ibatis.annotations.Mapper;
 
-@DS(value = "shopping")
+//@DS(value = "shop")
+@Mapper
 public interface UserMapper extends BaseMapper<User>{
 
 }
