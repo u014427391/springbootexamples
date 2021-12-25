@@ -1,11 +1,21 @@
-
-pagehelper:
-  helper-dialect: mysql
-  reasonable: true
-  support-methods-arguments: true
-  params: count=countSql
+#pagehelper:
+#  helper-dialect: mysql
+#  reasonable: true
+#  support-methods-arguments: true
+#  params: count=countSql
 spring:
   datasource:
     dynamic:
-      primary:
-
+      primary: shop #设置默认的数据源或者数据源组,默认值即为master
+      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        shop:
+          url: jdbc:mysql://127.0.0.1:3306/shopping?useUnicode=true&characterEncoding=utf-8
+          username: root
+          password: root
+          driver-class-name: com.mysql.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
+#        slave_1:
+#          url: jdbc:mysql://xx.xx.xx.xx:3307/dynamic
+#          username: root
+#          password: 123456
+#          driver-class-name: com.mysql.jdbc.Driver
