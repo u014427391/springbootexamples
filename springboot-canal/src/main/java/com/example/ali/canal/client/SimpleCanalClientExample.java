@@ -22,16 +22,16 @@ public class SimpleCanalClientExample {
 public static void main(String args[]) {
     // 创建链接
     CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(),
-                                                                                        11111), "example", "", "");
+                                                                                        11111), "example", "canal", "canal");
     int batchSize = 1000;
     int emptyCount = 0;
     try {
         connector.connect();
-        connector.subscribe(".*\\..*");
-        //connector.subscribe(".*ale_main.*");
+        connector.subscribe(".*canaltest.*");
+        //connector.subscribe(".*\\..*");
         connector.rollback();
         int totalEmptyCount = 120;
-        while (emptyCount < totalEmptyCount) {
+        while (emptyCount < totalEmptyCount ) {
             Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
             long batchId = message.getId();
             int size = message.getEntries().size();

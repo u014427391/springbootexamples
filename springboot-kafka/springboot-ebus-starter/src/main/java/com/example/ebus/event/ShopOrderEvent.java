@@ -14,6 +14,6 @@ public class ShopOrderEvent {
     private String productName;
     private float price;
     private String productDesc;
-
+    private Integer isOk;
 
 }

@@ -6,6 +6,7 @@ import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.common.utils.AddressUtils;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.Message;
+import com.example.ebus.event.ShopOrderEvent;
 import com.example.ebus.publisher.MyEventPublisher;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Optional;
 
 public class AliCanalClient implements InitializingBean {
 
@@ -25,7 +27,7 @@ public class AliCanalClient implements InitializingBean {
                 11111), "example", "", "");
         try {
             connector.connect();
-            connector.subscribe(".*\\..*");
+            connector.subscribe(".*canaltest.*");
             connector.rollback();
             while (true) {
                 Message message = connector.getWithoutAck(1);
@@ -62,7 +64,7 @@ public class AliCanalClient implements InitializingBean {
                     if (rowChange.getEventType() == CanalEntry.EventType.UPDATE) {
                         rowChange.getRowDatasList().stream().forEach((row->{
                             row.getAfterColumnsList().stream().forEach(column->{
-                                if ("is".equals(column.getName())&&
+                                if ("isOk".equals(column.getName())&&
                                     column.getUpdated() && "1".equals(column.getValue())) {
                                     publishEvent(row);
                                 }
@@ -77,7 +79,30 @@ public class AliCanalClient implements InitializingBean {
     }
 
     private void publishEvent(CanalEntry.RowData rowData) {
-
+        ShopOrderEvent orderEvent = new ShopOrderEvent();
+        List<CanalEntry.Column> columns = rowData.getAfterColumnsList();
+        columns.forEach((column -> {
+            String name = column.getName();
+            String value = column.getValue();
+            Optional.ofNullable(value).ifPresent((v)->{
+                if ("orderCode".equals(name)) {
+                    orderEvent.setOrderCode(v);
+                }
+                if ("productName".equals(name)) {
+                    orderEvent.setProductName(v);
+                }
+                if ("price".equals(name)) {
+                    orderEvent.setPrice(Float.valueOf(v));
+                }
+                if ("productDesc".equals(name)) {
+                    orderEvent.setProductDesc(v);
+                }
+                if ("isOk".equals(name)) {
+                    orderEvent.setIsOk(Integer.valueOf(v));
+                }
+            });
+        }));
+        eventPublisher.publishEvent(orderEvent);
     }
 
 }
