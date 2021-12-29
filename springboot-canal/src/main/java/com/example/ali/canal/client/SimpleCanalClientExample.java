@@ -22,12 +22,12 @@ public class SimpleCanalClientExample {
 public static void main(String args[]) {
     // 创建链接
     CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(),
-                                                                                        11111), "example", "canal", "canal");
+            11111), "example", "canal", "canal");
     int batchSize = 1000;
     int emptyCount = 0;
     try {
         connector.connect();
-        connector.subscribe(".*canaltest.*");
+        connector.subscribe(".*order.*");
         //connector.subscribe(".*\\..*");
         connector.rollback();
         int totalEmptyCount = 120;
