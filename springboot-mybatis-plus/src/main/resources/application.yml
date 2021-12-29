@@ -16,11 +16,11 @@ spring:
           driver-class-name: com.mysql.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
           schema: classpath:db/schema-mysql.sql
           data: classpath:db/data-mysql.sql
-#        slave_1:
-#          url: jdbc:mysql://xx.xx.xx.xx:3307/dynamic
-#          username: root
-#          password: 123456
-#          driver-class-name: com.mysql.jdbc.Driver
+        slave_1:
+          url: jdbc:mysql://127.0.0.1:3306/canaltest?useUnicode=true&characterEncoding=utf-8
+          username: root
+          password:
+          driver-class-name: com.mysql.jdbc.Driver
 
 mybatis-plus:
   type-aliases-package: com.example.mybatisplus.*.*.model
