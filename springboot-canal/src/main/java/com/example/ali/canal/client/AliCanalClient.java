@@ -72,16 +72,12 @@ public class AliCanalClient implements ApplicationRunner {
                 try {
                     // 获取rowChange
                     CanalEntry.RowChange rowChange = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
-                    // 针对更新操作的监听
-                    if (rowChange.getEventType() == CanalEntry.EventType.UPDATE) {
+                    // 针对新增操作的监听
+                    if (rowChange.getEventType() == CanalEntry.EventType.INSERT) {
                         // 遍历rowChange里的所有的行数据
                         rowChange.getRowDatasList().stream().forEach((row->{
                             row.getAfterColumnsList().stream().forEach(column->{
-                                // 对具体字段进行校验，处理业务
-                                if ("isOk".equals(column.getName())&&
-                                    column.getUpdated() && "1".equals(column.getValue())) {
                                     publishEvent(row);
-                                }
                             });
                         }));
                     }
