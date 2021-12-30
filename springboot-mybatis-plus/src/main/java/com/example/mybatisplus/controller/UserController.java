@@ -1,7 +1,7 @@
 package com.example.mybatisplus.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.example.mybatisplus.common.ResultBean;
+import com.example.mybatisplus.common.rest.ResultBean;
 import com.example.mybatisplus.model.User;
 import com.example.mybatisplus.model.dto.UserDto;
 import com.example.mybatisplus.model.vo.UserVo;

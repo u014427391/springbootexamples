@@ -1,4 +1,4 @@
-package com.example.mybatisplus.common;
+package com.example.mybatisplus.common.rest;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;
