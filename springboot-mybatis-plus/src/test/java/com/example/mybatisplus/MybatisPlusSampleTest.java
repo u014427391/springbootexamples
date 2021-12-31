@@ -16,7 +16,7 @@ class MybatisPlusSampleTest {
     private UserMapper userMapper;
 
     @Test
-    void testInsert() {
+    void test() {
         List<User> userList = userMapper.selectList(new QueryWrapper<User>());
         userList.stream().forEach(System.out::println);
     }
