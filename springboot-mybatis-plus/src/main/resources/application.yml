@@ -21,6 +21,13 @@ spring:
           username: root
           password:
           driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 6
+    cache:
+      redis:
+        cache-null-values: true
 
 mybatis-plus:
   type-aliases-package: com.example.mybatisplus.*.*.model
