@@ -7,7 +7,7 @@ import com.example.mybatisplus.model.User;
 import org.apache.ibatis.annotations.CacheNamespace;
 
 @DS(value = "shop")
-@CacheNamespace(implementation = MyBatisRedisCache.class)
+@CacheNamespace(implementation = MyBatisRedisCache.class ,eviction = MyBatisRedisCache.class)
 public interface UserMapper extends BaseMapper<User>{
 
 }

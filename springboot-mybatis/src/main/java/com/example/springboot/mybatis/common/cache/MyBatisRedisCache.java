@@ -1,7 +1,7 @@
-package com.example.mybatisplus.common.cache;
+package com.example.springboot.mybatis.common.cache;
 
 
-import com.example.mybatisplus.common.ioc.SpringContextHolder;
+import com.example.springboot.mybatis.common.ioc.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.Cache;
 import org.springframework.data.redis.core.RedisTemplate;
