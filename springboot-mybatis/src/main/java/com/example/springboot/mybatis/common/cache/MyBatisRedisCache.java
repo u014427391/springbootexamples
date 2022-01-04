@@ -7,7 +7,6 @@ import org.apache.ibatis.cache.Cache;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -20,7 +19,6 @@ public class MyBatisRedisCache implements Cache {
 
     private String id;
 
-    private static final long EXPIRE_TIME_IN_MINUTES = 10;
 
     public MyBatisRedisCache(String id) {
         if (StringUtils.isEmpty(id)) {
@@ -40,16 +38,16 @@ public class MyBatisRedisCache implements Cache {
     @Override
     public void putObject(Object key, Object value) {
         if (!StringUtils.isEmpty(value)) {
-            redisTemplate.opsForValue().set( key.toString() , value, EXPIRE_TIME_IN_MINUTES , TimeUnit.MINUTES);
-            log.info("mybatis缓存,{}:{}" , key , value );
+            redisTemplate.opsForHash().put(id, key.toString() , value);
+            log.info("mybatis缓存,{}:[{}]" , key , value );
         }
     }
 
     @Override
     public Object getObject(Object key) {
         if (!StringUtils.isEmpty(key)) {
-            Object object = redisTemplate.opsForValue().get( key);
-            log.info("mybatis缓存读取,{}:{}", key , object);
+            Object object = redisTemplate.opsForHash().get(id , key.toString());
+            log.info("mybatis缓存读取,{}:[{}]", key , object);
             return object;
         }
         return null;
@@ -65,12 +63,12 @@ public class MyBatisRedisCache implements Cache {
 
     @Override
     public void clear() {
-        redisTemplate.delete(id);
+        redisTemplate.delete(id.toString());
     }
 
     @Override
     public int getSize() {
-        return redisTemplate.opsForHash().size(id).intValue();
+        return redisTemplate.opsForHash().size(id.toString()).intValue();
     }
 
     @Override
