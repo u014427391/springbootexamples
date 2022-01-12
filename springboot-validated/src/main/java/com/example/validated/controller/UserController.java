@@ -9,6 +9,7 @@ import com.example.validated.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/user")
-    public ResultBean<User> save(@RequestBody UserDto userDto) {
+    public ResultBean<User> save(@Valid @RequestBody UserDto userDto) {
         User user = BeanUtil.copyProperties(userDto , User.class);
         boolean flag = userService.save(user);
         if (flag) return ResultBean.ok(user);
@@ -48,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/user")
-    public ResultBean<User> update(@RequestBody UserDto userDto) {
+    public ResultBean<User> update(@Valid @RequestBody UserDto userDto) {
         User user = BeanUtil.copyProperties(userDto , User.class);
         boolean flag = userService.updateById(user);
         if (flag) return ResultBean.ok(user);
