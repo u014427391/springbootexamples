@@ -46,6 +46,6 @@ public class UserDto implements Serializable {
     @NotNull(message = "地址必须填!" )
     @Size(min = 1 , message = "地址至少要有一个")
     @Valid
-    private AddressDto address;
+    private List<AddressDto> address;
 
 }
