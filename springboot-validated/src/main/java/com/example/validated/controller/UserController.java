@@ -2,11 +2,16 @@ package com.example.validated.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.example.validated.common.rest.ResultBean;
+import com.example.validated.interfaces.BasicInfo;
+import com.example.validated.interfaces.UserInfo;
 import com.example.validated.model.User;
+import com.example.validated.model.dto.AddressDto;
 import com.example.validated.model.dto.UserDto;
+import com.example.validated.model.dto.UserGroupDto;
 import com.example.validated.model.vo.UserVo;
 import com.example.validated.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,6 +46,14 @@ public class UserController {
         return ResultBean.badRequest("新增失败");
     }
 
+    @PostMapping(value = "/user/basic")
+    public ResultBean<User> saveBasic(@Validated(BasicInfo.class) @RequestBody UserGroupDto userDto) {
+        User user = BeanUtil.copyProperties(userDto , User.class);
+        boolean flag = userService.save(user);
+        if (flag) return ResultBean.ok(user);
+        return ResultBean.badRequest("新增失败");
+    }
+
     @DeleteMapping(value = "/user/{id}")
     public ResultBean<Integer> del(@PathVariable("id") Integer id) {
         boolean flag = userService.removeById(id);
@@ -49,7 +62,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/user")
-    public ResultBean<User> update(@Valid @RequestBody UserDto userDto) {
+    public ResultBean<User> update(@Validated @RequestBody UserDto userDto) {
         User user = BeanUtil.copyProperties(userDto , User.class);
         boolean flag = userService.updateById(user);
         if (flag) return ResultBean.ok(user);

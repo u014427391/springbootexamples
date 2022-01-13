@@ -1,7 +1,7 @@
 package com.example.validated.model.enumCls;
 
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import org.springframework.util.StringUtils;
 
 public enum  SexTypeEnum {
 
@@ -34,8 +34,8 @@ public enum  SexTypeEnum {
     }
 
 
-    public static boolean isValueValid(String value) {
-        if(StringUtils.isNotBlank(value)){
+    public static boolean isValueValid(Integer value) {
+        if(!StringUtils.isEmpty(value)){
             for (SexTypeEnum enumObj : SexTypeEnum.values()) {
                 if (enumObj.getCode().equals(value)) {
                     return true;
