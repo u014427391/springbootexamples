@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example.springboot</groupId>
-    <artifactId>custom-spring-boot-starter-autoconfigurer</artifactId>
+    <artifactId>spring-boot-starter-autoconfigurer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>custom-spring-boot-starter-autoconfigurer</name>
+    <name>spring-boot-starter-autoconfigurer</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
