@@ -1,6 +1,6 @@
 package com.example.mongodb;
 
-import com.example.mongodb.model.UserModel;
+import com.example.mongodb.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ class SpringbootMongodbApplicationTests {
 
     @Test
     void contextLoads() {
-        UserModel user = UserModel.builder()
+        User user = User.builder()
                 .id(1L)
                 .name("admin")
                 .email("123456@qq.com")

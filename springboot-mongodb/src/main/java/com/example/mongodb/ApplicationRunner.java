@@ -1,12 +1,16 @@
 package com.example.mongodb;
 
 
-import com.example.mongodb.model.UserModel;
+import com.example.mongodb.model.User;
 import com.example.mongodb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class ApplicationRunner implements CommandLineRunner {
@@ -22,22 +26,15 @@ public class ApplicationRunner implements CommandLineRunner {
 
     private void init() {
         userRepository.deleteAll();
-
-        UserModel user1 = UserModel.builder()
-                .id(1L)
-                .age(18)
-                .name("Jone")
-                .email("test1@qq.com")
-                .build();
-        UserModel user2 = UserModel.builder()
-                .id(2L)
-                .age(18)
-                .name("Jack")
-                .email("test2@qq.com")
-                .build();
-
-        userRepository.insert(user1);
-        userRepository.insert(user2);
+        List<User> users = Stream.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L ,9L).map(i -> {
+            User user = new User();
+            user.setId(i);
+            user.setName("User" + i);
+            user.setAge(18);
+            user.setEmail("test" + i + "@qq.com");
+            return user;
+        }).collect(Collectors.toList());
+        userRepository.saveAll(users);
     }
 
 }
