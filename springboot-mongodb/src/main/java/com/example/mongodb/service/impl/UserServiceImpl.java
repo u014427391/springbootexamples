@@ -4,11 +4,8 @@ package com.example.mongodb.service.impl;
 import com.example.mongodb.model.User;
 import com.example.mongodb.repository.UserRepository;
 import com.example.mongodb.service.IUserService;
-import jdk.nashorn.internal.runtime.options.Option;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
