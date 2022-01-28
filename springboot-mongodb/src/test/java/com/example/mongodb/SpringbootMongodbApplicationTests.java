@@ -39,6 +39,7 @@ class SpringbootMongodbApplicationTests {
 
     @Test
     void updateFirst() {
+        // 多条相同的数据，只会更新第一条
         mongoTemplate.updateFirst(
                 Query.query(Criteria.where("name").is("User1")),
                 Update.update("name" , "James"), User.class);
@@ -46,6 +47,7 @@ class SpringbootMongodbApplicationTests {
 
     @Test
     void updateMulti() {
+        // 多条相同的数据，都会根据条件更新
         mongoTemplate.updateMulti(
                 Query.query(Criteria.where("name").is("User1")),
                 Update.update("name" , "James"), User.class);
@@ -53,6 +55,7 @@ class SpringbootMongodbApplicationTests {
 
     @Test
     void findAndModify() {
+        // 和updateFirst类似，不过会返回更新的数据
         User user = mongoTemplate.findAndModify(
                 Query.query(Criteria.where("name").is("User1")) ,
                 Update.update("name" , "James"), User.class);
@@ -61,6 +64,7 @@ class SpringbootMongodbApplicationTests {
 
     @Test
     void upsert() {
+        // 查得到数据更新，查不到会更新一条
         mongoTemplate.upsert(
                 Query.query(Criteria.where("name").is("User10")) ,
                 Update.update("name" , "James"), User.class);
