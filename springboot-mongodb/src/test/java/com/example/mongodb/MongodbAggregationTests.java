@@ -44,13 +44,13 @@ public class MongodbAggregationTests {
         mongoDatabase = mongoClient.getDatabase(DATABASE);
         collection = mongoDatabase.getCollection(COLLECTION);
 
-        //collection.drop();
+        collection.drop();
 
-//        InputStream inputStream = MongodbAggregationTests.class.getResourceAsStream(USER_JSON);
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//        reader.lines()
-//                .forEach(l->collection.insertOne(Document.parse(l)));
-//        reader.close();
+        InputStream inputStream = MongodbAggregationTests.class.getResourceAsStream(USER_JSON);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        reader.lines()
+                .forEach(l->collection.insertOne(Document.parse(l)));
+        reader.close();
 
     }
 
