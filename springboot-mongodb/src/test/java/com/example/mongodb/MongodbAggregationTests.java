@@ -1,8 +1,6 @@
 package com.example.mongodb;
 
 
-
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
@@ -16,13 +14,11 @@ import org.bson.Document;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.print.Doc;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static org.junit.Assert.assertEquals;
