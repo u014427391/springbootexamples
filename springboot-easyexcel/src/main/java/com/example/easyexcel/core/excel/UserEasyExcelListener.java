@@ -1,16 +1,12 @@
 package com.example.easyexcel.core.excel;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.example.easyexcel.model.User;
-import com.example.easyexcel.model.dto.UserExcelDto;
-import lombok.Getter;
+import com.alibaba.excel.metadata.CellExtra;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,34 +21,52 @@ import java.util.List;
  * </pre>
  */
 @Slf4j
-public class UserEasyExcelListener extends AnalysisEventListener<UserExcelDto> {
+public class UserEasyExcelListener<T> extends AnalysisEventListener<T> {
 
-    @Getter
-    private final String batchId ;
+    private List<T> datas;
 
-    private final Date date;
+    private Integer rowIndex;
 
-    private List<UserExcelDto> datas;
+    private List<CellExtra> extraMergeInfoList;
 
-    public UserEasyExcelListener() {
-        this.batchId = IdUtil.simpleUUID();
-        this.date = DateTime.now();
+    public UserEasyExcelListener(Integer rowIndex) {
+        this.rowIndex = rowIndex;
         datas = new ArrayList<>();
+        extraMergeInfoList = new ArrayList<>();
     }
 
     @Override
-    public void invoke(UserExcelDto data, AnalysisContext context) {
-        int index = context.readRowHolder().getRowIndex();
-        if (index != 1) {
-            data.setBatchId(batchId);
-            data.setDate(date);
-            datas.add(data);
-        }
+    public void invoke(T data, AnalysisContext context) {
+        log.info("解析到一条数据: ", JSONUtil.toJsonPrettyStr(data));
+        datas.add(data);
     }
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-
+        log.info("所有数据解析完成！");
     }
+
+    @Override
+    public void extra(CellExtra extra, AnalysisContext context) {
+        log.info("读取到了一条额外信息:{}", JSONUtil.toJsonPrettyStr(extra));
+        switch (extra.getType()) {
+            case MERGE:
+                if (extra.getRowIndex() >= rowIndex) {
+                    extraMergeInfoList.add(extra);
+                }
+                break;
+            default:
+        }
+    }
+
+    public List<T> getData() {
+        return datas;
+    }
+
+
+    public List<CellExtra> getExtraMergeInfoList() {
+        return extraMergeInfoList;
+    }
+
 
 }

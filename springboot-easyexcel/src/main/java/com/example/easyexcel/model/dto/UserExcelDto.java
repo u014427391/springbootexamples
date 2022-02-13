@@ -17,14 +17,20 @@ public class UserExcelDto {
     @ExcelIgnore
     private Date date;
 
-    @ExcelProperty(value = "序号")
+    @ExcelProperty(value = "序号",index = 0)
     private String seq;
 
-    @ExcelProperty(value = "用户名")
+    @ExcelProperty(value = "用户名" ,index = 1)
     private String name;
 
-    @ExcelProperty(value = "密码")
+    @ExcelProperty(value = "密码", index = 2)
     private String password;
+
+    @ExcelProperty(value = "描述",index = 3)
+    private String addressName;
+
+    @ExcelProperty(value = "邮政编码",index = 4)
+    private String code;
 
     @EasyExcelCollection
     private List<AddressDto> address;

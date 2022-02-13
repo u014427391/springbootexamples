@@ -1,14 +1,18 @@
 package com.example.easyexcel.service;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.read.builder.ExcelReaderBuilder;
+import com.alibaba.excel.enums.CellExtraTypeEnum;
+import com.alibaba.excel.metadata.CellExtra;
+import com.example.easyexcel.core.excel.ExcelMergeHelper;
 import com.example.easyexcel.core.excel.UserEasyExcelListener;
-import com.example.easyexcel.model.User;
 import com.example.easyexcel.model.dto.UserExcelDto;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * <pre>
@@ -24,12 +28,23 @@ import java.io.IOException;
 @Service
 public class ImportService {
 
-    public void doImportExcel(MultipartFile file) throws IOException {
-        UserEasyExcelListener easyExcelListener = new UserEasyExcelListener();
-        ExcelReaderBuilder read = EasyExcel.read(
-                file.getInputStream(),
-                UserExcelDto.class,
-                easyExcelListener);
-        read.doReadAll();
+    public void doImportExcel(@RequestPart("file") MultipartFile file) throws IOException {
+        Integer sheetNo = 0;
+        Integer headRowNumber = 1;
+        UserEasyExcelListener easyExcelListener = new UserEasyExcelListener(headRowNumber);
+//        ExcelReaderBuilder read = EasyExcel.read(
+//                file.getInputStream(),
+//                UserExcelDto.class,
+//                easyExcelListener);
+//        read.doReadAll();
+
+        EasyExcel.read(file.getInputStream(), UserExcelDto.class, easyExcelListener)
+                .extraRead(CellExtraTypeEnum.MERGE)
+                .sheet(sheetNo)
+                .headRowNumber(headRowNumber)
+                .doRead();
+        List<CellExtra> extraMergeInfoList = easyExcelListener.getExtraMergeInfoList();
+        List<UserExcelDto> data = new ExcelMergeHelper().explainMergeData(easyExcelListener.getData(), extraMergeInfoList, headRowNumber);
+        System.out.println(JSONUtil.toJsonPrettyStr(data));
     }
 }
