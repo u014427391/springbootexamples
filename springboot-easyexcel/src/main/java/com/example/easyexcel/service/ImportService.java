@@ -7,12 +7,20 @@ import com.alibaba.excel.metadata.CellExtra;
 import com.example.easyexcel.core.excel.ExcelMergeHelper;
 import com.example.easyexcel.core.excel.UserEasyExcelListener;
 import com.example.easyexcel.model.dto.UserExcelDto;
+import com.example.easyexcel.model.vo.ExcelValidateError;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * <pre>
@@ -28,7 +36,44 @@ import java.util.List;
 @Service
 public class ImportService {
 
-    public void doImportExcel(@RequestPart("file") MultipartFile file) throws IOException {
+    @Autowired
+    private Validator validator;
+
+    public List<ExcelValidateError> importExcel(MultipartFile file) throws IOException {
+        List<UserExcelDto> excelDtoList = obtainExcelData(file);
+        final List<ExcelValidateError> errs = doValidateExcel(excelDtoList);
+        if (errs.isEmpty()) {
+            System.out.println("开始保存数据!");
+        }
+        return errs;
+    }
+
+    private List<ExcelValidateError> doValidateExcel(final List<UserExcelDto> excelDtoList) {
+        final List<ExcelValidateError> errs = new ArrayList<ExcelValidateError>();
+        if (!excelDtoList.isEmpty()) {
+            excelDtoList.stream().forEach(dto->{
+                Set<ConstraintViolation<UserExcelDto>> violations = validator.validate(dto);
+                List<String> errMsgs = new ArrayList<>();
+                if (!violations.isEmpty()) {
+                    errMsgs = violations.stream().map(e -> e.getMessage()).collect(Collectors.toList());
+                }
+                if (!errMsgs.isEmpty()) {
+                    errs.add(ExcelValidateError
+                            .builder()
+                            .index(dto.getSeq())
+                            .errMsgs(errMsgs)
+                            .build());
+                }
+            });
+//            errs.stream().collect(
+//                    Collectors.collectingAndThen(
+//                            Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ExcelValidateError::getIndex))), ArrayList::new)
+//            );
+        }
+        return errs.stream().filter(distinctByKey(ExcelValidateError::getIndex)).collect(Collectors.toList());
+    }
+
+    private List<UserExcelDto> obtainExcelData(MultipartFile file) throws IOException {
         Integer sheetNo = 0;
         Integer headRowNumber = 1;
         UserEasyExcelListener easyExcelListener = new UserEasyExcelListener(headRowNumber);
@@ -43,8 +88,17 @@ public class ImportService {
                 .sheet(sheetNo)
                 .headRowNumber(headRowNumber)
                 .doRead();
+        System.out.println(JSONUtil.toJsonPrettyStr(easyExcelListener.getData()));
         List<CellExtra> extraMergeInfoList = easyExcelListener.getExtraMergeInfoList();
         List<UserExcelDto> data = new ExcelMergeHelper().explainMergeData(easyExcelListener.getData(), extraMergeInfoList, headRowNumber);
+
         System.out.println(JSONUtil.toJsonPrettyStr(data));
+
+        return data;
+    }
+
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
     }
 }
