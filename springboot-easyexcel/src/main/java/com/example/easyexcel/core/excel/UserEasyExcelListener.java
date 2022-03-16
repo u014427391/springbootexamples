@@ -1,5 +1,7 @@
 package com.example.easyexcel.core.excel;
 
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
@@ -38,6 +40,8 @@ public class UserEasyExcelListener<T> extends AnalysisEventListener<T> {
     @Override
     public void invoke(T data, AnalysisContext context) {
         log.info("解析到一条数据: ", JSONUtil.toJsonPrettyStr(data));
+        context.readWorkbookHolder().setIgnoreEmptyRow(false);
+        ReflectUtil.invoke(data, "setIndex", StrUtil.toString(context.readRowHolder().getRowIndex()));
         datas.add(data);
     }
 

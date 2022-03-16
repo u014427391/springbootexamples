@@ -60,17 +60,15 @@ public class ImportService {
                 if (!errMsgs.isEmpty()) {
                     errs.add(ExcelValidateError
                             .builder()
-                            .index(dto.getSeq())
+                            .index(dto.getIndex())
                             .errMsgs(errMsgs)
                             .build());
                 }
             });
-//            errs.stream().collect(
-//                    Collectors.collectingAndThen(
-//                            Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ExcelValidateError::getIndex))), ArrayList::new)
-//            );
+
         }
-        return errs.stream().filter(distinctByKey(ExcelValidateError::getIndex)).collect(Collectors.toList());
+        return errs;
+        //return errs.stream().filter(distinctByKey(ExcelValidateError::getIndex)).collect(Collectors.toList());
     }
 
     private List<UserExcelDto> obtainExcelData(MultipartFile file) throws IOException {
