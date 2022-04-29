@@ -33,8 +33,9 @@ public class RestTemplateConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestFactory factory ) {
-        RestTemplate restTemplate = new RestTemplate(factory);
+    public RestTemplate restTemplate(RestTemplateBuilder builder ,ClientHttpRequestFactory factory ) {
+        RestTemplate restTemplate = builder.build();
+        restTemplate.setRequestFactory(factory);
         return restTemplate;
     }
 

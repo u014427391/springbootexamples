@@ -22,20 +22,20 @@ public class CustomClientHttpRequestInterceptor implements ClientHttpRequestInte
     }
 
     private void trackRequest(HttpRequest httpRequest, byte[] bytes) {
-        log.debug("=======================request start=================================================");
-        log.info("Headers: {}", httpRequest.getHeaders());
-        log.info("Request URI: {}", httpRequest.getURI());
-        log.info("Request Method: {}", httpRequest.getMethod());
-        log.info("Request Body : {}" , Convert.toStr(bytes));
-        log.debug("=======================request end=================================================");
+        log.info("=======================request start=================================================");
+        log.info("Headers        : {}", httpRequest.getHeaders());
+        log.info("Request URI    : {}", httpRequest.getURI());
+        log.info("Request Method : {}", httpRequest.getMethod());
+        log.info("Request Body   : {}" , Convert.toStr(bytes));
+        log.info("=======================request end=================================================");
     }
 
     private void trackResponse(ClientHttpResponse httpResponse) throws IOException {
-        log.debug("=======================response start=================================================");
-        log.debug("Status code  : {}", httpResponse.getStatusCode());
-        log.debug("Status text  : {}", httpResponse.getStatusText());
-        log.debug("Headers      : {}", httpResponse.getHeaders());
-        log.debug("=======================response end=================================================");
+        log.info("=======================response start=================================================");
+        log.info("Status code  : {}", httpResponse.getStatusCode());
+        log.info("Status text  : {}", httpResponse.getStatusText());
+        log.info("Headers      : {}", httpResponse.getHeaders());
+        log.info("=======================response end=================================================");
 
     }
 
