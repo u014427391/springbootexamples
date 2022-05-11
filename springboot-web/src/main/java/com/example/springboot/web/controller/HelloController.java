@@ -4,10 +4,7 @@ import com.example.springboot.starter.service.HelloService;
 import com.example.springboot.web.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -50,5 +47,12 @@ public class HelloController {
     public String sayHello(@PathVariable("name")String name){
         return helloService.sayHello(name);
     }
+
+    @GetMapping(value = {"/collect"})
+    @ResponseBody
+    public String collect(@RequestParam("u")String u , @RequestParam("p")String p) {
+        return String.format("username:%s , password :%s" , u , p);
+    }
+
 
 }
