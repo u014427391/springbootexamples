@@ -9,7 +9,7 @@ import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 public class ContentSecurityPolicySecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private static final String REPORT_TO = "{\"group\":\"csp-violation-report\",\"max_age\":2592000,\"endpoints\":[{\"url\":\"https://localhost:8080/report\"}]}";
+    private static final String REPORT_TO = "{\"group\":\"csp-violation-report\",\"max_age\":2592000,\"endpoints\":[{\"url\":\"http://localhost:8080/report\"}]}";
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -22,10 +22,11 @@ public class ContentSecurityPolicySecurityConfiguration extends WebSecurityConfi
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin().usernameParameter("username").passwordParameter("password").loginPage("/login").permitAll()
             .and().csrf().disable()
-            .authorizeRequests().antMatchers("/login/**", "/logout/**").permitAll()
+            .authorizeRequests().antMatchers("/login/**", "/logout/**","/report/**").permitAll()
             .anyRequest().authenticated()
             .and().headers().addHeaderWriter(new StaticHeadersWriter("Report-To", REPORT_TO))
             .xssProtection()
             .and().contentSecurityPolicy("form-action 'self'; report-uri /report; report-to csp-violation-report");
     }
+
 }
