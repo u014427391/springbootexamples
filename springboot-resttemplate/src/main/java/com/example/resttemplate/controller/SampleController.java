@@ -1,6 +1,9 @@
 package com.example.resttemplate.controller;
 
+import com.example.resttemplate.configuration.RestGetUriTemplateHandler;
+import com.example.resttemplate.configuration.RestTemplateWrapper;
 import com.example.resttemplate.model.UserDto;
+import com.example.resttemplate.model.request.QueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,14 @@ public class SampleController {
         return userDto;
     }
 
+
+    @GetMapping(value = {"/users/get"})
+    public UserDto get(QueryDto queryDto) {
+        restTemplate.setUriTemplateHandler(new RestGetUriTemplateHandler());
+        RestTemplateWrapper restTemplateWrapper = new RestTemplateWrapper(restTemplate);
+        UserDto userDto = restTemplateWrapper.getForObject("https://api.github.com/user" , UserDto.class, queryDto);
+        return userDto;
+    }
 
 
 }
