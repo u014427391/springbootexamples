@@ -29,9 +29,10 @@ public class SampleController {
 
     @GetMapping(value = {"/users/get"})
     public UserDto get(QueryDto queryDto) {
+//        UserDto userDto = restTemplate.getForObject("https://api.github.com/users/mojombo" , UserDto.class , queryDto);
         restTemplate.setUriTemplateHandler(new RestGetUriTemplateHandler());
         RestTemplateWrapper restTemplateWrapper = new RestTemplateWrapper(restTemplate);
-        UserDto userDto = restTemplateWrapper.getForObject("https://api.github.com/user" , UserDto.class, queryDto);
+        UserDto userDto = restTemplateWrapper.getForObject("https://api.github.com/users/mojombo" , UserDto.class, queryDto);
         return userDto;
     }
 
