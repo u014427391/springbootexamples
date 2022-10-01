@@ -3,6 +3,7 @@ package com.example.springcloud.provider;
 import com.example.springcloud.provider.bean.User;
 import com.example.springcloud.provider.service.UserService;
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,10 +13,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @SpringBootApplication
 @EnableEurekaClient
 @RestController
+@Slf4j
 public class SpringcloudServiceProviderApplication {
 
     @Bean
@@ -36,7 +39,6 @@ public class SpringcloudServiceProviderApplication {
     }
 
     @GetMapping({"/api/users/{username}"})
-    @ResponseBody
     public User findUser(@PathVariable("username")String username) throws InterruptedException{
         //User user=  userService.findUser(username);
         User user = new User("nicky","http://smilenicky.blog.csdn.net");
@@ -51,5 +53,10 @@ public class SpringcloudServiceProviderApplication {
         return user;
     }
 
+    @GetMapping(value = "/api/users")
+    public List<User> list(User user) {
+        log.info("请求参数:{}" , user.toString());
+        return userService.list(user);
+    }
 
 }

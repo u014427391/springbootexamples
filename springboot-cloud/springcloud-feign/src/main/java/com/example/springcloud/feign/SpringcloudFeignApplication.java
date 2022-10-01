@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
@@ -28,4 +30,10 @@ public class SpringcloudFeignApplication {
     public User index(@PathVariable("username")String username){
         return userService.findGithubUser(username);
     }
+
+    @GetMapping("/list")
+    public List<User> list(User user) {
+        return userService.list(user);
+    }
+
 }
