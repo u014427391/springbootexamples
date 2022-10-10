@@ -1,6 +1,7 @@
 package com.example.springcloud.feign.service;
 
 import com.example.springcloud.feign.bean.User;
+import com.example.springcloud.feign.configuration.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.List;
  *    修改后版本:     修改人：  修改日期: 2020/07/28 13:09  修改内容:
  * </pre>
  */
-@FeignClient(value = "EUREKA-SERVICE-PROVIDER" ,contextId = "EUREKA-SERVICE-PROVIDER", url = "http://127.0.0.1:8083")
+@FeignClient(value = "EUREKA-SERVICE-PROVIDER" ,contextId = "EUREKA-SERVICE-PROVIDER" , configuration = FeignClientConfiguration.class)
 @Service
 public interface UserService {
     @RequestMapping(value = "/api/users/{username}",method = RequestMethod.GET)

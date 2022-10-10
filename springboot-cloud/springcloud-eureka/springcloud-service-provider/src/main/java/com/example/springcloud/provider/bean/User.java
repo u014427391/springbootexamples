@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable {
+public class User extends BaseBean implements Serializable {
 
     private String name;
     private String blog;
@@ -32,6 +32,10 @@ public class User implements Serializable {
         return "User{" +
                 "name='" + name + '\'' +
                 ", blog='" + blog + '\'' +
+                ", createTime='" + super.getCreateTime() + '\'' +
+                ", updateTime='" + super.getUpdateTime() + '\'' +
+                ", createMan='" + super.getCreateMan() + '\'' +
+                ", updateMan='" + super.getUpdateMan() + '\'' +
                 '}';
     }
 }
