@@ -4,7 +4,6 @@ import com.example.eventlistener.event.UserRegisterEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.SmartApplicationListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,7 +20,7 @@ public class UserRegisterMessageListener implements SmartApplicationListener {
         return true;
     }
 
-    @Async("asyncThreadPool")
+   
     public void onApplicationEvent(ApplicationEvent event) {
         log.info("监听到用户注册，准备给新用户发送站内信...");
         log.info("user info:{}" , event.toString());
