@@ -1,7 +1,6 @@
 package com.example.mongodb.service.impl;
 
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.example.mongodb.common.page.PageBean;
 import com.example.mongodb.common.page.PageDataBean;
@@ -17,6 +16,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,6 +93,16 @@ public class UserServiceImpl implements IUserService {
         }
 
         return pageBean.loadData(result);
+    }
+
+    @Override
+    public org.springframework.data.domain.Page<User> mongoPageList(PageBean pageBean, User queryParam) {
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains());
+        Example<User> example = Example.of(queryParam, matcher);
+        Sort sort = Sort.by(Sort.Direction.DESC, "_id");
+        Pageable pageable = PageRequest.of(pageBean.getPageIndex() - 1, pageBean.getPageRowNum(), sort);
+        return userRepository.findAll(example , pageable);
     }
 
 }
