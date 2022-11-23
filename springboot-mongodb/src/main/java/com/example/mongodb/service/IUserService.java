@@ -1,6 +1,8 @@
 package com.example.mongodb.service;
 
 
+import com.example.mongodb.common.page.PageBean;
+import com.example.mongodb.common.page.PageDataBean;
 import com.example.mongodb.model.User;
 
 import java.util.List;
@@ -18,5 +20,7 @@ public interface IUserService {
     User updateById(User user);
 
     User findByEmail(String email);
+
+    PageDataBean<List<User>> pageList(PageBean pageBean , User queryParam);
 
 }

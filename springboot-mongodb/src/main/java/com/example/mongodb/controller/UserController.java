@@ -2,6 +2,8 @@ package com.example.mongodb.controller;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.example.mongodb.common.page.PageBean;
+import com.example.mongodb.common.page.PageDataBean;
 import com.example.mongodb.common.rest.ResultBean;
 import com.example.mongodb.model.User;
 import com.example.mongodb.model.dto.UserDto;
@@ -52,5 +54,10 @@ public class UserController {
         return ResultBean.ok(userService.updateById(user));
     }
 
+    @GetMapping(value = "/user/pageList")
+    public ResultBean<PageDataBean<List<User>>> pageList(PageBean pageBean , User param) {
+        PageDataBean<List<User>> pageDataBean = userService.pageList(pageBean, param);
+        return ResultBean.ok(pageDataBean);
+    }
 
 }
