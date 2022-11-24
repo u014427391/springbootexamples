@@ -10,6 +10,7 @@ import com.example.mongodb.model.dto.UserDto;
 import com.example.mongodb.model.vo.UserVo;
 import com.example.mongodb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,5 +60,13 @@ public class UserController {
         PageDataBean<List<User>> pageDataBean = userService.pageList(pageBean, param);
         return ResultBean.ok(pageDataBean);
     }
+
+    @GetMapping(value = "/user/mongoPageList")
+    public ResultBean<PageDataBean<List<User>>> mongoPageList(PageBean pageBean , User param) {
+        Page<User> pageDataBean = userService.mongoPageList(pageBean, param);
+        pageBean = pageBean.setPageBean(pageDataBean);
+        return ResultBean.ok(pageBean.loadData(pageDataBean.getContent()));
+    }
+
 
 }

@@ -97,9 +97,13 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public org.springframework.data.domain.Page<User> mongoPageList(PageBean pageBean, User queryParam) {
+        User param = new User();
+        if (StrUtil.isNotBlank(queryParam.getName())) {
+            param.setName(queryParam.getName());
+        }
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains());
-        Example<User> example = Example.of(queryParam, matcher);
+        Example<User> example = Example.of(param, matcher);
         Sort sort = Sort.by(Sort.Direction.DESC, "_id");
         Pageable pageable = PageRequest.of(pageBean.getPageIndex() - 1, pageBean.getPageRowNum(), sort);
         return userRepository.findAll(example , pageable);
