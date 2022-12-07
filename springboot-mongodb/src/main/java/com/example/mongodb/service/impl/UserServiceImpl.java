@@ -106,7 +106,8 @@ public class UserServiceImpl implements IUserService {
         Example<User> example = Example.of(param, matcher);
         Sort sort = Sort.by(Sort.Direction.DESC, "_id");
         Pageable pageable = PageRequest.of(pageBean.getPageIndex() - 1, pageBean.getPageRowNum(), sort);
-        return userRepository.findAll(example , pageable);
+        org.springframework.data.domain.Page<User> page = userRepository.findAll(example, pageable);
+        return new PageImpl<User>(page.getContent() , pageable , page.getTotalElements());
     }
 
 }
