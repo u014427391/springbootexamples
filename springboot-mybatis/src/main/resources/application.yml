@@ -34,8 +34,9 @@ spring:
     data:  classpath:sql/data.sql
 mybatis:
     # 指定全局配置文件位置
-    config-location: classpath:mybatis/mybatis-config.xml
+    #config-location: classpath:mybatis/mybatis-config.xml
     # 指定sql映射文件位置
     mapper-locations: classpath:mybatis/mapper/*.xml
-
-
+    configuration:
+      default-enum-type-handler: com.example.springboot.mybatis.common.enumhandler.MybatisEnumCodeTypeHandler
+      map-underscore-to-camel-case: true
