@@ -1,0 +1,28 @@
+server:
+    port: 8080
+
+spring:
+    main:
+        banner-mode: "off"
+
+resteasy:
+  jaxrs:
+    app:
+      registration: property
+      classes: com.example.jbossuploadfile.configuration.JAXRSApplication
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - shutdown
+  endpoint:
+    shutdown:
+      enabled: true
+
+logging:
+  level:
+    org:
+      springframework: info
