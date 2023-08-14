@@ -1,4 +1,4 @@
-package com.example.jbossuploadfile.entity;
+package com.example.resteasy.entity;
 
 
 import lombok.AllArgsConstructor;

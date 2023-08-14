@@ -1,4 +1,4 @@
-package com.example.jbossuploadfile.configuration;
+package com.example.resteasy.configuration;
 
 import org.springframework.stereotype.Component;
 

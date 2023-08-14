@@ -9,7 +9,7 @@ resteasy:
   jaxrs:
     app:
       registration: property
-      classes: com.example.jbossuploadfile.configuration.JAXRSApplication
+      classes: com.example.resteasy.configuration.JAXRSApplication
 
 management:
   endpoints:

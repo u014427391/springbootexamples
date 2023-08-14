@@ -1,8 +1,8 @@
-package com.example.jbossuploadfile.endpoint;
+package com.example.resteasy.endpoint;
 
 
 import cn.hutool.core.io.FileUtil;
-import com.example.jbossuploadfile.entity.FileUploadResult;
+import com.example.resteasy.entity.FileUploadResult;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;

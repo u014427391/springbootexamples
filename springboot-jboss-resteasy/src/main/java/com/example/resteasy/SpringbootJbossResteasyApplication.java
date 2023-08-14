@@ -1,4 +1,4 @@
-package com.example.jbossuploadfile;
+package com.example.resteasy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
