@@ -1,0 +1,14 @@
+spring:
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      enable-auto-commit: true
+      group-id: consumer1
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      max-poll-records: 1
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+

@@ -9,6 +9,7 @@ eureka:
       enabled: false  # 关闭eureka健康检查
     register-with-eureka: true # Eureka服务注册开启
     fetch-registry: true # Eureka服务发现开启
+    enabled: true # 开关
   instance:
     status-page-url-path: http://localhost:8761/actuator/info
     health-check-url-path: http://localhost:8761/actuator//health
@@ -25,7 +26,17 @@ spring:
   cloud:
     gateway:
       routes:
-        # 根据Path路径路由
+        - id: get_user_info
+          uri: http://127.0.0.1:8083
+          predicates:
+          - Path=/api/findUser
+          filters:
+          - AddRequestHeader=passToken,a68f3eac-5b9c-4fc1-a900-98ee18574576
+          - name: Custom
+            args:
+              passid: 7a11600c-403c-4260-9165-659e138ada9c
+              serviceId: d8c6ce4c-1b2c-4826-9044-4197d17aad87
+          # 根据Path路径路由
         - id: user-service-provider # 配置路由id
           uri: http://127.0.0.1:8083/api/users/{username}  # 路由到的地址
           predicates:
@@ -126,6 +137,8 @@ spring:
                   maxBackoff: 50ms
                   factor: 2
                   basedOnPreviousValue: false
+
+
 
 # 修改网关日志级别
 logging:

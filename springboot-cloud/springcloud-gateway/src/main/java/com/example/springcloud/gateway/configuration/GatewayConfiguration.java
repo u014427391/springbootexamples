@@ -1,5 +1,6 @@
 package com.example.springcloud.gateway.configuration;
 
+import com.example.springcloud.gateway.filter.factories.CustomGatewayFilterFactory;
 import com.example.springcloud.gateway.filter.global.CustomGlobalFilter;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
@@ -48,4 +49,5 @@ public class GatewayConfiguration {
     public GlobalFilter customFilter() {
         return new CustomGlobalFilter();
     }
+
 }

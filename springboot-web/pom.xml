@@ -49,7 +49,7 @@
 
 		<dependency>
 			<groupId>com.example.springboot</groupId>
-			<artifactId>custom-spring-boot-starter-autoconfigurer</artifactId>
+			<artifactId>spring-boot-starter-autoconfigurer</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

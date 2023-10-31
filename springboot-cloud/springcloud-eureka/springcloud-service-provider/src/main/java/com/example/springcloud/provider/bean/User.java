@@ -3,6 +3,7 @@ package com.example.springcloud.provider.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -20,7 +21,8 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @AllArgsConstructor
-public class User implements Serializable {
+@NoArgsConstructor
+public class User extends BaseBean implements Serializable {
 
     private String name;
     private String blog;
@@ -30,6 +32,10 @@ public class User implements Serializable {
         return "User{" +
                 "name='" + name + '\'' +
                 ", blog='" + blog + '\'' +
+                ", createTime='" + super.getCreateTime() + '\'' +
+                ", updateTime='" + super.getUpdateTime() + '\'' +
+                ", createMan='" + super.getCreateMan() + '\'' +
+                ", updateMan='" + super.getUpdateMan() + '\'' +
                 '}';
     }
 }

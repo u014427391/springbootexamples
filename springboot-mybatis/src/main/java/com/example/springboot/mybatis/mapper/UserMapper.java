@@ -1,6 +1,7 @@
 package com.example.springboot.mybatis.mapper;
 
 import com.example.springboot.mybatis.bean.User;
+import com.example.springboot.mybatis.common.cache.MyBatisRedisCache;
 import org.apache.ibatis.annotations.*;
 
 /**
@@ -14,6 +15,7 @@ import org.apache.ibatis.annotations.*;
  *    修改后版本:     修改人：  修改日期: 2019年12月15日  修改内容:
  * </pre>
  */
+@CacheNamespace(implementation = MyBatisRedisCache.class)
 public interface UserMapper {
     @Select("select * from sys_user where userId=#{userId}")
     public User getUserById(Integer userId);

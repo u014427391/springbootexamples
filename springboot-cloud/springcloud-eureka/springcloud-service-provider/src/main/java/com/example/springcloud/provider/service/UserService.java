@@ -6,6 +6,9 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * <pre>
  *  UserService，查找github用户数据
@@ -34,4 +37,9 @@ public class UserService {
         User results = restTemplate.getForObject(url, User.class);
         return results;
     }
+
+    public List<User> list(User user) {
+        return Arrays.asList(new User("admin" , "http://blog.com") , new User("nicky" , "http://blog.com"));
+    }
+
 }
