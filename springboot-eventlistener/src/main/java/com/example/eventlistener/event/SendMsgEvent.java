@@ -2,13 +2,14 @@ package com.example.eventlistener.event;
 
 import org.springframework.context.ApplicationEvent;
 
-public class UserRegisterEvent extends ApplicationEvent {
+
+public class SendMsgEvent extends ApplicationEvent {
 
     private Long userId;
 
-    private String name;
+    private String userName;
 
-    public UserRegisterEvent(Object source){
+    public SendMsgEvent(Object source){
         super(source);
     }
 
@@ -20,11 +21,11 @@ public class UserRegisterEvent extends ApplicationEvent {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
