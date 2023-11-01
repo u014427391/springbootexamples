@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping(value = {"/user/{id}"})
-    public ResultBean<UserVo> user(@PathVariable("id")Integer id) {
+    public ResultBean<UserVo> user(@PathVariable("id")Long id) {
         User user = userService.getById(id);
         UserVo userVo = BeanUtil.copyProperties(user , UserVo.class);
         return ResultBean.ok(userVo);
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/user/{id}")
-    public ResultBean<Integer> del(@PathVariable("id") Integer id) {
+    public ResultBean<Long> del(@PathVariable("id") Long id) {
         boolean flag = userService.removeById(id);
         if (flag) return ResultBean.ok(id);
         return ResultBean.badRequest("删除失败");
