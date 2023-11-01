@@ -1,9 +1,6 @@
 package com.example.eventlistener.service.impl;
 
-import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import cn.hutool.http.HttpRequest;
 import com.example.eventlistener.event.SendMsgEvent;
 import com.example.eventlistener.event.UserRegisterEvent;
 import com.example.eventlistener.mapper.UserMapper;
@@ -65,31 +62,15 @@ public class UserServiceImpl implements ApplicationEventPublisherAware , IUserSe
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
             @Override
             public void afterCommit() {
-                LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
-                wrapper.eq(User::getId , user.getId());
-                User user = userMapper.selectOne(wrapper);
-                log.info("select user:{}" , JSONUtil.toJsonStr(user));
-
-                LambdaUpdateWrapper<User> updateWp = Wrappers.lambdaUpdate();
-                updateWp.eq(User::getId , user.getId());
-                user.setName("系统管理员");
-                userMapper.update(user, updateWp);
-                log.info("update user");
-
-//                updateUser(user);
+                String result = HttpRequest
+                        .get("http://127.0.0.1:8081/api/user/"+user.getId())
+                        .execute().body();
+                log.info("result:{}" , result);
             }
         });
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void updateUser(User user) {
-        LambdaUpdateWrapper<User> updateWp = Wrappers.lambdaUpdate();
-        updateWp.eq(User::getId , user.getId());
-        user.setName("系统管理员");
-        userMapper.update(user, updateWp);
-        log.info("update user");
-    }
 
     private User doRegister() {
         User user = User.builder()
