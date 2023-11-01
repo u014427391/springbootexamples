@@ -14,14 +14,19 @@ public class SampleController {
     @Resource
     private UserServiceImpl userService;
 
-    @GetMapping(value = "/test")
-    public void test() {
+    @GetMapping(value = "/register")
+    public void register() {
         userService.register();
     }
 
-    @GetMapping(value = "registerAndSendMsg")
-    public void registerAndSendMsg() {
-        userService.registerAndSendMsg();
+    @GetMapping(value = "/sendMsgAfterRegisterByEvent")
+    public void registerAfterSendMsgByEvent() {
+        userService.sendMsgAfterRegisterByEvent();
+    }
+
+    @GetMapping(value = "/sendMsgAfterRegister")
+    public void sendMsgAfterRegister() {
+        userService.sendMsgAfterRegister();
     }
 
 }

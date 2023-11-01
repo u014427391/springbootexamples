@@ -3,6 +3,7 @@ package com.example.eventlistener.listener;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.eventlistener.event.SendMsgEvent;
 import com.example.eventlistener.mapper.UserMapper;
@@ -25,9 +26,15 @@ public class SendMsgListener {
     public void sendMsg(SendMsgEvent sendMsgEvent) {
         log.info("sendMsg: {}" , JSONUtil.toJsonStr(sendMsgEvent));
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(User::getName , "管理员");
+        wrapper.eq(User::getId , sendMsgEvent.getUserId());
         User user = userMapper.selectOne(wrapper);
         log.info("user:{}" , JSONUtil.toJsonStr(user));
+
+        LambdaUpdateWrapper<User> updateWp = Wrappers.lambdaUpdate();
+        updateWp.eq(User::getId , user.getId());
+        user.setName("系统管理员");
+        userMapper.update(user, updateWp);
+        log.info("update user");
     }
 
 

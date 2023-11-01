@@ -9,6 +9,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @TableName("user")
 @Data
@@ -22,5 +23,7 @@ public class User implements Serializable {
     private String name;
     private Integer age;
     private String email;
+    private LocalDateTime createTime;
+    private LocalDateTime modifyTime;
 
 }

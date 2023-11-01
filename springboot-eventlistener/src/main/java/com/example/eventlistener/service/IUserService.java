@@ -7,6 +7,8 @@ public interface IUserService {
 
     void register();
 
-    void registerAndSendMsg();
+    void sendMsgAfterRegisterByEvent();
+
+    void sendMsgAfterRegister();
 
 }
