@@ -1,8 +1,6 @@
 package com.example.mybatisplus.model.vo;
 
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder(toBuilder = true)
@@ -21,5 +20,7 @@ public class UserVo implements Serializable {
     private String name;
     private Integer age;
     private String email;
+    private LocalDateTime createTime;
+    private LocalDateTime modifyTime;
 
 }

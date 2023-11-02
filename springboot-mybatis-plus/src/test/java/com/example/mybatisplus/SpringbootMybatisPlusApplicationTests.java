@@ -2,7 +2,7 @@ package com.example.mybatisplus;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.mybatisplus.mapper.UserMapper;
-import com.example.mybatisplus.model.User;
+import com.example.mybatisplus.model.UserDO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,7 @@ class SpringbootMybatisPlusApplicationTests {
 
     @Test
     void contextLoads() {
-        List<User> userList = userMapper.selectList(new QueryWrapper<User>());
+        List<UserDO> userList = userMapper.selectList(new QueryWrapper<UserDO>());
         userList.stream().forEach(System.out::println);
     }
 

@@ -2,7 +2,7 @@ package com.example.mybatisplus.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.example.mybatisplus.common.rest.ResultBean;
-import com.example.mybatisplus.model.User;
+import com.example.mybatisplus.model.UserDO;
 import com.example.mybatisplus.model.dto.UserDto;
 import com.example.mybatisplus.model.vo.UserVo;
 import com.example.mybatisplus.service.impl.UserServiceImpl;
@@ -20,21 +20,21 @@ public class UserController {
 
     @GetMapping(value = {"/user"})
     public ResultBean<List<UserVo>> users() {
-        List<User> poList = userService.list();
+        List<UserDO> poList = userService.list();
         List<UserVo> voList = BeanUtil.copyToList(poList , UserVo.class);
         return ResultBean.ok(voList);
     }
 
     @GetMapping(value = {"/user/{id}"})
     public ResultBean<UserVo> user(@PathVariable("id")Long id) {
-        User user = userService.getById(id);
+        UserDO user = userService.getById(id);
         UserVo userVo = BeanUtil.copyProperties(user , UserVo.class);
         return ResultBean.ok(userVo);
     }
 
     @PostMapping(value = "/user")
-    public ResultBean<User> save(@RequestBody UserDto userDto) {
-        User user = BeanUtil.copyProperties(userDto , User.class);
+    public ResultBean<UserDO> save(@RequestBody UserDto userDto) {
+        UserDO user = BeanUtil.copyProperties(userDto , UserDO.class);
         boolean flag = userService.save(user);
         if (flag) return ResultBean.ok(user);
         return ResultBean.badRequest("新增失败");
@@ -48,8 +48,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/user")
-    public ResultBean<User> update(@RequestBody UserDto userDto) {
-        User user = BeanUtil.copyProperties(userDto , User.class);
+    public ResultBean<UserDO> update(@RequestBody UserDto userDto) {
+        UserDO user = BeanUtil.copyProperties(userDto , UserDO.class);
         boolean flag = userService.updateById(user);
         if (flag) return ResultBean.ok(user);
         return ResultBean.badRequest("更新失败");
