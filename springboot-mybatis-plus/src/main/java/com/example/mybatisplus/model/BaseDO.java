@@ -1,11 +1,8 @@
 package com.example.mybatisplus.model;
 
 
-import cn.hutool.core.date.DatePattern;
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
