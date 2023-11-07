@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 public class BaseDO {
 
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "modify_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
 
     @TableLogic(value = "0", delval = "1")
