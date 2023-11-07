@@ -1,9 +1,9 @@
-#pagehelper:
-#  helper-dialect: mysql
-#  reasonable: true
-#  support-methods-arguments: true
-#  params: count=countSql
 spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    database: 1
   datasource:
     dynamic:
       primary: shop #设置默认的数据源或者数据源组,默认值即为master
@@ -21,11 +21,7 @@ spring:
           username: root
           password:
           driver-class-name: com.mysql.jdbc.Driver
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password:
-    database: 0
+
 
 mybatis-plus:
   type-aliases-package: com.example.mybatisplus.*.*.model
