@@ -34,5 +34,5 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     default-statement-timeout: 60
     cache-enabled: true
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
