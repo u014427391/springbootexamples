@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-@MapperScan("com.example.mybatisplus.mapper")
+@MapperScan("com.example.redis.mapper")
 public class MybatisPlusConfiguration {
 
     private static final String dateFormat = "yyyy-MM-dd";
