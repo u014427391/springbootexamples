@@ -13,15 +13,14 @@ spring:
           url: jdbc:mysql://127.0.0.1:3306/shop?useUnicode=true&characterEncoding=utf-8
           username: root
           password:
-          driver-class-name: com.mysql.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
+          driver-class-name: com.mysql.cj.jdbc.Drive# 3.2.0开始支持SPI可省略此配置
           schema: classpath:db/schema-mysql.sql
           data: classpath:db/data-mysql.sql
         slave_1:
           url: jdbc:mysql://127.0.0.1:3306/canaltest?useUnicode=true&characterEncoding=utf-8
           username: root
           password:
-          driver-class-name: com.mysql.jdbc.Driver
-
+          driver-class-name: com.mysql.cj.jdbc.Drive
 
 mybatis-plus:
   type-aliases-package: com.example.redis.*.*.model
