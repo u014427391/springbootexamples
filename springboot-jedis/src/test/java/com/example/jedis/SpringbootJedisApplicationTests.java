@@ -1,6 +1,7 @@
 package com.example.jedis;
 
 import cn.hutool.core.util.IdUtil;
+import com.example.jedis.common.JedisTemplate;
 import com.example.jedis.configuration.RedisConfiguration;
 import com.example.jedis.model.UserDto;
 import com.example.jedis.repository.UserRepository;
@@ -24,6 +25,8 @@ class SpringbootJedisApplicationTests {
     RedisTemplate redisTemplate;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    JedisTemplate jedisTemplate;
 
     @Test
     void contextLoads() {
@@ -46,6 +49,12 @@ class SpringbootJedisApplicationTests {
                 .gender(UserDto.Gender.MALE)
                 .build();
         userRepository.save(userDto);
+    }
+
+    @Test
+    void testJedisTemplate() {
+        String tKey = jedisTemplate.get("tKey");
+        System.out.println(tKey);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.jedis.configuration;
 
+import com.example.jedis.common.JedisTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -46,6 +47,11 @@ public class RedisConfiguration {
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
+    }
+
+    @Bean
+    public JedisTemplate jedisTemplate(){
+        return new JedisTemplate();
     }
 
 
