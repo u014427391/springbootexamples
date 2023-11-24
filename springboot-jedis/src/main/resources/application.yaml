@@ -10,3 +10,8 @@ spring:
         max-idle: 8
         max-active: 8
         min-idle: 2
+
+example:
+  redis:
+    scan:
+      count: 300

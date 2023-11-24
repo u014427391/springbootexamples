@@ -1,10 +1,14 @@
 package com.example.jedis.common;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
 import redis.clients.jedis.exceptions.JedisException;
@@ -13,6 +17,7 @@ import redis.clients.jedis.params.SetParams;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -21,6 +26,10 @@ import java.util.function.Function;
 @Component
 @Slf4j
 public class JedisTemplate implements InitializingBean {
+
+
+    @Value("${example.redis.scan.count:300}")
+    private static Integer scount;
 
     @Resource
     private JedisPool jedisPool;
@@ -279,6 +288,39 @@ public class JedisTemplate implements InitializingBean {
         return execute(e->{
             return jedis.ttl(key);
         });
+    }
+
+    public Set<String> keys(final String pattern) {
+        return execute(e->{
+            return jedis.keys(pattern);
+        });
+    }
+
+    public Set<String> scan(String pattern) {
+        return execute(e->{
+            return this.doScan(pattern);
+        });
+    }
+
+
+    protected Set<String> doScan(String pattern) {
+        Set<String> resultSet = new ConcurrentHashSet<>();
+        String cursor = String.valueOf(0);
+        try {
+            do {
+                ScanParams params = new ScanParams();
+                params.count(300);
+                params.match(pattern);
+                ScanResult<String> scanResult = jedis.scan(cursor, params);
+                cursor = scanResult.getCursor();
+                resultSet.addAll(scanResult.getResult());
+            } while (Integer.valueOf(cursor) > 0);
+        } catch (NumberFormatException e) {
+            log.error("doScan NumberFormatException:{}", e);
+        } catch (Exception e) {
+            log.error("doScan Exception :{}", e);
+        }
+        return resultSet;
     }
 
 
