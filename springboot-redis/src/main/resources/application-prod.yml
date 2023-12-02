@@ -13,7 +13,7 @@ spring:
           url: jdbc:mysql://127.0.0.1:3306/shop?useUnicode=true&characterEncoding=utf-8
           username: root
           password:
-          driver-class-name: com.mysql.cj.jdbc.Drive# 3.2.0开始支持SPI可省略此配置
+          driver-class-name: com.mysql.cj.jdbc.Drive # 3.2.0开始支持SPI可省略此配置
           schema: classpath:db/schema-mysql.sql
           data: classpath:db/data-mysql.sql
         slave_1:
