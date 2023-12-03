@@ -2,10 +2,14 @@ package com.example.redis;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.json.JSONUtil;
 import com.example.redis.model.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
@@ -13,6 +17,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -37,11 +43,37 @@ class SpringbootRedisApplicationTests {
 
     @Test
     void testZSetAdd() {
-
-        IntStream.range(0, 1000).forEach(e->{
+        TimeInterval timeInterval = DateUtil.timer();
+        IntStream.range(0, 10000).forEach(e->{
             invoke();
         });
+        System.out.println("执行时间:"+timeInterval.intervalRestart()+"ms");
+    }
 
+    @Test
+    void testPipeline() {
+        TimeInterval timeInterval = DateUtil.timer();
+        Map<Long, String> map = new HashMap<>();
+        IntStream.range(0, 10000).forEach(e->{
+            Long increment = getNextId();
+            UserDto userDto = UserDto.builder()
+                    .id(increment)
+                    .name("user"+increment)
+                    .age(100)
+                    .email("123456@qq.com")
+                    .build();
+            map.put(increment, JSONUtil.toJsonStr(userDto));
+        });
+        redisTemplate.executePipelined(new RedisCallback<Object>() {
+            @Override
+            public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                map.forEach((score,value)->{
+                    connection.zSetCommands().zAdd(REDIS_KEY.getBytes(), score, value.getBytes());
+                });
+                return null;
+            }
+        });
+        System.out.println("执行时间:"+timeInterval.intervalRestart()+"ms");
     }
 
     class RunnableTest implements Runnable {
