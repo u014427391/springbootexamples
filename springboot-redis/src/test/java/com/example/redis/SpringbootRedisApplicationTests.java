@@ -69,6 +69,7 @@ class SpringbootRedisApplicationTests {
             public Object doInRedis(RedisConnection connection) throws DataAccessException {
                 map.forEach((score,value)->{
                     connection.zSetCommands().zAdd(REDIS_KEY.getBytes(), score, value.getBytes());
+                    connection.expire(REDIS_KEY.getBytes(), getExpire(new Date()));
                 });
                 return null;
             }
