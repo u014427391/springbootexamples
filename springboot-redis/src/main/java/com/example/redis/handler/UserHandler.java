@@ -42,14 +42,14 @@ public class UserHandler {
         List<UserVo> list = CollUtil.newArrayList();
         recordSet.stream().forEach(getValue -> {
             if (StrUtil.isNotBlank(getValue)) {
-                UserVo recordDto = null;
+                UserVo recordVo = null;
                 try {
-                    recordDto = JSONUtil.toBean(getValue, UserVo.class);
+                    recordVo = JSONUtil.toBean(getValue, UserVo.class);
                 } catch (Exception e) {
                     // ignore exception
                 }
-                if (recordDto != null) {
-                    list.add(recordDto);
+                if (recordVo != null) {
+                    list.add(recordVo);
                 }
             }
         });
