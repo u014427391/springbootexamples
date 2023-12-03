@@ -2,7 +2,6 @@ package com.example.redis;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
 import com.example.redis.model.dto.UserDto;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,8 @@ import java.util.stream.IntStream;
 @SpringBootTest
 class SpringbootRedisApplicationTests {
 
+    private static final String REDIS_KEY = "testKeyRecord";
+
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -32,6 +33,15 @@ class SpringbootRedisApplicationTests {
         });
 
         countDownLatch.await();
+    }
+
+    @Test
+    void testZSetAdd() {
+
+        IntStream.range(0, 1000).forEach(e->{
+            invoke();
+        });
+
     }
 
     class RunnableTest implements Runnable {
@@ -54,14 +64,14 @@ class SpringbootRedisApplicationTests {
 
         Long increment = getNextId();
         UserDto userDto = UserDto.builder()
-                .id(IdUtil.getSnowflake().nextId())
-                .name("user")
+                .id(increment)
+                .name("user"+increment)
                 .age(100)
                 .email("123456@qq.com")
                 .build();
 
-        redisTemplate.opsForZSet().add("testKeyRecord", JSONUtil.toJsonStr(userDto), increment);
-
+        redisTemplate.opsForZSet().add(REDIS_KEY, JSONUtil.toJsonStr(userDto), increment);
+        redisTemplate.expire(REDIS_KEY, getExpire(new Date()), TimeUnit.SECONDS);
     }
 
     private Long getNextId() {

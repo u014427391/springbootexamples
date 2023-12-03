@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/pageUserInfo")
-    public ResultBean<PageDataBean<UserVo>> pageUserInfo(PageBean pageBean) {
+    public ResultBean<PageDataBean<UserVo>> pageUserInfo(@RequestBody PageBean pageBean) {
         return ResultBean.ok(userHandler.pageUserInfo(pageBean));
     }
 

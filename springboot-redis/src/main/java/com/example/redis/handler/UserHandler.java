@@ -18,6 +18,8 @@ import java.util.Set;
 @Component
 public class UserHandler {
 
+    private static final String REDIS_KEY = "testKeyRecord";
+
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -26,10 +28,19 @@ public class UserHandler {
         Integer pageSize = Optional.ofNullable(pageBean.getPageSize()).orElse(10);
         pageBean.initPage();
 
-        Set<String> recordSet = Optional.ofNullable(redisTemplate.opsForZSet()
-                .reverseRange("testKeyRecord", (pageNum - 1) * pageSize + 1, pageSize)).orElse(CollUtil.newHashSet());
+        if (!redisTemplate.hasKey(REDIS_KEY)) {
+            return pageBean.loadData(CollUtil.newArrayList());
+        }
+        int min = (pageNum -1) * pageSize;
+        int max = min + pageSize - 1 ;
+        Long size = redisTemplate.opsForZSet().size(REDIS_KEY);
+
+        Set<String> recordSet = Optional.ofNullable(redisTemplate
+                .opsForZSet()
+                .reverseRange(REDIS_KEY, min, max))
+                .orElse(CollUtil.newHashSet());
         List<UserVo> list = CollUtil.newArrayList();
-        recordSet.stream().forEach(getValue->{
+        recordSet.stream().forEach(getValue -> {
             if (StrUtil.isNotBlank(getValue)) {
                 UserVo recordDto = null;
                 try {
@@ -42,10 +53,10 @@ public class UserHandler {
                 }
             }
         });
-        long totalCount = redisTemplate.opsForZSet().zCard("testKeyRecord");
 
         Page page = new Page();
-        page.setTotal(totalCount);
+        page.setTotal(size);
+        pageBean.setPages(page);
 
         return pageBean.loadData(list);
     }

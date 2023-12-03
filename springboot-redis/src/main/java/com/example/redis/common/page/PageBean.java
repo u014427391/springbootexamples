@@ -18,9 +18,9 @@ import java.util.Optional;
 public class PageBean {
 
     // 当前页
-    private Integer pageNum = 1;
+    private Integer pageNum;
     // 一页的条数
-    private Integer pageSize = 10;
+    private Integer pageSize;
 
     @JsonIgnore
     private Page pages;
