@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @Builder
@@ -33,18 +32,5 @@ public class PageBean {
         return new PageDataBean(dataList , pages.getTotal() , pageNum , pageSize);
     }
 
-    public PageBean setPageBean(org.springframework.data.domain.Page page) {
-        PageBean pageBean = new PageBean();
-        pageBean.setPageNum(pageNum);
-        pageBean.setPageSize(pageSize);
-        Optional.ofNullable(page).ifPresent(e->{
-            Page<?> pageHelper = new Page<>();
-            pageHelper.setTotal(page.getTotalElements());
-            pageHelper.setPageNum(pageNum);
-            pageHelper.setPageSize(pageSize);
-            pageBean.setPages(pageHelper);
-        });
-        return pageBean;
-    }
-
+   
 }
