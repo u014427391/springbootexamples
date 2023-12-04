@@ -19,6 +19,7 @@
         <mysql.connector.version>8.0.21</mysql.connector.version>
         <java.version>8</java.version>
         <pagehelper.version>5.1.8</pagehelper.version>
+        <redisson.version>3.15.6</redisson.version>
     </properties>
     <dependencies>
         <dependency>
@@ -65,6 +66,13 @@
             <artifactId>pagehelper</artifactId>
             <version>${pagehelper.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>
