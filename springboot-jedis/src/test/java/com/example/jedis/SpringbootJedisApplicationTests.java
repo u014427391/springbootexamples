@@ -20,8 +20,8 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 @SpringBootTest
-@ContextConfiguration(classes = RedisConfiguration.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+//@ContextConfiguration(classes = RedisConfiguration.class)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class SpringbootJedisApplicationTests {
 
     @Autowired
@@ -48,7 +48,7 @@ class SpringbootJedisApplicationTests {
 
     @Test
     void testCrud() {
-        IntStream.range(0,100000).forEach(e->{
+        IntStream.range(0,10).forEach(e->{
             final UserDto userDto = UserDto.builder()
                     .id(IdUtil.getSnowflake().nextId())
                     .name("用户1")

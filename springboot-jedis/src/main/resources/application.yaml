@@ -7,9 +7,10 @@ spring:
     database: 1
     jedis:
       pool:
+        min-idle: 2
         max-idle: 8
         max-active: 8
-        min-idle: 2
+        max-wait: -1
 
 example:
   redis:
