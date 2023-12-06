@@ -294,26 +294,38 @@ public class JedisTemplate implements InitializingBean {
         });
     }
 
-    public Object eval(String script, Integer keyCount, String... params) {
+    public Object eval(final String script,final Integer keyCount,final String... params) {
         return execute(e -> {
             return jedis.eval(script, keyCount, params);
         });
     }
 
-    public Object eval(String script, List<String> keys, List<String> params) {
+    public Object eval(final String script, final List<String> keys, final List<String> params) {
         return execute(e -> {
             return jedis.eval(script, keys, params);
         });
     }
 
-    public Set<String> scan(String pattern) {
+    public Object evalsha(final String script, final List<String> keys, final List<String> params) {
+        return execute(e -> {
+            return jedis.evalsha(script, keys, params);
+        });
+    }
+
+    public String scriptLoad(final String script) {
+        return execute(e -> {
+            return jedis.scriptLoad(script);
+        });
+    }
+
+    public Set<String> scan(final String pattern) {
         return execute(e -> {
             return this.doScan(pattern);
         });
     }
 
 
-    protected Set<String> doScan(String pattern) {
+    protected Set<String> doScan(final String pattern) {
         Set<String> resultSet = new ConcurrentHashSet<>();
         String cursor = String.valueOf(0);
         try {
