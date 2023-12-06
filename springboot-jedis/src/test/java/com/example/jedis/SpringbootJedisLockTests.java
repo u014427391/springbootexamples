@@ -3,6 +3,7 @@ package com.example.jedis;
 import cn.hutool.core.util.IdUtil;
 import com.example.jedis.common.JedisLockTemplate;
 import com.example.jedis.configuration.RedisConfiguration;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class SpringbootJedisLockTests {
 
 //        CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        IntStream.range(0, 1).forEach(e->{
+        IntStream.range(0, 5).forEach(e->{
             new Thread(new RunnableTask()).start();
         });
 
@@ -48,17 +49,18 @@ public class SpringbootJedisLockTests {
 //            this.countDownLatch = countDownLatch;
 //        }
 
+        @SneakyThrows
         @Override
         public void run() {
             String requestId = IdUtil.simpleUUID();
-            Boolean lock = jedisLockTemplate.lock(REDIS_KEY, requestId, 5, 5 * 1000);
+            Boolean lock = jedisLockTemplate.acquire(REDIS_KEY, requestId, 5, 3 );
             if (lock) {
                 try {
                     doSomeThing();
                 } catch (InterruptedException e) {
-                    jedisLockTemplate.unlock(REDIS_KEY, requestId);
+                    jedisLockTemplate.release(REDIS_KEY, requestId);
                 } finally {
-                    jedisLockTemplate.unlock(REDIS_KEY, requestId);
+                    jedisLockTemplate.release(REDIS_KEY, requestId);
                 }
             } else {
                 log.warn("获取锁失败!");
@@ -68,7 +70,7 @@ public class SpringbootJedisLockTests {
 
         private void doSomeThing() throws InterruptedException {
             log.info("do some thing");
-            Thread.sleep(15000);
+            Thread.sleep(15*1000);
         }
     }
 

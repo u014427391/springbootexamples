@@ -1,7 +1,7 @@
 package com.example.jedis.common;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.convert.Convert;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class JedisLockTemplate implements InitializingBean {
+@Slf4j
+public class JedisLockTemplate extends AbstractRedisLock implements InitializingBean {
 
     private String UNLOCK_LUA = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
@@ -30,11 +31,12 @@ public class JedisLockTemplate implements InitializingBean {
 
     private static final Long RETRY_INTERVAL = 1000L;
     private static final Integer DEFAULT_EXPIRE = 30;
-    private static final Long DEFAULT_TIMEOUT = 300L;
+    private static final Integer DEFAULT_TIMEOUT = 1000;
 
 
     @Autowired
     private JedisTemplate jedisTemplate;
+
 
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
 
@@ -46,28 +48,19 @@ public class JedisLockTemplate implements InitializingBean {
     }
 
 
-
-    public Boolean lock(String lockKey, String requestId, int expire, long timeout) {
-        expire = expire <= 0 ? DEFAULT_EXPIRE : expire;
-        timeout = timeout < 0 ? DEFAULT_TIMEOUT : timeout;
-
+    @Override
+    public boolean doAcquire(String lockKey, String requestId, int expire) {
         Boolean canLock = false;
-        long start = System.currentTimeMillis();
-        try {
-            do {
-                canLock = jedisTemplate.setnxex(lockKey, requestId, expire);
-                if (canLock) {
-                    watch(lockKey, requestId, expire);
-                    return canLock;
-                }
-                Thread.sleep(RETRY_INTERVAL);
-            } while (System.currentTimeMillis() - start < timeout);
-        } catch (InterruptedException e) {
+        canLock = jedisTemplate.setnxex(lockKey, requestId, expire);
+        if (canLock) {
+            watch(lockKey, requestId, expire);
+            return canLock;
         }
         return canLock;
     }
 
-    public Boolean unlock(String lockKey, String requestId) {
+    @Override
+    public boolean release(String lockKey, String requestId) {
         Object eval = jedisTemplate.evalsha(UNLOCK_LUA, CollUtil.newArrayList(lockKey), CollUtil.newArrayList(requestId));
         if (UNLOCK_SUCCESS.equals(eval)) {
             scheduledThreadPoolExecutor.shutdown();
@@ -88,7 +81,6 @@ public class JedisLockTemplate implements InitializingBean {
     }
 
 
-
     class WatchDogTask implements Runnable {
         private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
         private List<String> keys;
@@ -102,7 +94,8 @@ public class JedisLockTemplate implements InitializingBean {
 
         @Override
         public void run() {
-            if (Convert.toInt(jedisTemplate.evalsha(WATCH_DOG_LUA, keys, args)) == 0) {
+            log.info("watch dog for renewal...");
+            if (jedisTemplate.evalsha(WATCH_DOG_LUA, keys, args).equals(0)) {
                 scheduledThreadPoolExecutor.shutdown();
             }
         }

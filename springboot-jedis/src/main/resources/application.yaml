@@ -3,14 +3,15 @@ spring:
     port: 6379
     host: 127.0.0.1
     password:
-    timeout: 10000
+    timeout: 1800000
     database: 1
     jedis:
       pool:
         min-idle: 0
-        max-idle: 8
-        max-active: 8
+        max-idle: 100
+        max-active: 100
         max-wait: -1
+
 
 
 example:

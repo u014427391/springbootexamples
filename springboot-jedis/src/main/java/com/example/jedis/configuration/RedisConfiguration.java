@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -22,45 +24,39 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 @ConditionalOnClass({GenericObjectPool.class, JedisConnection.class, Jedis.class})
 @EnableRedisRepositories(basePackages = "com.example.jedis.repository")
+@EnableConfigurationProperties(RedisProperties.class)
 @Slf4j
 public class RedisConfiguration {
 
-    @Value("${spring.redis.host:127.0.0.1}")
-    private String host;
-    @Value("${spring.redis.port:6379}")
-    private Integer port;
-    @Value("${spring.redis.password:}")
-    private String password;
-    @Value("${spring.redis.database:0}")
-    private Integer database;
 
-    @Value("${spring.redis.jedis.pool.max-active:8}")
-    private Integer maxActive;
-    @Value("${spring.redis.jedis.pool.max-idle:8}")
-    private Integer maxIdle;
-    @Value("${spring.redis.jedis.pool.max-wait:-1}")
-    private Long maxWait;
-    @Value("${spring.redis.jedis.pool.min-idle:0}")
-    private Integer minIdle;
+    private final RedisProperties properties;
+
+
+    public RedisConfiguration(RedisProperties properties) {
+        this.properties = properties;
+    }
 
 
     @Bean
     public JedisPoolConfig jedisPoolConfig() {
+        RedisProperties.Pool pool = properties.getJedis().getPool();
+
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(maxIdle);
-        jedisPoolConfig.setMaxWaitMillis(maxWait);
-        jedisPoolConfig.setMaxTotal(maxActive);
-        jedisPoolConfig.setMinIdle(minIdle);
+        jedisPoolConfig.setMaxIdle(pool.getMaxIdle());
+        jedisPoolConfig.setMaxWaitMillis(pool.getMaxWait().toMillis());
+        jedisPoolConfig.setMaxTotal(pool.getMaxActive());
+        jedisPoolConfig.setMinIdle(pool.getMinIdle());
+
         return jedisPoolConfig;
     }
 
     @Bean
     public RedisStandaloneConfiguration jedisConfig() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-        config.setHostName(host);
-        config.setPort(port);
-        config.setDatabase(database);
-        config.setPassword(RedisPassword.of(password));
+        config.setHostName(properties.getHost());
+        config.setPort(properties.getPort());
+        config.setDatabase(properties.getDatabase());
+        config.setPassword(RedisPassword.of(properties.getPassword()));
         return config;
     }
 
