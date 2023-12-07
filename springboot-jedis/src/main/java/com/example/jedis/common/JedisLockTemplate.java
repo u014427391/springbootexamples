@@ -1,13 +1,13 @@
 package com.example.jedis.common;
 
 import cn.hutool.core.collection.CollUtil;
+import io.netty.util.HashedWheelTimer;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -29,22 +29,21 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
 
     private static final Long UNLOCK_SUCCESS = 1L;
 
-    private static final Long RETRY_INTERVAL = 1000L;
-    private static final Integer DEFAULT_EXPIRE = 30;
-    private static final Integer DEFAULT_TIMEOUT = 1000;
-
-
     @Autowired
     private JedisTemplate jedisTemplate;
 
-
-    private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
+    private HashedWheelTimer hashedWheelTimer;
 
 
     @Override
     public void afterPropertiesSet() throws Exception {
         this.UNLOCK_LUA = jedisTemplate.scriptLoad(UNLOCK_LUA);
         this.WATCH_DOG_LUA = jedisTemplate.scriptLoad(WATCH_DOG_LUA);
+        hashedWheelTimer = new HashedWheelTimer(
+                new DefaultThreadFactory("watchdog-timer"),
+                100,
+                TimeUnit.MILLISECONDS
+        );
     }
 
 
@@ -63,42 +62,21 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
     public boolean release(String lockKey, String requestId) {
         Object eval = jedisTemplate.evalsha(UNLOCK_LUA, CollUtil.newArrayList(lockKey), CollUtil.newArrayList(requestId));
         if (UNLOCK_SUCCESS.equals(eval)) {
-            scheduledThreadPoolExecutor.shutdown();
+            hashedWheelTimer.stop();
             return true;
         }
         return false;
     }
 
-    private void watch(String lockKey, String lockValue, long expire) {
-        if (scheduledThreadPoolExecutor.isShutdown()) {
-            scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
-        }
-        scheduledThreadPoolExecutor.scheduleAtFixedRate(new WatchDogTask(scheduledThreadPoolExecutor, CollUtil.newArrayList(lockKey), CollUtil.newArrayList(lockValue)),
-                1,
+    private void watch(String lockKey, String requestId, long expire) {
+        hashedWheelTimer.newTimeout(t -> {
+                    log.info("watch dog for renewal...");
+                    jedisTemplate.evalsha(WATCH_DOG_LUA, CollUtil.newArrayList(lockKey), CollUtil.newArrayList(requestId));
+                },
                 expire,
-                TimeUnit.SECONDS
-        );
+                TimeUnit.SECONDS);
     }
 
 
-    class WatchDogTask implements Runnable {
-        private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
-        private List<String> keys;
-        private List<String> args;
-
-        public WatchDogTask(ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, List<String> keys, List<String> args) {
-            this.scheduledThreadPoolExecutor = scheduledThreadPoolExecutor;
-            this.keys = keys;
-            this.args = args;
-        }
-
-        @Override
-        public void run() {
-            log.info("watch dog for renewal...");
-            if (jedisTemplate.evalsha(WATCH_DOG_LUA, keys, args).equals(0)) {
-                scheduledThreadPoolExecutor.shutdown();
-            }
-        }
-    }
 
 }
