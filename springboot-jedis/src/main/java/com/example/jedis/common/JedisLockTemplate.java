@@ -67,7 +67,7 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
         return false;
     }
 
-    private void watch(String lockKey, String requestId, long expire) {
+    public void watch(String lockKey, String requestId, int expire) {
         if (scheduledExecutorService.isShutdown()) {
             scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
         }

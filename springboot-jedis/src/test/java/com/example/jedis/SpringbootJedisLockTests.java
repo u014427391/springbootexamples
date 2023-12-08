@@ -63,7 +63,7 @@ public class SpringbootJedisLockTests {
 
     private void redisLock() {
         String requestId = IdUtil.simpleUUID();
-        Boolean lock = jedisLockTemplate.acquire(REDIS_KEY, requestId, 5, 10 );
+        Boolean lock = jedisLockTemplate.acquire(REDIS_KEY, requestId, 5, 3 );
         if (lock) {
             try {
                 doSomeThing();
