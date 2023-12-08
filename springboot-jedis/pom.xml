@@ -45,9 +45,7 @@
 
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-common</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <artifactId>netty-all</artifactId>
         </dependency>
 
         <dependency>
