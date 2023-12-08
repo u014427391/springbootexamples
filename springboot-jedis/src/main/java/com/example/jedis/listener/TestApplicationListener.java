@@ -13,4 +13,5 @@ public class TestApplicationListener implements ApplicationListener<ApplicationS
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
         log.info("onApplicationEvent");
     }
+
 }

@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import java.util.concurrent.TimeUnit;
+
 
 @SpringBootApplication
 @Slf4j
