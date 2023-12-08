@@ -31,47 +31,57 @@ public class SpringbootJedisLockTests {
 
 //        CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        IntStream.range(0, 5).forEach(e->{
-            new Thread(new RunnableTask()).start();
-        });
+//        IntStream.range(0, 5).forEach(e->{
+//            new Thread(new RunnableTask(countDownLatch)).start();
+//        });
+//        new Thread(new RunnableTask()).start();
 
 //        countDownLatch.await();
+
+        redisLock();
+
     }
 
 
     class RunnableTask implements Runnable {
 
-//        CountDownLatch countDownLatch;
+        CountDownLatch countDownLatch;
 
         public RunnableTask() {}
 
-//        public RunnableTask (CountDownLatch countDownLatch) {
-//            this.countDownLatch = countDownLatch;
-//        }
+        public RunnableTask (CountDownLatch countDownLatch) {
+            this.countDownLatch = countDownLatch;
+        }
 
         @SneakyThrows
         @Override
         public void run() {
-            String requestId = IdUtil.simpleUUID();
-            Boolean lock = jedisLockTemplate.acquire(REDIS_KEY, requestId, 5, 3 );
-            if (lock) {
-                try {
-                    doSomeThing();
-                } catch (InterruptedException e) {
-                    jedisLockTemplate.release(REDIS_KEY, requestId);
-                } finally {
-                    jedisLockTemplate.release(REDIS_KEY, requestId);
-                }
-            } else {
-                log.warn("获取锁失败!");
-            }
-//            countDownLatch.countDown();
+            redisLock();
+            countDownLatch.countDown();
         }
 
-        private void doSomeThing() throws InterruptedException {
-            log.info("do some thing");
-            Thread.sleep(15*1000);
+
+    }
+
+    private void redisLock() {
+        String requestId = IdUtil.simpleUUID();
+        Boolean lock = jedisLockTemplate.acquire(REDIS_KEY, requestId, 60, 60 );
+        if (lock) {
+            try {
+                doSomeThing();
+            } catch (InterruptedException e) {
+                jedisLockTemplate.release(REDIS_KEY, requestId);
+            } finally {
+                jedisLockTemplate.release(REDIS_KEY, requestId);
+            }
+        } else {
+            log.warn("获取锁失败!");
         }
+    }
+
+    private void doSomeThing() throws InterruptedException {
+        log.info("do some thing");
+        Thread.sleep(80*1000);
     }
 
 }

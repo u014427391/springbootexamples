@@ -42,7 +42,8 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
         hashedWheelTimer = new HashedWheelTimer(
                 new DefaultThreadFactory("watchdog-timer"),
                 100,
-                TimeUnit.MILLISECONDS
+                TimeUnit.MILLISECONDS,
+                1024
         );
     }
 
@@ -59,7 +60,7 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
     }
 
     @Override
-    public boolean release(String lockKey, String requestId) {
+    public boolean doRelease(String lockKey, String requestId) {
         Object eval = jedisTemplate.evalsha(UNLOCK_LUA, CollUtil.newArrayList(lockKey), CollUtil.newArrayList(requestId));
         if (UNLOCK_SUCCESS.equals(eval)) {
             hashedWheelTimer.stop();
