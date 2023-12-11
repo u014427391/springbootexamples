@@ -1,60 +1,39 @@
-package com.example.jedis;
+package com.example.jedis.controller;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.cron.task.RunnableTask;
 import com.example.jedis.common.JedisLockTemplate;
-import com.example.jedis.configuration.RedisConfiguration;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-@SpringBootTest
+@RestController
 @Slf4j
-public class SpringbootJedisLockTests {
+public class TestController {
+
 
     private static final String REDIS_KEY = "test:lock";
 
     @Autowired
     private JedisLockTemplate jedisLockTemplate;
 
+    @GetMapping("test")
+    public void test(@RequestParam("threadNum")Integer threadNum) throws InterruptedException {
 
-    @Test
-    public void testLock() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(threadNum);
+        IntStream.range(0, threadNum).forEach(e->{
+            new Thread(new RunnableTask(countDownLatch)).start();
+        });
+        countDownLatch.await();
 
-//        CountDownLatch countDownLatch = new CountDownLatch(1);
-//        IntStream.range(0, 1).forEach(e->{
-//            new Thread(new RunnableTask(countDownLatch)).start();
-//        });
-//        countDownLatch.await();
-
-        for (int i = 0; i < 3; i++) {
-            new Thread(()->redisLock()).start();
-        }
-
-//        redisLock();
-
+//        for (int i = 0; i < threadNum; i++) {
+//            new Thread(()->redisLock()).start();
+//        }
     }
-
-    class RedisLockThread extends Thread {
-        @SneakyThrows
-        @Override
-        public void run() {
-            redisLock();
-        }
-    }
-
-
 
     class RunnableTask implements Runnable {
 
@@ -72,6 +51,7 @@ public class SpringbootJedisLockTests {
 
 
     }
+
 
     private void redisLock() {
         String requestId = getRequestId();
@@ -105,5 +85,7 @@ public class SpringbootJedisLockTests {
         return sb.toString();
 
     }
+
+
 
 }

@@ -1,8 +1,8 @@
 package com.example.jedis.configuration;
 
+import cn.hutool.core.convert.Convert;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -36,17 +36,32 @@ public class RedisConfiguration {
         this.properties = properties;
     }
 
-
+    /**
+     *
+     * testOnBorrow: 向资源池借用连接时是否做连接有效性检测（ping）
+     * testOnReturn: 向资源池归还连接时是否做连接有效性检测（ping）
+     * testWhileIdle: 是否在空闲资源监测时通过ping命令监测连接有效性，无效连接将被销毁。
+     * jmxEnabled: 是否开启JMX监控
+     * @Date 2023/12/11 16:29
+     * @return redis.clients.jedis.JedisPoolConfig
+     */
     @Bean
     public JedisPoolConfig jedisPoolConfig() {
         RedisProperties.Pool pool = properties.getJedis().getPool();
-
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(pool.getMaxIdle());
         jedisPoolConfig.setMaxWaitMillis(pool.getMaxWait().toMillis());
         jedisPoolConfig.setMaxTotal(pool.getMaxActive());
         jedisPoolConfig.setMinIdle(pool.getMinIdle());
-
+        jedisPoolConfig.setMinEvictableIdleTimeMillis(60000);
+        jedisPoolConfig.setTimeBetweenEvictionRunsMillis(30000);
+        jedisPoolConfig.setNumTestsPerEvictionRun(-1);
+        jedisPoolConfig.setTestOnBorrow(false);
+        jedisPoolConfig.setTestOnReturn(false);
+        jedisPoolConfig.setBlockWhenExhausted(false);
+        jedisPoolConfig.setTestWhileIdle(true);
+        jedisPoolConfig.setBlockWhenExhausted(true);
+        jedisPoolConfig.setJmxEnabled(true);
         return jedisPoolConfig;
     }
 
@@ -63,7 +78,9 @@ public class RedisConfiguration {
 
     @Bean
     public JedisPool jedisPool() {
-      return new JedisPool(jedisPoolConfig());
+        JedisPool jedisPool = new JedisPool(jedisPoolConfig(),properties.getHost(),  properties.getPort(),
+                Convert.toInt(properties.getTimeout().getSeconds()));
+        return jedisPool;
     }
 
 

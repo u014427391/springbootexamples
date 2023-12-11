@@ -20,6 +20,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
         try {
             do {
                 if (doAcquire(lockKey, requestId, expireTime)) {
+                    watchDog(lockKey, requestId, expireTime);
                     return true;
                 }
                 TimeUnit.MILLISECONDS.sleep(100);
@@ -29,11 +30,15 @@ public abstract class AbstractDistributedLock implements DistributedLock {
             Throwable cause = e.getCause();
             if (cause instanceof SocketTimeoutException) {
                 // ignore exception
+                log.error("sockTimeout exception:{}", e);
             }
-            if (cause instanceof  InterruptedException) {
+            else if (cause instanceof  InterruptedException) {
                 // ignore exception
+                log.error("Interrupted exception:{}", e);
             }
-            log.error("lock acquire exception:{}", e);
+            else {
+                log.error("lock acquire exception:{}", e);
+            }
             throw new LockException(e.getMessage(), e);
         }
         return false;
@@ -52,6 +57,8 @@ public abstract class AbstractDistributedLock implements DistributedLock {
     protected abstract boolean doAcquire(String lockKey, String requestId, int expireTime);
 
     protected abstract boolean doRelease(String lockKey, String requestId);
+
+    protected abstract void watchDog(String lockKey, String requestId, int expireTime);
 
 
 }

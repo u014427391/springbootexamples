@@ -48,13 +48,7 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
 
     @Override
     public boolean doAcquire(String lockKey, String requestId, int expire) {
-        Boolean canLock = false;
-        canLock = jedisTemplate.setnxex(lockKey, requestId, expire);
-        if (canLock) {
-            watch(lockKey, requestId, expire);
-            return canLock;
-        }
-        return canLock;
+        return jedisTemplate.setnxex(lockKey, requestId, expire);
     }
 
     @Override
@@ -67,14 +61,16 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
         return false;
     }
 
-    public void watch(String lockKey, String requestId, int expire) {
+    @Override
+    public void watchDog(String lockKey, String requestId, int expire) {
+        int period = getPeriod(expire);
         if (scheduledExecutorService.isShutdown()) {
             scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
         }
         scheduledExecutorService.scheduleAtFixedRate(
                 new WatchDogTask(scheduledExecutorService, CollUtil.newArrayList(lockKey), CollUtil.newArrayList(requestId, Convert.toStr(expire))),
                 1,
-                expire -1,
+                period,
                 TimeUnit.SECONDS
                 );
     }
@@ -100,6 +96,12 @@ public class JedisLockTemplate extends AbstractRedisLock implements Initializing
             }
             log.info("renewal result:{}, keys:{}, args:{}", evalsha, keys, args);
         }
+    }
+
+    private int getPeriod(int expire) {
+        if (expire < 1)
+            throw new LockException("expire不允许小于1");
+        return expire - 1;
     }
 
 

@@ -110,7 +110,7 @@ public class JedisTemplate implements InitializingBean {
         });
     }
 
-    public Boolean setnxex(final String key, final String value, int seconds) {
+    public synchronized Boolean setnxex(final String key, final String value, int seconds) {
         return execute(e -> {
             SetParams setParams = new SetParams();
             setParams.nx();
