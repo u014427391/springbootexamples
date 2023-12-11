@@ -1,6 +1,7 @@
 package com.example.jedis.controller;
 
 import com.example.jedis.common.JedisLockTemplate;
+import com.example.jedis.common.Lock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,12 @@ public class TestController {
 //        for (int i = 0; i < threadNum; i++) {
 //            new Thread(()->redisLock()).start();
 //        }
+    }
+
+    @GetMapping("testLock")
+    @Lock(lockKey = "test:api", requestId = "123", expire = 5, timeout = 3)
+    public void testLock() throws InterruptedException {
+        doSomeThing();
     }
 
     class RunnableTask implements Runnable {

@@ -9,10 +9,10 @@ public @interface Lock {
 
     String lockKey();
 
-    long expire(); // 毫秒
+    String requestId();
 
-    int delayTime() default  0;
+    int expire();
 
-
+    int timeout() default  0;
 
 }
