@@ -356,7 +356,7 @@ public class JedisTemplate implements InitializingBean {
         }
     }
 
-    protected static boolean isStatusOk(String status) {
+    protected synchronized static boolean isStatusOk(String status) {
         return status != null && ("OK".equals(status) || "+OK".equals(status));
     }
 
