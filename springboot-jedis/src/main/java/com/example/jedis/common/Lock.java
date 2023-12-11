@@ -11,8 +11,8 @@ public @interface Lock {
 
     String requestId();
 
-    int expire();
+    int expire() default 30;
 
-    int timeout() default  0;
+    int timeout() default  1;
 
 }
