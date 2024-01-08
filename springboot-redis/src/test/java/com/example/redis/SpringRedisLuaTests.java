@@ -22,12 +22,15 @@ import java.util.concurrent.TimeUnit;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class SpringRedisLuaTests {
 
-    private static final String LUA_SCRIPT = "local lockParam = redis.call('exists', KEYS[1])\n" +
+    private static final String LOCK_LUA_SCRIPT = "local lockParam = redis.call('exists', KEYS[1])\n" +
             "if lockParam == 0 then\n" +
             "redis.call('set', KEYS[1], ARGV[1])\n" +
             "redis.call('expire', KEYS[1], ARGV[2])\n" +
             "end\n" +
             "return lockParam\n";
+
+    private String UNLOCK_LUA = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -36,20 +39,25 @@ public class SpringRedisLuaTests {
     public void testLua() {
         Long orderId = IdUtil.getSnowflake().nextId();
         String lockKey = "order:"+orderId;
+        String requestId = IdUtil.randomUUID();
         try {
-            Long lock = (Long) redisTemplate.execute(RedisScript.of(LUA_SCRIPT, Long.class), Arrays.asList(lockKey), "1", 30);
+            Long lock = (Long) redisTemplate.execute(RedisScript.of(LOCK_LUA_SCRIPT, Long.class), Arrays.asList(lockKey), requestId, 30);
+            // 抢得到锁
             if (lock == 0) {
                 // 模拟业务执行10s
                 TimeUnit.MILLISECONDS.sleep(10*1000);
-                // 释放redis分布式锁
-                redisTemplate.delete(lockKey);
             }
             log.info("lock:[{}]", lock);
         } catch (Exception e) {
-            redisTemplate.delete(lockKey);
+            testRelease(lockKey, requestId);
+        } finally {
+            testRelease(lockKey, requestId);
         }
+    }
 
-
+    @Test
+    public void testRelease(String lockKey, String lockValue) {
+        redisTemplate.execute(RedisScript.of(UNLOCK_LUA, Long.class), Arrays.asList(lockKey), lockValue);
     }
 
 
