@@ -29,7 +29,7 @@ public class SpringRedisLuaTests {
             "end\n" +
             "return lockParam\n";
 
-    private String UNLOCK_LUA = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+    private String UNLOCK_LUA_SCRIPT = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
 
     @Autowired
@@ -57,7 +57,7 @@ public class SpringRedisLuaTests {
 
     @Test
     public void testRelease(String lockKey, String lockValue) {
-        redisTemplate.execute(RedisScript.of(UNLOCK_LUA, Long.class), Arrays.asList(lockKey), lockValue);
+        redisTemplate.execute(RedisScript.of(UNLOCK_LUA_SCRIPT, Long.class), Arrays.asList(lockKey), lockValue);
     }
 
 
