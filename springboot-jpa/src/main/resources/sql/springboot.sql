@@ -26,13 +26,15 @@ CREATE TABLE `sys_user` (
   `username` varchar(20) NOT NULL,
   `sex` char(10) DEFAULT NULL,
   `password` varchar(10) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`userId`),
   UNIQUE KEY `idx_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_user` */
 
-insert  into `sys_user`(`userId`,`username`,`sex`,`password`) values (1,'admin','man','11');
+insert  into `sys_user`(`userId`,`username`,`sex`,`password`, `create_time`, `modify_time`) values (1,'admin','man','11', now(), now());
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
