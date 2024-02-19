@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class RedisDelayQueue implements DelayQueue {
     private static final String DELAY_QUEUE_NAME = "delay_queue";
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     @Override
     public boolean push(Message message) {
@@ -45,7 +46,7 @@ public class RedisDelayQueue implements DelayQueue {
             msgList = stringSet.stream().map(str -> {
                 Message message = null;
                 try {
-                    JSONUtil.toBean(str, Message.class);
+                    message = JSONUtil.toBean(str, Message.class);
                 } catch (ConvertException e) {
                     log.error("toBean exception:{}", e);
                 }

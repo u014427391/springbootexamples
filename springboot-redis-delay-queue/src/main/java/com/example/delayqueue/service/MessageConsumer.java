@@ -2,6 +2,7 @@ package com.example.delayqueue.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
 import com.example.delayqueue.core.Message;
 import com.example.delayqueue.core.RedisDelayQueue;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,22 +33,18 @@ public class MessageConsumer implements InitializingBean {
                     ,new ArrayBlockingQueue<>(100),new MyThreadFactory());
     }
 
-    @Scheduled(cron = "*/1 * * * * * ")
+    @Scheduled(cron = "*/3 * * * * * ")
     public void consumer() {
         log.info("ready consumer...");
         executorService.execute(() -> {
-            List<Message> messageList = redisDelayQueue.pull();
-            if (CollUtil.isEmpty(messageList)) {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                for (Message message : messageList) {
-                    log.info("消费了{},消费时间为:{}", message.getValue(), DateUtil.now());
+            List<Message> messageList = Optional.ofNullable(redisDelayQueue.pull()).orElse(CollUtil.newArrayList());
+            if (CollUtil.isNotEmpty(messageList)) {
+                messageList.stream().forEach(message -> {
+                    log.info("consumer {},consumer time:{}", JSONUtil.toJsonStr(message), DateUtil.now());
                     redisDelayQueue.remove(message);
-                }
+                });
             }
+
         });
     }
 
