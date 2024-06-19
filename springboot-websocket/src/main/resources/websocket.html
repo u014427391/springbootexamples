@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webSocket</title>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<h1>WebSocket Demo</h1>
+<input type="button" onclick="websocket.send('666666')" value="点我发消息"/>
+</body>
+<script type="application/javascript">
+    var websocket = {
+        send: function (str) {
+        }
+    };
+    window.onload = function () {
+        if (!'WebSocket' in window) return;
+        webSocketInit();
+    };
+    function webSocketInit() {
+        websocket = new WebSocket("ws://127.0.0.1:8080/ws/webSocketServer");
+        //建立连接
+        websocket.onopen = function () {
+            websocket.send("socketClient=666");
+            console.log("成功连接到服务器");
+        };
+        //接收到消息
+        websocket.onmessage = function (event) {
+            console.log(event.data);
+        };
+        //连接发生错误
+        websocket.onerror = function () {
+            alert("WebSocket连接发生错误");
+        };
+        //连接关闭
+        websocket.onclose = function () {
+            alert("WebSocket连接关闭");
+        };
+        //监听窗口关闭
+        window.onbeforeunload = function () {
+            websocket.close()
+        };
+    }
+</script>
+</html>
