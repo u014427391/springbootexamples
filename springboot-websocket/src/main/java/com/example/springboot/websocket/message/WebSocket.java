@@ -13,13 +13,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @ServerEndpoint("/ws/webSocketServer")
 @Component
 @Slf4j
-public class WebSocketObject {
+public class WebSocket {
 
     private static final String PREFIX = "socketClient=";
 
     private String socketClientCode;
 
-    private static CopyOnWriteArrayList<WebSocketObject> webSocketSet = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<WebSocket> webSocketSet = new CopyOnWriteArrayList<>();
 
     private Session session ;
 
@@ -27,7 +27,7 @@ public class WebSocketObject {
     public void onOpen(Session session) {
         this.session = session;
         webSocketSet.add(this);
-        log.info("open a webSocket ,online num: {}", getOnlineNum());
+        log.info("open a webSocket {}, online num: {}",getSocketClientCode(), getOnlineNum());
     }
 
     @OnClose
