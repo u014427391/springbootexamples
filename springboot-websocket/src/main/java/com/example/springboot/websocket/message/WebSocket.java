@@ -32,14 +32,16 @@ public class WebSocket {
 
     @OnClose
     public void onClose() {
-        log.error("close a webSocket");
         webSocketSet.remove(this);
+        log.error("close a webSocket {}, online num:{}", getSocketClientCode(), getOnlineNum());
+        printOnlineClientCode();
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("webSocket error：{}", error);
         webSocketSet.remove(this);
+        log.error("webSocket error {}, {}, online num:{}", error, getSocketClientCode(), getOnlineNum());
+        printOnlineClientCode();
     }
 
     @OnMessage
