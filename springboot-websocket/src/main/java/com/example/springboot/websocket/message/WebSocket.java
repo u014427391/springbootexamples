@@ -19,6 +19,7 @@ public class WebSocket {
 
     private String socketClientCode;
 
+    // 线程安全的CopyOnWriteArrayList
     private static CopyOnWriteArrayList<WebSocket> webSocketSet = new CopyOnWriteArrayList<>();
 
     private Session session ;
