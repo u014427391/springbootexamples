@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能聊天窗口</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+    <div class="chat-window">
+        <div class="chat-header">
+            <h3>智能聊天窗口</h3>
+        </div>
+        <div class="chat-body">
+            <div v-for="(message, index) in messages" :key="index" class="message" :class="{ 'user': message.type === 'user', 'bot': message.type === 'bot' }">
+                <div class="avatar" :class="{ 'user-avatar': message.type === 'user', 'bot-avatar': message.type === 'bot' }"></div>
+                <div class="text">{{ message.text }}</div>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" v-model="userInput" @keyup.enter="sendMessage" placeholder="输入消息...">
+            <button @click="sendMessage">发送</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

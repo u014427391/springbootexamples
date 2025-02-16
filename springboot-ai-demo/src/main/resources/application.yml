@@ -1,0 +1,8 @@
+spring:
+  ai:
+    openai:
+      api-key: key
+      base-url: https://api.siliconflow.cn
+      chat:
+        options:
+          model: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
