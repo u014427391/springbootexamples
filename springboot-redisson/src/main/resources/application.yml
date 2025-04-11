@@ -16,9 +16,15 @@ spring:
           subscriptionConnectionPoolSize: 50
           connectionMinimumIdleSize: 32
           connectionPoolSize: 64
-          database: 0
+          database: 1
           dnsMonitoringInterval: 5000
         threads: 0
         nettyThreads: 0
         codec: !<org.redisson.codec.JsonJacksonCodec> {}
         transportMode: "NIO"
+
+
+bloom:
+  filter:
+    expected-insertions: 1000000  # 预期插入数量，默认值为 1000000
+    false-probability: 0.03       # 误判率，默认值为 3%
