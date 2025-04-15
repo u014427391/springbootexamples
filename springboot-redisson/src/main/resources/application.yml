@@ -11,7 +11,7 @@ spring:
           password: null
           subscriptionsPerConnection: 5
           clientName: null
-          address: "redis://127.0.0.1:6379"
+          address: "redis://192.168.123.203:6379"
           subscriptionConnectionMinimumIdleSize: 1
           subscriptionConnectionPoolSize: 50
           connectionMinimumIdleSize: 32
