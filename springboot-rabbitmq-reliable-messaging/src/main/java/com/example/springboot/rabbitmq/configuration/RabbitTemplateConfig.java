@@ -35,10 +35,9 @@ public class RabbitTemplateConfig {
 
         // 设置 Return 回调
         rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) -> {
-            log.info("消息发送失败，交换机：{}", exchange);
-            log.info("路由键：{}", routingKey);
-            log.info("原因：{}", replyText);
+            log.info("消息发送失败，交换机：{}，路由键：{}，原因：{}", exchange, routingKey, replyText);
         });
+
 
         return rabbitTemplate;
     }

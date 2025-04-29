@@ -22,7 +22,12 @@ public class MessageReceiver {
             Thread.sleep(1000);
             // 手动确认消息
             channel.basicAck(deliveryTag, false);
+
+            // 模拟消息处理失败
+            //throw new RuntimeException("消息处理失败");
         } catch (Exception e) {
+            log.error("消息处理失败，消息内容：{}", message, e);
+
             // 消息处理失败，拒绝消息并重新入队
             channel.basicNack(deliveryTag, false, true);
         }
