@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    host: 192.168.61.169
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: correlated  # 开启生产者确认机制
+    publisher-returns: true  # 开启消息返回机制
+    template:
+      mandatory: true  # 消息路由失败时返回给生产者
+    listener:
+      simple:
+        acknowledge-mode: manual  # 手动确认模式
+        retry:
+          enabled: true  # 开启消费者失败重试
+          initial-interval: 1000  # 初始的失败等待时长为1秒
+          multiplier: 1  # 失败的等待时长倍数
+          max-attempts: 3  # 最大重试次数
