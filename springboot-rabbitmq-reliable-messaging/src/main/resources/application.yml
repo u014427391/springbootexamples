@@ -1,9 +1,9 @@
 spring:
   rabbitmq:
-    host: 192.168.61.169
+    host: 127.0.0.1
     port: 5672
-    username: guest
-    password: guest
+    username: admin
+    password: 123456
     publisher-confirm-type: correlated  # 开启生产者确认机制
     publisher-returns: true  # 开启消息返回机制
     template:
