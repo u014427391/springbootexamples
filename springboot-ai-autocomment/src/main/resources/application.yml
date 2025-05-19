@@ -1,0 +1,4 @@
+openai:
+  api-key: your-api-key
+  api-url: https://api.siliconflow.cn/v1/chat/completions
+  model-name: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
