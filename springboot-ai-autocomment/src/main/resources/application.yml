@@ -2,3 +2,11 @@ openai:
   api-key: your-api-key
   api-url: https://api.siliconflow.cn/v1/chat/completions
   model-name: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+
+
+chromedriver:
+  path: D:/software/chromedriver_win32/chromedriver.exe
+
+article:
+  urls:
+    path: D:/software/chromedriver_win32/article_urls.txt
