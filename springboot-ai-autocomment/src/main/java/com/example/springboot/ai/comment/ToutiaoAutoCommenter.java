@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +36,17 @@ public class ToutiaoAutoCommenter {
     @Value("${openai.api-key}")
     private String OPENAI_API_KEY;
 
+    @Value("${login.username}")
+    private String loginUsername;
+
+    @Value("${login.password}")
+    private String loginPassword;
+
     private static WebDriver driver;
     private static Map<String, Object> cookies = new HashMap<>();
+
+    @Autowired
+    private OpenAIHelper openAIHelper;
 
     public void startAutoComment() throws InterruptedException {
 
@@ -106,6 +116,7 @@ public class ToutiaoAutoCommenter {
             WebElement commentBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("comment-textarea")));
 
             String articleTitle = driver.getTitle();
+            log.info("获取文章标题:{}", articleTitle);
 
             // 假设 OpenAIHelper 是一个可以生成评论的类
             String comment = generateComment(articleTitle);
@@ -123,7 +134,7 @@ public class ToutiaoAutoCommenter {
         }
     }
 
-    private static void login(WebDriver driver) {
+    private void login(WebDriver driver) {
         driver.get("http://www.toutiao.com");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
 
@@ -152,10 +163,10 @@ public class ToutiaoAutoCommenter {
             clickableAccountLoginOption.click();
 
             WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("web-login-normal-input__input")));
-            usernameField.sendKeys("your-account");
+            usernameField.sendKeys(loginUsername);
 
             WebElement passwordField = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("web-login-button-input__input")));
-            passwordField.sendKeys("your-password");
+            passwordField.sendKeys(loginPassword);
 
             WebElement agreeCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.className("web-login-confirm-info__checkbox")));
             if (!agreeCheckbox.isSelected()) {
@@ -233,7 +244,6 @@ public class ToutiaoAutoCommenter {
     }
 
     private String generateComment(String articleTitle) throws IOException {
-        OpenAIHelper openAIHelper = new OpenAIHelper(OPENAI_API_KEY);
         String comment = openAIHelper.generateComment(articleTitle);
         return comment;
     }

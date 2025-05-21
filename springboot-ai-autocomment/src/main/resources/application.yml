@@ -10,3 +10,8 @@ chromedriver:
 article:
   urls:
     path: D:/software/chromedriver_win32/article_urls.txt
+
+
+login:
+  username: your-user-name
+  password: your-password

@@ -27,13 +27,6 @@ public class OpenAIHelper {
 
     private final Gson gson = new Gson();
 
-    public OpenAIHelper() {
-    }
-
-    public OpenAIHelper(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
     // 生成评论
     public String generateComment(String title) throws IOException {
         if (apiKey == null || apiKey.isEmpty() || title == null || title.isEmpty()) {
