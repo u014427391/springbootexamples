@@ -11,7 +11,9 @@ article:
   urls:
     path: D:/software/chromedriver_win32/article_urls.txt
 
+browser:
+  userDataDir: D:/data/user-data-dir
 
 login:
-  username: your-user-name
-  password: your-password
+  username: your-account
+  password: yout-password

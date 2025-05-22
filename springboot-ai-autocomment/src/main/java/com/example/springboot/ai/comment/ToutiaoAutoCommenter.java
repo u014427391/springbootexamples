@@ -2,10 +2,12 @@ package com.example.springboot.ai.comment;
 
 import com.example.springboot.ai.components.OpenAIHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -14,12 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -33,6 +35,9 @@ public class ToutiaoAutoCommenter {
     @Value("${article.urls.path}")
     private String ARTICLE_PATH;
 
+    @Value("${browser.userDataDir}")
+    private String USER_DATA_DIR;
+
     @Value("${openai.api-key}")
     private String OPENAI_API_KEY;
 
@@ -43,12 +48,11 @@ public class ToutiaoAutoCommenter {
     private String loginPassword;
 
     private static WebDriver driver;
-    private static Map<String, Object> cookies = new HashMap<>();
 
     @Autowired
     private OpenAIHelper openAIHelper;
 
-    public void startAutoComment() throws InterruptedException {
+    public void startAutoComment() {
 
         WebDriverManager.chromedriver().setup(); // 自动下载并配置chromedriver
         System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
@@ -58,9 +62,11 @@ public class ToutiaoAutoCommenter {
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-blink-features=AutomationControlled");
         options.addArguments("--disable-infobars");
-        options.addArguments("--disable-extensions");
         options.addArguments("--disable-dev-shm-usage"); // 解决Docker环境下的内存问题
         options.addArguments("--no-sandbox"); // 解决Linux环境下的权限问题
+
+        // 设置用户数据目录
+        options.addArguments("--user-data-dir=" + USER_DATA_DIR);
 
         // 设置User-Agent，使用与当前浏览器匹配的版本
         String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36";
@@ -87,13 +93,7 @@ public class ToutiaoAutoCommenter {
         }
         log.info("共读取到 {} 个文章链接", articleUrls.size());
 
-        // 尝试加载保存的Cookies并检查登录状态
-        if (loadCookies()) {
-            log.info("从保存的Cookies恢复登录状态");
-            if (!checkLoginStatus()) {
-                login(driver);
-            }
-        } else {
+        if (!checkLoginStatus()) {
             login(driver);
         }
 
@@ -105,7 +105,7 @@ public class ToutiaoAutoCommenter {
         }
 
         // 关闭浏览器
-        driver.quit();
+        driver.close();
     }
 
     public void commentArticle(WebDriver driver, String url) {
@@ -176,11 +176,12 @@ public class ToutiaoAutoCommenter {
             WebElement loginSubmitButton = driver.findElement(By.className("web-login-button"));
             loginSubmitButton.click();
 
-            // 获取并保存Cookies
-            saveCookies();
+            // 登录成功后刷新页面
+            driver.navigate().refresh();
 
         } catch (Exception e) {
-            log.error("登录时出错", e);
+            log.error("登录时出错:{}", e.getMessage(), e);
+            e.printStackTrace();
         }
     }
 
@@ -194,52 +195,6 @@ public class ToutiaoAutoCommenter {
             return false; // 如果找到了登录按钮，则未登录
         } catch (Exception e) {
             return true; // 如果没有找到登录按钮，则已登录
-        }
-    }
-
-    private static void saveCookies() {
-        // 保存Cookies到文件
-        cookies.clear();
-        for (Cookie cookie : driver.manage().getCookies()) {
-            cookies.put(cookie.getName(), cookie);
-        }
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("cookies.dat"))) {
-            oos.writeObject(cookies);
-        } catch (IOException e) {
-            log.error("保存Cookies时出错", e);
-        }
-    }
-
-    private static boolean loadCookies() {
-        // 从文件加载Cookies
-        File cookieFile = new File("cookies.dat");
-        if (!cookieFile.exists()) {
-            return false;
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cookieFile))) {
-            @SuppressWarnings("unchecked")
-            Map<String, Cookie> loadedCookies = (Map<String, Cookie>) ois.readObject();
-            cookies.clear();
-            cookies.putAll(loadedCookies);
-
-            // 确保页面加载完成后再添加Cookies
-            driver.get("http://www.toutiao.com");
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
-            ExpectedCondition<Boolean> pageLoadCondition = driver1 ->
-                    ((JavascriptExecutor) driver1).executeScript("return document.readyState").equals("complete");
-            wait.until(pageLoadCondition);
-
-            // 添加Cookies到driver
-            for (Cookie cookie : loadedCookies.values()) {
-                // 确保Cookie的domain与当前页面匹配
-                if (cookie.getDomain() != null && cookie.getDomain().contains("toutiao.com")) {
-                    driver.manage().addCookie(cookie);
-                }
-            }
-            return true;
-        } catch (Exception e) {
-            log.error("加载Cookies时出错", e);
-            return false;
         }
     }
 

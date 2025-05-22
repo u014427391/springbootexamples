@@ -29,6 +29,7 @@ public class OpenAIHelper {
 
     // 生成评论
     public String generateComment(String title) throws IOException {
+        // 如果没有提供API密钥或标题为空，返回空字符串
         if (apiKey == null || apiKey.isEmpty() || title == null || title.isEmpty()) {
             log.error("API密钥或标题为空");
             return "";
@@ -36,27 +37,30 @@ public class OpenAIHelper {
 
         RequestBody requestBody = new RequestBody();
         requestBody.model = modelName;
-        requestBody.temperature = 0.7;
-        requestBody.max_tokens = 50;
+        requestBody.temperature = 0.5; // 控制生成文本的随机性，0.0表示确定性最高，2.0表示随机性最高
+        requestBody.max_tokens = 50; // 最大生成token数
 
         Message message = new Message();
         message.role = "user";
-        message.content = "生成一条积极的评论，主题是: " + title +
-                "。评论需要自然、互动性强，不超过50个字。";
+        message.content = "生成一条积极的抖音评论，主题是: " + title +
+                "。评论需要自然、互动性强，使用简单语言，不包含任何特殊字符或表情符号。";
         requestBody.messages = new Message[]{message};
 
+        // 发送请求
         URL url = new URL(apiURL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+        connection.setRequestProperty("Authorization", "Bearer " + apiKey); // DeepSeek使用相同的授权头格式
         connection.setDoOutput(true);
 
+        // 写入请求体
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = gson.toJson(requestBody).getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
+        // 读取响应
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             try (BufferedReader br = new BufferedReader(
@@ -67,6 +71,7 @@ public class OpenAIHelper {
                     response.append(responseLine.trim());
                 }
 
+                // 解析响应
                 ResponseBody responseBody = gson.fromJson(response.toString(), ResponseBody.class);
                 if (responseBody != null &&
                         responseBody.choices != null &&
@@ -88,6 +93,7 @@ public class OpenAIHelper {
             }
         }
 
+        // 请求失败时返回空字符串
         return "";
     }
 
@@ -98,14 +104,15 @@ public class OpenAIHelper {
         int max_tokens;
         Message[] messages;
 
+        // DeepSeek特定参数（如果需要）
         @SerializedName("top_p")
-        double topP = 0.9;
+        double topP = 0.9; // 核采样概率
 
         @SerializedName("frequency_penalty")
-        double frequencyPenalty = 0.0;
+        double frequencyPenalty = 0.0; // 频率惩罚，降低重复度
 
         @SerializedName("presence_penalty")
-        double presencePenalty = 0.0;
+        double presencePenalty = 0.0; // 存在惩罚，鼓励生成新话题
     }
 
     // 内部类：消息（与OpenAI相同）
@@ -118,6 +125,7 @@ public class OpenAIHelper {
     private static class ResponseBody {
         Choice[] choices;
 
+        // DeepSeek可能返回的额外字段
         String id;
         String object;
         long created;
