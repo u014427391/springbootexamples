@@ -38,14 +38,6 @@ public abstract class AbstractAutoCommenter {
         }
     }
 
-    protected WebElement waitForElementPresence(By locator, Duration timeout) {
-        WebDriverWait wait = new WebDriverWait(driver, timeout.getSeconds());
-        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-    }
 
-    protected WebElement waitForElementToBeClickable(By locator, Duration timeout) {
-        WebDriverWait wait = new WebDriverWait(driver, timeout.getSeconds());
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
 
 }

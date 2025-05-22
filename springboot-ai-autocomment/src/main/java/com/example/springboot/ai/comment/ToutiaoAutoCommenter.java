@@ -4,7 +4,6 @@ import com.example.springboot.ai.components.OpenAIHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,8 +156,19 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
     protected void comment(String url) {
         driver.get(url);
         try {
+            // 判断链接类型
+            String urlType = parseUrlType(url);
+            log.info("链接类型: {}", urlType);
+
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
+
+            if (urlType.equals("视频")) {
+                WebElement commentIcon = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".comment-icon")));
+                commentIcon.click();
+            }
+
             WebElement commentBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("comment-textarea")));
+
             String articleTitle = driver.getTitle();
             log.info("获取文章标题: {}", articleTitle);
 
@@ -170,6 +181,23 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
             Thread.sleep(3000);
         } catch (Exception e) {
             log.error("评论文章时出错", e);
+        }
+    }
+
+    // 判断链接类型的方法
+    private String parseUrlType(String url) {
+        try {
+            URL toutiaoUrl = new URL(url);
+            String path = toutiaoUrl.getPath();
+
+            if (path.contains("/video/")) {
+                return "视频";
+            } else {
+                return "文章";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "无效链接";
         }
     }
 }
