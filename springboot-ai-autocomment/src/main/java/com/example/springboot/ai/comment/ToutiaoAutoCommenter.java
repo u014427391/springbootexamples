@@ -10,8 +10,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,9 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ToutiaoAutoCommenter {
-
-    private static final Logger log = LoggerFactory.getLogger(ToutiaoAutoCommenter.class);
+public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
 
     @Value("${chromedriver.path}")
     private String CHROME_DRIVER_PATH;
@@ -46,11 +42,10 @@ public class ToutiaoAutoCommenter {
     @Value("${login.password}")
     private String loginPassword;
 
-    private static WebDriver driver;
-
     @Autowired
     private OpenAIHelper openAIHelper;
 
+    @Override
     public void startAutoComment() {
         WebDriverManager.chromedriver().setup();
         System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
@@ -67,19 +62,20 @@ public class ToutiaoAutoCommenter {
                 }
             }
 
-            List<String> articleUrls = readArticleUrls();
+            List<String> articleUrls = readUrls();
             if (articleUrls.isEmpty()) {
                 log.info("文章链接文件为空，没有文章需要评论");
                 return;
             }
 
-            commentArticles(articleUrls);
+            doComment(articleUrls);
         } finally {
             driver.close();
         }
     }
 
-    private ChromeOptions configureChromeOptions() {
+    @Override
+    protected ChromeOptions configureChromeOptions() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-notifications");
@@ -93,7 +89,8 @@ public class ToutiaoAutoCommenter {
         return options;
     }
 
-    private boolean isLoggedIn() {
+    @Override
+    protected boolean isLoggedIn() {
         try {
             driver.get("http://www.toutiao.com");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3).getSeconds());
@@ -104,7 +101,8 @@ public class ToutiaoAutoCommenter {
         }
     }
 
-    private boolean login() {
+    @Override
+    protected boolean login() {
         try {
             driver.get("http://www.toutiao.com");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
@@ -138,7 +136,8 @@ public class ToutiaoAutoCommenter {
         }
     }
 
-    private List<String> readArticleUrls() {
+    @Override
+    protected List<String> readUrls() {
         List<String> articleUrls = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(ARTICLE_PATH))) {
             String line;
@@ -153,15 +152,8 @@ public class ToutiaoAutoCommenter {
         return articleUrls;
     }
 
-    private void commentArticles(List<String> articleUrls) {
-        log.info("共读取到 {} 个文章链接", articleUrls.size());
-        for (int i = 0; i < articleUrls.size(); i++) {
-            log.info("处理第 {} 个文章，共 {} 个", i + 1, articleUrls.size());
-            commentArticle(articleUrls.get(i));
-        }
-    }
-
-    public void commentArticle(String url) {
+    @Override
+    protected void comment(String url) {
         driver.get(url);
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
