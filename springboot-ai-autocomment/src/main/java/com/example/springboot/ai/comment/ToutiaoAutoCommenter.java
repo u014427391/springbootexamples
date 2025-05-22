@@ -80,28 +80,40 @@ public class ToutiaoAutoCommenter {
         // 设置隐式等待时间
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        List<String> articleUrls = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARTICLE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (!line.trim().isEmpty()) {
-                    articleUrls.add(line.trim());
+        boolean isLoggedIn = checkLoginStatus();
+        if (!isLoggedIn) {
+            isLoggedIn = login(driver);
+        }
+
+        if (isLoggedIn) {
+            List<String> articleUrls = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(ARTICLE_PATH))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.trim().isEmpty()) {
+                        articleUrls.add(line.trim());
+                    }
                 }
+            } catch (IOException e) {
+                log.error("读取文章链接文件时出错", e);
             }
-        } catch (IOException e) {
-            log.error("读取文章链接文件时出错", e);
-        }
-        log.info("共读取到 {} 个文章链接", articleUrls.size());
 
-        if (!checkLoginStatus()) {
-            login(driver);
-        }
+            if (articleUrls.isEmpty()) {
+                log.info("文章链接文件为空，没有文章需要评论");
+                // 关闭浏览器
+                driver.close();
+                return;
+            }
 
-        for (int i = 0; i < articleUrls.size(); i++) {
-            log.info("处理第 {} 个文章，共 {} 个", i + 1, articleUrls.size());
+            log.info("共读取到 {} 个文章链接", articleUrls.size());
 
-            commentArticle(driver, articleUrls.get(i));
+            for (int i = 0; i < articleUrls.size(); i++) {
+                log.info("处理第 {} 个文章，共 {} 个", i + 1, articleUrls.size());
 
+                commentArticle(driver, articleUrls.get(i));
+            }
+        } else {
+            log.error("登录失败，无法执行评论操作");
         }
 
         // 关闭浏览器
@@ -134,12 +146,11 @@ public class ToutiaoAutoCommenter {
         }
     }
 
-    private void login(WebDriver driver) {
+    private boolean login(WebDriver driver) {
         driver.get("http://www.toutiao.com");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
 
         try {
-
             // 等待页面完全加载
             wait.until(webDriver ->
                     ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
@@ -156,7 +167,6 @@ public class ToutiaoAutoCommenter {
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", loginButton);
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", loginButton);
             }
-
 
             WebElement clickableAccountLoginOption = wait.until(
                     ExpectedConditions.elementToBeClickable(By.cssSelector("li[aria-label='账密登录']")));
@@ -179,15 +189,16 @@ public class ToutiaoAutoCommenter {
             // 登录成功后刷新页面
             driver.navigate().refresh();
 
+            // 检查登录是否成功
+            return checkLoginStatus();
+
         } catch (Exception e) {
             log.error("登录时出错:{}", e.getMessage(), e);
-            e.printStackTrace();
+            return false;
         }
     }
 
-    private static boolean checkLoginStatus() {
-        // 实现检查登录状态的逻辑
-        // 这里可以检查特定的元素是否存在，或者访问一个只有登录用户才能访问的页面
+    private boolean checkLoginStatus() {
         try {
             driver.get("http://www.toutiao.com");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3).getSeconds());
