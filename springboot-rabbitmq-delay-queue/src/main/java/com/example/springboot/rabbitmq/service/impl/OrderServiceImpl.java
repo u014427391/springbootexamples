@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("订单创建成功，订单ID：{}", savedOrder.getOrderId());
 
         // 发送订单到延迟队列，设置延迟30分钟
-        long delayTime = 1 * 60 * 1000; // 30分钟
+        long delayTime = 30 * 60 * 1000; // 30分钟
         sendOrderToDelayQueue(savedOrder.getOrderId(), delayTime);
 
         return savedOrder;
