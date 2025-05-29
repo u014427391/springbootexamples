@@ -26,12 +26,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) {
         try {
-            Order order = new Order();
-            order.setOrderId(UUID.randomUUID().toString());
-            order.setUserId(orderDTO.getUserId());
-            order.setAmount(orderDTO.getAmount());
-
-            Order savedOrder = orderService.createOrder(order);
+            Order savedOrder = orderService.createOrder(orderDTO);
             return ResponseEntity.ok(savedOrder);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

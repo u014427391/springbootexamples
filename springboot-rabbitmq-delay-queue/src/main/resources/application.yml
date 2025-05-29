@@ -1,21 +1,24 @@
 spring:
   rabbitmq:
-    host: 127.0.0.1      # RabbitMQ服务器的主机名或IP地址
+    host: 127.0.0.1           # RabbitMQ服务器的主机名或IP地址
     port: 5672                # RabbitMQ服务器的端口号（默认是5672）
     username: admin           # 连接RabbitMQ的用户名
-    password: admin           # 连接RabbitMQ的密码
+    password: 123456          # 连接RabbitMQ的密码
     virtual-host: /           # 使用的虚拟主机（默认是根目录/）
     listener:
       simple:
-        acknowledge-mode: auto  # 消息确认模式：自动确认（消息被消费后自动确认）
-        concurrency: 1          # 最小并发消费者数量
-        max-concurrency: 1      # 最大并发消费者数量
+        acknowledge-mode: manual # 消息确认模式：手动确认，避免消息丢失
+        concurrency: 3          # 最小并发消费者数量
+        max-concurrency: 10     # 最大并发消费者数量
+        prefetch: 10             # 消费者每次预取10条消息
+        default-requeue-rejected: false  # 拒绝消息不重新入队
         retry:
           enabled: true         # 启用消费失败重试机制
-          max-attempts: 3       # 最大重试次数
-          initial-interval: 3000ms  # 首次重试间隔时间（3秒）
+          max-attempts: 5       # 最大重试次数
+          initial-interval: 5000ms  # 首次重试间隔时间（3秒）
+          backoff-mode: exponential
   datasource:
-    url: jdbc:mysql://127.0.0.1:3316/test?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3310/test?useSSL=false&serverTimezone=UTC
     username: your-username
     password: your-password
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,6 +29,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    database: 1
 
 # 日志配置
 logging:

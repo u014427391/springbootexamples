@@ -1,5 +1,6 @@
 package com.example.springboot.rabbitmq.service;
 
+import com.example.springboot.rabbitmq.dto.OrderDTO;
 import com.example.springboot.rabbitmq.entity.Order;
 import com.example.springboot.rabbitmq.enums.OrderStatus;
 
@@ -9,10 +10,10 @@ public interface OrderService {
 
     /**
      * 创建订单
-     * @param order 订单信息
+     * @param orderDto 订单信息
      * @return 创建的订单
      */
-    Order createOrder(Order order);
+    Order createOrder(OrderDTO orderDto);
 
     /**
      * 根据订单ID查询订单

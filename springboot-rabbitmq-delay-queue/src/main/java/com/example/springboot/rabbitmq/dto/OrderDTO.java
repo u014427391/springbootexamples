@@ -11,5 +11,5 @@ public class OrderDTO {
 
     private BigDecimal amount;
 
-
+    private String requestId;
 }
