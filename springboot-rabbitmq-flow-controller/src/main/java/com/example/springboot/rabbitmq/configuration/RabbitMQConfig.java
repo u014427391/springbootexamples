@@ -80,8 +80,10 @@ public class RabbitMQConfig {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
-        factory.setPrefetchCount(50);
-        factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        factory.setConcurrentConsumers(3); // 设置并发消费者数量
+        factory.setMaxConcurrentConsumers(10);
+        factory.setPrefetchCount(1); // 设置 QoS
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL); // 手动确认模式
         return factory;
     }
 }

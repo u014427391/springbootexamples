@@ -11,7 +11,7 @@ spring:
     # 消费者配置
     listener:
       simple:
-        acknowledge-mode: auto
+        acknowledge-mode: manual
         prefetch: 50
         concurrency: 3
         max-concurrency: 10
