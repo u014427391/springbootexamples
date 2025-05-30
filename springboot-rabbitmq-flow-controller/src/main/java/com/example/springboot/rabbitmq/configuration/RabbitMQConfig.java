@@ -1,5 +1,6 @@
 package com.example.springboot.rabbitmq.configuration;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@Slf4j
 public class RabbitMQConfig {
 
     public static final String QUEUE_NAME = "flow.control.queue";
@@ -54,19 +56,19 @@ public class RabbitMQConfig {
         // 设置发布确认回调
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
-                System.out.println("消息发送成功: " + correlationData);
+                log.info("消息发送成功: {}",  correlationData);
             } else {
-                System.out.println("消息发送失败: " + cause);
+                log.warn("消息发送失败: {}",  cause);
             }
         });
         
         // 设置返回回调
         rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) -> {
-            System.out.println("消息被退回: " + new String(message.getBody()));
-            System.out.println("回复码: " + replyCode);
-            System.out.println("回复文本: " + replyText);
-            System.out.println("交换机: " + exchange);
-            System.out.println("路由键: " + routingKey);
+            log.info("消息被退回: {}", new String(message.getBody()));
+            log.info("回复码: ", replyCode);
+            log.info("回复文本: ", replyText);
+            log.info("交换机: ", exchange);
+            log.info("路由键: ", routingKey);
         });
         
         return rabbitTemplate;
@@ -82,7 +84,7 @@ public class RabbitMQConfig {
         factory.setMessageConverter(messageConverter);
         factory.setConcurrentConsumers(3); // 设置并发消费者数量
         factory.setMaxConcurrentConsumers(10);
-        factory.setPrefetchCount(1); // 设置 QoS
+        factory.setPrefetchCount(50); // 设置 QoS
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL); // 手动确认模式
         return factory;
     }
