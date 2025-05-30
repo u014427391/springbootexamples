@@ -1,0 +1,31 @@
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
+    # 消息确认配置
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    # 消费者配置
+    listener:
+      simple:
+        acknowledge-mode: auto
+        prefetch: 50
+        concurrency: 3
+        max-concurrency: 10
+    # 连接池配置
+    cache:
+      channel:
+        size: 50
+        checkout-timeout: 30000ms
+      connection:
+        mode: CHANNEL
+        size: 5
+
+# 自定义流量控制配置
+app:
+  flow-control:
+    max-messages: 1000
+    duration: 5000
