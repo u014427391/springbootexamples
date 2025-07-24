@@ -23,7 +23,7 @@ public @interface RateLimiter {
     /**
      * 桶容量
      */
-    int capacity();
+    int capacity() default 10;
 
     /**
      * 阈值
@@ -31,8 +31,8 @@ public @interface RateLimiter {
     int limit() default 10;
 
     /**
-     * 窗口秒 or 速率
+     * 窗口 秒 or 速率
      */
-    int rate() default 1;
+    int window () default 1;
 
 }

@@ -7,21 +7,21 @@ import org.springframework.stereotype.Component;
 @Component("SLIDING_WINDOW")
 public class SlidingWindowStrategy extends AbstractRateLimitStrategy {
 
-    private static final String LUA = "";
-
     public SlidingWindowStrategy(StringRedisTemplate redisTemplate) {
         super(redisTemplate);
     }
 
     @Override
-    protected String getLuaScript() { return LUA; }
+    protected String luaFilePath() {
+        return "lua/sliding_window.lua";
+    }
 
     @Override
     protected String[] buildArgs(RateLimitContext ctx) {
         long now = System.currentTimeMillis();
         return new String[]{
                 String.valueOf(now),
-                String.valueOf(ctx.getRate() * 1000L),
+                String.valueOf(ctx.getWindow() * 1000L),
                 String.valueOf(ctx.getLimit())
         };
     }

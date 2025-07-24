@@ -7,15 +7,14 @@ import org.springframework.stereotype.Component;
 @Component("LEAKY_BUCKET")
 public class LeakyBucketStrategy extends AbstractRateLimitStrategy {
 
-    private static final String LUA = "";
-
-
     public LeakyBucketStrategy(StringRedisTemplate redisTemplate) {
         super(redisTemplate);
     }
 
     @Override
-    protected String getLuaScript() { return LUA; }
+    protected String luaFilePath() {
+        return "lua/leaky_bucket.lua";
+    }
 
     @Override
     protected String[] buildArgs(RateLimitContext ctx) {

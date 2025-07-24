@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component("TOKEN_BUCKET")
 public class TokenBucketStrategy extends AbstractRateLimitStrategy{
 
-    private static final String LUA = "";
-
     public TokenBucketStrategy(StringRedisTemplate redisTemplate) {
         super(redisTemplate);
     }
 
     @Override
-    protected String getLuaScript() { return LUA; }
+    protected String luaFilePath() {
+        return "lua/token_bucket.lua";
+    }
 
     @Override
     protected String[] buildArgs(RateLimitContext ctx) {

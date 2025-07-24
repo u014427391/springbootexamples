@@ -34,7 +34,7 @@ public class RateLimitAspect {
                 .compositeKey(key)
                 .capacity(rateLimiter.capacity())
                 .limit(rateLimiter.limit())
-                .rate(rateLimiter.rate())
+                .window(rateLimiter.window())
                 .nowMillis(System.currentTimeMillis())
                 .build();
         boolean pass = strategy.tryAcquire(ctx);
