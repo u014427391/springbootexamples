@@ -1,5 +1,8 @@
 package com.example.ratelimit.core;
 
+import com.example.ratelimit.keygenerator.DefaultKeyGenerator;
+import com.example.ratelimit.keygenerator.KeyGenerator;
+
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD})
@@ -7,12 +10,29 @@ import java.lang.annotation.*;
 @Documented
 public @interface RateLimiter {
 
-    String key() default "rate:limit";
+    /**
+     * 限流类型
+     */
+    RateLimitType type() default RateLimitType.FIXED_WINDOW;
 
-    long maxNum() default 10;
+    /**
+     * 限流标识
+     */
+    Class<? extends KeyGenerator> keyGen() default DefaultKeyGenerator.class;
 
-    long winWidth() default 1000;
+    /**
+     * 桶容量
+     */
+    int capacity();
 
-    String message() default "";
+    /**
+     * 阈值
+     */
+    int limit() default 10;
+
+    /**
+     * 窗口秒 or 速率
+     */
+    int rate() default 1;
 
 }

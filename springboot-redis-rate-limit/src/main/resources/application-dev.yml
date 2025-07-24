@@ -1,6 +1,13 @@
 spring:
+  # Redis配置
   redis:
-    host: 127.0.0.1
+    host: localhost
     port: 6379
-    password:
-    database: 0
+    # password: 123456  # 如果Redis有密码，请取消注释并设置
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 2
+        max-wait: -1ms
