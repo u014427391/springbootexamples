@@ -15,9 +15,7 @@ public class StrategyFactory {
 
     public StrategyFactory(List<AbstractRateLimitStrategy> strategies) {
         strategies.forEach(bean -> {
-            String enumName = bean.getClass().getSimpleName()
-                    .replace("Strategy", "")
-                    .toUpperCase();
+            String enumName = bean.getClass().getAnnotation(Component.class).value();
             map.put(RateLimitType.valueOf(enumName), bean);
         });
     }
