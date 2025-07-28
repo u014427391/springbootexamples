@@ -13,10 +13,10 @@ public class OrderController {
 
     /* ================== 1 固定窗口 ================== */
     /**
-     * 每 IP 每秒最多 5 次
+     * 每 IP 每秒最多 10 次
      * curl http://localhost:8080/demo/fixed
      */
-    @RateLimiter(type = RateLimitType.FIXED_WINDOW, limit = 5, window = 1, keyGen = DefaultKeyGenerator.class)
+    @RateLimiter(type = RateLimitType.FIXED_WINDOW, limit = 10, window = 1, keyGen = DefaultKeyGenerator.class)
 
     /* ================== 2 滑动窗口 ================== */
     /**

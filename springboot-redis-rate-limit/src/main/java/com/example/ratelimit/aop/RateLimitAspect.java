@@ -1,6 +1,7 @@
 package com.example.ratelimit.aop;
 
 import com.example.ratelimit.core.RateLimitContext;
+import com.example.ratelimit.exception.RateLimitException;
 import com.example.ratelimit.keygenerator.KeyGenerator;
 import com.example.ratelimit.core.RateLimiter;
 import com.example.ratelimit.strategy.RateLimitStrategy;
@@ -39,7 +40,7 @@ public class RateLimitAspect {
                 .build();
         boolean pass = strategy.tryAcquire(ctx);
         if (!pass) {
-            throw new IllegalArgumentException("Too many requests");
+            throw new RateLimitException(429, "Too many requests");
         }
 
         return pjp.proceed();

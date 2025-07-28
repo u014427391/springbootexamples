@@ -1,6 +1,5 @@
 package com.example.ratelimit.core;
 
-import com.example.ratelimit.core.RateLimitType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
