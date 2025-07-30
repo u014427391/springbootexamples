@@ -137,7 +137,7 @@ public class ExcelExportService {
             long currentStart = start + i;
             long currentEnd = Math.min(start + i + QUERY_BATCH_SIZE, end);
 
-            // 调用UserService查询数据（假设UserService有此方法）
+            // 调用UserService查询数据
             List<User> batchData = userService.findUsersByRange(currentStart, currentEnd);
 
             if (batchData != null && !batchData.isEmpty()) {
