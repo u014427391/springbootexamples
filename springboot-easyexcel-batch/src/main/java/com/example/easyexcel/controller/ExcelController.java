@@ -1,5 +1,6 @@
 package com.example.easyexcel.controller;
 
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.example.easyexcel.service.ExcelExportService;
 import com.example.easyexcel.service.ExcelImportService;
 import com.example.easyexcel.service.UserService;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -56,7 +58,29 @@ public class ExcelController {
             }
         }
     }
+    
+    @PostMapping("/import")
+    @ApiOperation("导入用户数据")
+    public ResponseEntity<String> importUsers(@RequestParam("file") MultipartFile file) {
+        try {
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("请选择要导入的文件");
+            }
 
+            String fileName = file.getOriginalFilename();
+            ExcelTypeEnum excelType = importService.getExcelType(fileName);
+            if (excelType == null) {
+                return ResponseEntity.badRequest().body("不支持的文件类型，文件名：" +  fileName);
+            }
+
+            importService.importMillionUsers(file);
+            return ResponseEntity.ok("文件导入成功，正在后台处理数据");
+        } catch (Exception e) {
+            log.error("导入用户数据失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("导入失败：" + e.getMessage());
+        }
+    }
 
     @PostMapping("/generate-test-data")
     @ApiOperation("生成测试数据")

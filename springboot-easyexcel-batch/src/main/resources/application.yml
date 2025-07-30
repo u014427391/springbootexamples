@@ -16,6 +16,10 @@ spring:
       hibernate:
         format_sql: true
     show-sql: false
+  servlet:
+    multipart:
+      max-file-size: 100MB    # 单个文件最大大小
+      max-request-size: 200MB # 整个请求最大大小
 
 logging:
   level:
@@ -25,3 +29,6 @@ logging:
 
 server:
   port: 8080
+
+  tomcat:
+    max-swallow-size: -1  # 取消Tomcat的请求体大小限制
