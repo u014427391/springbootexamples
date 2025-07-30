@@ -144,7 +144,7 @@
 
 - [集成 EasyExcel 导入合并行数据](https://blog.csdn.net/u014427391/article/details/123529499)  
 - [对 Excel 报表的校验提示](https://blog.csdn.net/u014427391/article/details/123532264)  
-
+- [集成EasyExcel实现百万级别的数据导入导出实践](https://smilenicky.blog.csdn.net/article/details/149777832)
 ### 4.9 Jackson 应用
 
 - [自定义 Jackson 对象映射器](https://smilenicky.blog.csdn.net/article/details/134184022)  
@@ -166,10 +166,12 @@
 - [集成 Redis 实现缓存处理](https://blog.csdn.net/u014427391/article/details/78799623)  
 - [使用 Redis 做 MyBatis 二级缓存](https://blog.csdn.net/u014427391/article/details/122255831)  
 - [使用 Redis ZSet 实现排序分页](https://smilenicky.blog.csdn.net/article/details/134772873)  
-- [集成 Redisson 入门与实践](https://smilenicky.blog.csdn.net/article/details/134202872)  
 - [使用 Redis 实现延时队列](https://smilenicky.blog.csdn.net/article/details/136164815)  
 - [集成 Jedis 教程](https://smilenicky.blog.csdn.net/article/details/134580788)  
 - [基于 Jedis 实现分布式锁](https://smilenicky.blog.csdn.net/article/details/134884618)  
+- [基于Redis的实现分布式限流器](https://smilenicky.blog.csdn.net/article/details/136391217)
+- [集成 Redisson 入门与实践](https://smilenicky.blog.csdn.net/article/details/134202872)  
+- [集成Redisson实现布隆过滤器](https://smilenicky.blog.csdn.net/article/details/147150182)
 
 ### 5.3 集成 MongoDB 教程
 
@@ -186,7 +188,9 @@
 ### 6.1 消息队列之 RabbitMQ
 
 - [RabbitMQ 使用实用教程](https://blog.csdn.net/u014427391/article/details/105414281)  
-
+- [RabbitMQ可靠性投递实践教程](https://smilenicky.blog.csdn.net/article/details/147616195)
+- [RabbitMQ 实现订单超时未支付自动关闭](https://smilenicky.blog.csdn.net/article/details/148307584)
+- [集成 RabbitMQ 实现高效流量控制](https://smilenicky.blog.csdn.net/article/details/148337534)
 ### 6.2 消息队列之 Kafka
 
 - [集成 Kafka 实现事件发布](https://blog.csdn.net/u014427391/article/details/122091467)  
@@ -326,10 +330,11 @@
 
 ## 十四、部署监控篇
 
-### 14.1 热部署实践
+### 14.1 部署与监控实践
 
 - [devtools 热部署实现教程](https://smilenicky.blog.csdn.net/article/details/107531226)  
 - [Spring Boot Actuator 系统监控与管理入门教程](https://smilenicky.blog.csdn.net/article/details/107535188)  
+- [使用Arthas Tunnel Server 进行远程调试实践](https://smilenicky.blog.csdn.net/article/details/147256008)
 
 ---
 
