@@ -38,7 +38,7 @@ public class ExcelImportService {
     /**
      * 多线程导入百万级用户数据（每个Sheet一个线程）
      */
-    public void importMillionUsers(MultipartFile file) throws ExecutionException, InterruptedException, IOException {
+    public void importMillionUsers(MultipartFile file) throws IOException {
         // 1. 保存成临时文件，避免多线程共用 InputStream
         java.io.File tmpFile = java.io.File.createTempFile("excel_", ".xlsx");
         file.transferTo(tmpFile);          // Spring 提供的零拷贝
