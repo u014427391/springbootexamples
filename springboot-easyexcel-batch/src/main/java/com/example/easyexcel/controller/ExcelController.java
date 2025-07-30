@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 @RestController
 @RequestMapping("/api/excel")
 @Api(tags = "Excel导入导出接口")
@@ -24,6 +28,33 @@ public class ExcelController {
         this.exportService = exportService;
         this.importService = importService;
         this.userService = userService;
+    }
+
+    @GetMapping("/export")
+    @ApiOperation("导出用户数据")
+    public void exportUsers(HttpServletResponse response,
+                            @RequestParam(defaultValue = "1000000") long totalCount) throws IOException {
+        try {
+            exportService.exportMillionUsers(response, totalCount);
+            log.info("成功导出 {} 条用户数据", totalCount);
+        } catch (Exception e) {
+            log.error("导出用户数据失败", e);
+            try {
+                if (!response.isCommitted()) {
+                    // 响应未提交，重置并返回错误信息
+                    response.reset();
+                    response.setContentType("application/json;charset=utf-8");
+                    PrintWriter writer = response.getWriter();
+                    writer.write("{\"code\":500,\"message\":\"导出失败：" + e.getMessage() + "\"}");
+                    writer.flush();
+                } else {
+                    // 响应已提交，无法重置，只能记录日志
+                    log.warn("响应流已提交，无法返回错误信息");
+                }
+            } catch (IOException ex) {
+                log.error("处理导出错误响应失败", ex);
+            }
+        }
     }
 
 
