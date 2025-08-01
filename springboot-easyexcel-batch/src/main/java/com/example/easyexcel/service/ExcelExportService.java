@@ -1,7 +1,9 @@
 package com.example.easyexcel.service;
 
 import com.alibaba.excel.EasyExcel;
+
 import com.alibaba.excel.ExcelWriter;
+
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.example.easyexcel.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -9,139 +11,145 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 @Slf4j
 public class ExcelExportService {
 
     private final ThreadPoolTaskExecutor excelExecutor;
-    private final UserService userService;
+    private final UserService userService;  // 注入UserService
 
     // 每个Sheet的数据量
     private static final int DATA_PER_SHEET = 100000;
 
-    // 单次查询最小数据量（根据内存情况调整）
-    private static final int MIN_BATCH_SIZE = 5000;
-    // 单次查询最大数据量（防止OOM）
-    private static final int MAX_BATCH_SIZE = 20000;
+    // 每次查询的数据量
+    private static final int QUERY_BATCH_SIZE = 10000;
 
+    // 构造函数注入UserService
     public ExcelExportService(ThreadPoolTaskExecutor excelExecutor, UserService userService) {
         this.excelExecutor = excelExecutor;
         this.userService = userService;
     }
 
     /**
-     * 流式导出百万级用户数据（无内存累积）
+     * 导出百万级用户数据（从UserService读取）
      */
     public void exportMillionUsers(HttpServletResponse response, long totalCount) throws IOException {
-        // 设置响应头（支持流式输出）
+        // 设置响应头
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         String fileName = URLEncoder.encode("百万用户数据", "UTF-8").replaceAll("\\+", "%20");
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
-        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
         response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
 
         // 计算总Sheet数
         int sheetCount = (int) (totalCount / DATA_PER_SHEET + (totalCount % DATA_PER_SHEET > 0 ? 1 : 0));
-        log.info("总Sheet数：{}，总数据量：{}", sheetCount, totalCount);
+        log.info("需要生成的Sheet总数：{}", sheetCount);
 
-        // 直接使用响应输出流，避免中间字节缓存
-        try (OutputStream os = response.getOutputStream()) {
-            ExcelWriter excelWriter = EasyExcel.write(os, User.class).build();
+        // 内存中缓存所有Sheet的数据（键：sheetNo，值：数据列表）
+        ConcurrentMap<Integer, List<User>> sheetDataMap = new ConcurrentHashMap<>(sheetCount);
 
-            // 逐个处理Sheet，处理完立即释放
+        try {
+            // 第一步：多线程并行从UserService查询所有数据并缓存
+            CompletableFuture[] queryFutures = new CompletableFuture[sheetCount];
             for (int sheetNo = 0; sheetNo < sheetCount; sheetNo++) {
-                long sheetStart = sheetNo * (long) DATA_PER_SHEET;
-                long sheetEnd = Math.min((sheetNo + 1) * (long) DATA_PER_SHEET, totalCount);
-                String sheetName = "用户数据" + (sheetNo + 1);
+                final int currentSheetNo = sheetNo;
+                long start = currentSheetNo * (long) DATA_PER_SHEET;
+                long end = Math.min((currentSheetNo + 1) * (long) DATA_PER_SHEET, totalCount);
 
-                log.info("开始处理Sheet[{}]：{} - {}条", sheetName, sheetStart, sheetEnd);
-
-                // 创建Sheet并流式写入
-                WriteSheet writeSheet = EasyExcel.writerSheet(sheetNo, sheetName).build();
-                streamWriteSheet(excelWriter, writeSheet, sheetStart, sheetEnd);
-
-                log.info("Sheet[{}]处理完成，内存已释放", sheetName);
+                queryFutures[currentSheetNo] = CompletableFuture.runAsync(() -> {
+                    try {
+                        log.info("开始查询Sheet {} 的数据（{} - {}）", currentSheetNo, start, end);
+                        List<User> sheetData = queryUserDataByRange(start, end);
+                        sheetDataMap.put(currentSheetNo, sheetData);
+                        log.info("完成查询Sheet {} 的数据，共 {} 条", currentSheetNo, sheetData.size());
+                    } catch (Exception e) {
+                        log.error("查询Sheet {} 数据失败", currentSheetNo, e);
+                        throw new RuntimeException("查询Sheet " + currentSheetNo + " 数据失败", e);
+                    }
+                }, excelExecutor);
             }
 
-            excelWriter.finish();
-            log.info("所有数据导出完成");
-        } catch (Exception e) {
-            log.error("导出失败", e);
-            throw new IOException("Excel导出失败", e);
-        }
-    }
+            // 等待所有数据查询完成
+            CompletableFuture.allOf(queryFutures).join();
+            log.info("所有Sheet数据查询完成，开始生成Excel");
 
-    /**
-     * 流式写入单个Sheet，数据不驻留内存
-     */
-    private void streamWriteSheet(ExcelWriter excelWriter, WriteSheet writeSheet, long start, long end) {
-        long remaining = end - start;
-        long currentPos = start;
+            // 第二步：将内存中的数据写入Excel并输出到响应流
+            try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                ExcelWriter excelWriter = EasyExcel.write(bos, User.class).build();
+                // 按顺序写入每个Sheet
+                for (int sheetNo = 0; sheetNo < sheetCount; sheetNo++) {
+                    String sheetName = "用户数据" + (sheetNo + 1);
+                    List<User> sheetData = sheetDataMap.get(sheetNo);
 
-        // 循环获取小批量数据，写入后立即释放
-        while (remaining > 0) {
-            // 动态调整批次大小（剩余少的时候用实际值，避免内存浪费）
-            int batchSize = (int) Math.min(Math.min(remaining, MAX_BATCH_SIZE),
-                    Math.max(remaining / 10, MIN_BATCH_SIZE));
+                    if (sheetData == null || sheetData.isEmpty()) {
+                        log.warn("Sheet {} 没有数据，跳过", sheetNo);
+                        continue;
+                    }
 
-            // 获取当前批次数据
-            List<User> batchData = userService.findUsersByRange(currentPos, currentPos + batchSize);
-
-            if (batchData == null || batchData.isEmpty()) {
-                log.warn("数据中断，提前结束。当前位置：{}", currentPos);
-                break;
-            }
-
-            // 写入数据（写入后EasyExcel会处理数据，无需保留）
-            excelWriter.write(batchData, writeSheet);
-
-            // 强制释放当前批次内存（关键步骤）
-            releaseBatchMemory(batchData);
-
-            // 更新进度
-            remaining -= batchData.size();
-            currentPos += batchData.size();
-            log.debug("已写入 {} 条，剩余 {} 条", currentPos - start, remaining);
-        }
-    }
-
-    /**
-     * 彻底释放批次数据内存
-     */
-    private void releaseBatchMemory(List<User> batchData) {
-        // 1. 清除列表元素引用
-        batchData.clear();
-        // 2. 如果是ArrayList，可手动置空内部数组（反射优化，可选）
-        clearArrayListInternalArray(batchData);
-        // 3. 解除外部引用
-        batchData = null;
-        // 4. 触发Minor GC（仅建议，不保证立即执行）
-        System.gc();
-    }
-
-    /**
-     * 反射清空ArrayList内部数组（进一步优化内存释放）
-     */
-    private void clearArrayListInternalArray(List<User> list) {
-        if (list instanceof java.util.ArrayList) {
-            try {
-                java.lang.reflect.Field elementDataField = java.util.ArrayList.class.getDeclaredField("elementData");
-                elementDataField.setAccessible(true);
-                Object[] elementData = (Object[]) elementDataField.get(list);
-                // 置空内部数组元素，彻底释放引用
-                for (int i = 0; i < elementData.length; i++) {
-                    elementData[i] = null;
+                    // 创建Sheet并写入数据
+                    WriteSheet writeSheet = EasyExcel.writerSheet(sheetNo, sheetName).build();
+                    excelWriter.write(sheetData, writeSheet);
+                    log.info("Sheet {} 写入完成，共 {} 条数据", sheetName, sheetData.size());
                 }
-            } catch (Exception e) {
-                log.debug("反射清空ArrayList内部数组失败（不影响主流程）", e);
+
+                // 所有Sheet写入完成后，将完整Excel写入响应流
+                excelWriter.finish();
+                byte[] excelBytes = bos.toByteArray();
+
+                // 设置文件大小，让浏览器知道文件总大小
+                response.setContentLength(excelBytes.length);
+
+                // 写入响应流
+                try (OutputStream os = response.getOutputStream()) {
+                    os.write(excelBytes);
+                    os.flush();
+                }
+                log.info("Excel文件已完整写入响应流，总大小：{} KB", excelBytes.length / 1024);
+            }
+
+        } catch (Exception e) {
+            log.error("Excel导出失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 从UserService分批查询指定范围的用户数据
+     */
+    private List<User> queryUserDataByRange(long start, long end) {
+        List<User> allData = new ArrayList<>();
+        long totalToQuery = end - start;
+
+        // 分批查询，避免一次查询过多数据导致内存问题
+        for (long i = 0; i < totalToQuery; i += QUERY_BATCH_SIZE) {
+            long currentStart = start + i;
+            long currentEnd = Math.min(start + i + QUERY_BATCH_SIZE, end);
+
+            // 调用UserService查询数据
+            List<User> batchData = userService.findUsersByRange(currentStart, currentEnd);
+
+            if (batchData != null && !batchData.isEmpty()) {
+                allData.addAll(batchData);
+                log.info("已查询 {} - {} 范围的数据，累计 {} 条",
+                        currentStart, currentEnd, allData.size());
+            } else {
+                log.info("{} - {} 范围没有数据", currentStart, currentEnd);
+                break; // 没有更多数据，提前退出
             }
         }
+
+        return allData;
     }
 }
