@@ -1,3 +1,4 @@
+[专栏地址](https://smilenicky.blog.csdn.net/category_9195353.html)
 
 # SpringBoot 2.0 与微服务实践系列教程
 
@@ -167,7 +168,7 @@
 - [使用 Redis 做 MyBatis 二级缓存](https://blog.csdn.net/u014427391/article/details/122255831)  
 - [使用 Redis ZSet 实现排序分页](https://smilenicky.blog.csdn.net/article/details/134772873)  
 - [使用 Redis 实现延时队列](https://smilenicky.blog.csdn.net/article/details/136164815)  
-- [使用Redis实现分布式限流器](https://smilenicky.blog.csdn.net/article/details/136391217)
+- [使用 Redis 实现分布式限流器](https://smilenicky.blog.csdn.net/article/details/136391217)
 - [集成 Jedis 教程](https://smilenicky.blog.csdn.net/article/details/134580788)  
 - [基于 Jedis 实现分布式锁](https://smilenicky.blog.csdn.net/article/details/134884618)  
 
