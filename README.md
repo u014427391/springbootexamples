@@ -1,8 +1,8 @@
 [专栏地址](https://smilenicky.blog.csdn.net/category_9195353.html)
 
-# SpringBoot 2.0 与微服务实践系列教程
+# SpringBoot 与微服务实践系列教程
 
-本专栏基于 **Spring Boot 2.0**，配套自己编写的代码示例和图解，内容涵盖从基础入门到微服务架构的实践。包括基础配置、Web开发、数据库操作、Redis、日志管理，以及企业级开发中的消息队列、MongoDB、Elasticsearch、OAuth2.0、JWT、Spring Cloud、Dubbo、Spring Cloud Alibaba 等内容，形成一个完整的知识体系，适合作为入门教程。
+本专栏基于 **Spring Boot**，配套自己编写的代码示例和图解，内容涵盖从基础入门到微服务架构的实践。包括基础配置、Web开发、数据库操作、Redis、日志管理，以及企业级开发中的消息队列、MongoDB、Elasticsearch、OAuth2.0、JWT、Spring Cloud、Dubbo、Spring Cloud Alibaba 等内容，形成一个完整的知识体系，适合作为入门教程。
 
 专栏代码已托管至 GitHub，可通过以下链接克隆到本地：[GitHub代码下载](https://github.com/u014427391/springbootexamples)。
 
@@ -10,7 +10,7 @@
 
 ## 开发环境
 
-- **JDK**：1.8  
+- **JDK**：1.8+
 - **Spring Boot**：2.3.2.RELEASE  
 - **Spring Cloud**：Hoxton.SR9  
 - **Spring Cloud Alibaba**：2.2.2.RELEASE  
