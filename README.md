@@ -11,12 +11,12 @@ SpringBoot 实战教程从入门到高级，覆盖配置、数据访问、日志
 ## 开发环境
 
 - **JDK**：1.8+
-- **Spring Boot**：2.3.2.RELEASE  
+- **Spring Boot**：2.3.2.RELEASE  及以上版本
 - **Spring Cloud**：Hoxton.SR9  
 - **Spring Cloud Alibaba**：2.2.2.RELEASE  
 - **MyBatis Plus**：3.4.3.4  
 - **Maven**：3.2+  
-- **MySQL**：5.7.36  
+- **MySQL**：5.7.36 + 
 
 ## 开发工具
 
