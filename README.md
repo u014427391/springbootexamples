@@ -2,7 +2,7 @@
 
 # SpringBoot 与微服务实践系列教程
 
-本专栏基于 **Spring Boot**，配套自己编写的代码示例和图解，内容涵盖从基础入门到微服务架构的实践。包括基础配置、Web开发、数据库操作、Redis、日志管理，以及企业级开发中的消息队列、MongoDB、Elasticsearch、OAuth2.0、JWT、Spring Cloud、Dubbo、Spring Cloud Alibaba 等内容，形成一个完整的知识体系，适合作为入门教程。
+SpringBoot 实战教程从入门到高级，覆盖配置、数据访问、日志、Web、缓存、消息队列、微服务、Spring Cloud & Alibaba、单点登录、OAuth2.0、Elasticsearch、任务调度等核心模块，既适合零基础快速上手，也满足进阶开发者深挖细节。
 
 专栏代码已托管至 GitHub，可通过以下链接克隆到本地：[GitHub代码下载](https://github.com/u014427391/springbootexamples)。
 
