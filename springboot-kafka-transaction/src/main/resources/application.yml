@@ -1,0 +1,18 @@
+spring:
+  kafka:
+    bootstrap-servers: 192.168.62.243:9092
+    producer:
+      # 事务ID前缀，必须唯一
+      transaction-id-prefix: kafka_tx.
+      # 开启幂等性（自动开启事务支持）
+      enable-idempotence: true
+      acks: all
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: order-service
+      enable-auto-commit: false  # 必须关闭自动提交，由事务管理器控制
+      isolation-level: read_committed  # 只读取已提交事务的消息
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
