@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: 192.168.62.243:9092
+    bootstrap-servers: 127.0.0.1:9092
     producer:
       # 事务ID前缀，必须唯一
       transaction-id-prefix: kafka_tx.
