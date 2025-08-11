@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +22,8 @@ public class InventoryService {
 
 
     @KafkaListener(topics = "order-topic", groupId = "inventory-service")
-    @Transactional("kafkaTransactionManager")
-    public void handleOrder(ConsumerRecord<String, String> record) {
+    @Transactional
+    public void handleOrder(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
         log.info("监听订单创建:{}", record.value());
         Order order = JSONUtil.toBean(record.value(), Order.class);
 
@@ -33,6 +34,8 @@ public class InventoryService {
         kafkaTemplate.send("inventory-result-topic", order.getId(), "SUCCESS");
 
         // 3. 手动提交偏移量（由事务管理器自动完成）
+       // acknowledgment.acknowledge();
+
     }
 
 }

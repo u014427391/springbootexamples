@@ -1,6 +1,5 @@
 package com.example.kafka.transaction.service;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.example.kafka.transaction.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;

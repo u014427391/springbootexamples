@@ -16,3 +16,15 @@ spring:
       isolation-level: read_committed  # 只读取已提交事务的消息
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    #listener:
+      # ack-mode: manual-immediate  # 手动提交偏移量（事务中必须手动控制）
+
+
+logging:
+  level:
+    # Kafka客户端日志：只打印WARN及以上
+    org.apache.kafka: WARN
+    # Spring Kafka框架日志：只打印ERROR及以上
+    org.springframework.kafka: ERROR
+    # 可选：保留业务相关的日志级别（如自己的包用INFO）
+    com.example: DEBUG
