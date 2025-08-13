@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 聊天助手</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        neutral: '#F3F4F6',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .message-appear {
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+            .typing-pulse span {
+                animation: pulse 1.4s infinite ease-in-out both;
+            }
+            .typing-pulse span:nth-child(1) { animation-delay: -0.32s; }
+            .typing-pulse span:nth-child(2) { animation-delay: -0.16s; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-light to-neutral min-h-screen flex flex-col">
+<!-- 顶部导航栏 -->
+<header class="bg-white shadow-md py-4 px-6 sticky top-0 z-10">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <i class="fa fa-comments text-primary text-2xl"></i>
+            <h1 class="text-[clamp(1.25rem,3vw,1.75rem)] font-bold text-dark">AI 聊天助手</h1>
+        </div>
+        <div class="text-sm text-gray-500">
+                <span class="flex items-center gap-1">
+                    <span class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></span>
+                    在线
+                </span>
+        </div>
+    </div>
+</header>
+
+<!-- 主内容区 -->
+<main class="flex-grow flex flex-col max-w-4xl w-full mx-auto w-full px-4 py-6 md:py-8">
+    <!-- 聊天容器 -->
+    <div class="chat-container bg-white rounded-2xl shadow-lg p-4 md:p-6 h-[70vh] overflow-y-auto mb-6">
+        <div th:each="message : ${chatHistory}">
+            <div th:class="${message.role == 'user' ? 'message user-message' : 'message assistant-message'}"
+                 th:utext="${#strings.replace(#strings.escapeXml(message.content), '&#10;', '<br/>')}">
+            </div>
+        </div>
+
+        <!-- 输入指示器 -->
+        <div class="message assistant-message typing opacity-0" id="typing-indicator">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-gray-400 rounded-full typing-pulse">
+                    <span class="absolute w-2 h-2 bg-gray-400 rounded-full"></span>
+                    <span class="absolute w-2 h-2 bg-gray-400 rounded-full ml-3"></span>
+                    <span class="absolute w-2 h-2 bg-gray-400 rounded-full ml-6"></span>
+                </div>
+                <span>正在思考...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 输入区域 -->
+    <div class="input-container bg-white rounded-2xl shadow-md p-3 flex gap-3">
+        <input
+                type="text"
+                id="user-input"
+                placeholder="输入你的问题..."
+                autocomplete="off"
+                class="flex-grow px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+        >
+        <button id="send-btn" class="bg-primary hover:bg-primary/90 text-white p-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center">
+            <i class="fa fa-paper-plane"></i>
+        </button>
+        <button id="clear-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 p-3 rounded-xl transition-all shadow-sm hover:shadow">
+            <i class="fa fa-trash"></i>
+        </button>
+    </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="py-4 px-6 text-center text-gray-500 text-sm">
+    <p>© 2025 AI 聊天助手 | 提供智能对话服务</p>
+</footer>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatContainer = document.querySelector('.chat-container');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const typingIndicator = document.getElementById('typing-indicator');
+
+            // 滚动到底部
+            function scrollToBottom() {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            // 初始滚动到底部
+            scrollToBottom();
+
+            // 添加消息到聊天界面
+            function addMessage(content, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message message-appear ${isUser ? 'user-message' : 'assistant-message'} mb-4 opacity-0`;
+
+                // 处理代码块格式
+                if (content.includes('```')) {
+                    content = content.replace(/```([\s\S]*?)```/g,
+                        '<pre class="bg-gray-100 p-3 rounded-lg my-2 overflow-x-auto"><code>$1</code></pre>');
+                }
+
+                messageDiv.innerHTML = content.replace(/\n/g, '<br/>');
+                chatContainer.appendChild(messageDiv);
+
+                // 触发动画
+                setTimeout(() => {
+                    messageDiv.classList.remove('opacity-0');
+                }, 10);
+
+                scrollToBottom();
+            }
+
+            // 发送消息
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+
+                // 添加用户消息
+                addMessage(message, true);
+                userInput.value = '';
+
+                // 显示正在输入指示器
+                typingIndicator.style.display = 'block';
+                setTimeout(() => {
+                    typingIndicator.classList.remove('opacity-0');
+                }, 10);
+                scrollToBottom();
+
+                // 发送请求到服务器
+                fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 隐藏正在输入指示器
+                    typingIndicator.classList.add('opacity-0');
+                    setTimeout(() => {
+                        typingIndicator.style.display = 'none';
+                    }, 300);
+
+                    // 添加AI响应
+                    addMessage(data.content, false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    typingIndicator.classList.add('opacity-0');
+                    setTimeout(() => {
+                        typingIndicator.style.display = 'none';
+                    }, 300);
+                    addMessage('发生错误，请重试。', false);
+                });
+            }
+
+            // 清除聊天历史
+            function clearChat() {
+                fetch('/api/chat/clear', {
+                    method: 'POST'
+                })
+                .then(() => {
+                    // 清除聊天界面
+                    const messages = chatContainer.querySelectorAll('.message:not(.typing)');
+                    messages.forEach(msg => {
+                        msg.classList.add('opacity-0');
+                        setTimeout(() => msg.remove(), 300);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            // 事件监听器
+            sendBtn.addEventListener('click', sendMessage);
+            clearBtn.addEventListener('click', clearChat);
+
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // 样式定义
+            const style = document.createElement('style');
+            style.textContent = `
+                .user-message {
+                    background-color: #3B82F6;
+                    color: white;
+                    margin-left: auto;
+                    border-radius: 18px 18px 4px 18px;
+                    padding: 12px 18px;
+                    max-width: 75%;
+                    word-wrap: break-word;
+                    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+                }
+
+                .assistant-message {
+                    background-color: #F3F4F6;
+                    color: #1F2937;
+                    margin-right: auto;
+                    border-radius: 18px 18px 18px 4px;
+                    padding: 12px 18px;
+                    max-width: 75%;
+                    word-wrap: break-word;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                }
+
+                pre {
+                    font-family: 'Consolas', 'Monaco', monospace;
+                }
+
+                .chat-container::-webkit-scrollbar {
+                    width: 6px;
+                }
+
+                .chat-container::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 10px;
+                }
+
+                .chat-container::-webkit-scrollbar-thumb {
+                    background: #c1c1c1;
+                    border-radius: 10px;
+                }
+
+                .chat-container::-webkit-scrollbar-thumb:hover {
+                    background: #a8a8a8;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

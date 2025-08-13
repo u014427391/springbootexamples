@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 聊天助手</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .chat-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 500px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        .assistant-message {
+            background-color: #f1f1f1;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #clear-btn {
+            background-color: #f44336;
+        }
+        #clear-btn:hover {
+            background-color: #d32f2f;
+        }
+        .typing {
+            font-style: italic;
+            color: #666;
+            display: none;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI 聊天助手</h1>
+    <div class="chat-container" id="chat-container">
+        <div th:each="message : ${chatHistory}">
+            <div th:class="${message.role == 'user' ? 'message user-message' : 'message assistant-message'}"
+                 th:utext="${#strings.replace(#strings.escapeXml(message.content), '&#10;', '<br/>')}">
+            </div>
+        </div>
+        <div class="message assistant-message typing" id="typing-indicator">AI正在思考...</div>
+    </div>
+    <div class="input-container">
+        <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
+        <button id="send-btn">发送</button>
+        <button id="clear-btn">清除对话</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatContainer = document.getElementById('chat-container');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const typingIndicator = document.getElementById('typing-indicator');
+
+            // 滚动到底部
+            function scrollToBottom() {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            // 初始滚动到底部
+            scrollToBottom();
+
+            // 添加消息到聊天界面
+            function addMessage(content, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = isUser ? 'message user-message' : 'message assistant-message';
+                messageDiv.innerHTML = content.replace(/\n/g, '<br/>');
+                chatContainer.appendChild(messageDiv);
+                scrollToBottom();
+            }
+
+            // 发送消息
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+
+                // 添加用户消息
+                addMessage(message, true);
+                userInput.value = '';
+
+                // 显示正在输入指示器
+                typingIndicator.style.display = 'block';
+                scrollToBottom();
+
+                // 发送请求到服务器
+                fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 隐藏正在输入指示器
+                    typingIndicator.style.display = 'none';
+
+                    // 添加AI响应
+                    addMessage(data.content, false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    typingIndicator.style.display = 'none';
+                    addMessage('发生错误，请重试。', false);
+                });
+            }
+
+            // 清除聊天历史
+            function clearChat() {
+                fetch('/api/chat/clear', {
+                    method: 'POST'
+                })
+                .then(() => {
+                    // 清除聊天界面
+                    while (chatContainer.firstChild) {
+                        chatContainer.removeChild(chatContainer.firstChild);
+                    }
+                    chatContainer.appendChild(typingIndicator);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            // 事件监听器
+            sendBtn.addEventListener('click', sendMessage);
+            clearBtn.addEventListener('click', clearChat);
+
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

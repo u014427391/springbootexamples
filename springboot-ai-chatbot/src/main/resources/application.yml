@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  ai:
+    openai:
+      api-key: sk-zyahghonavpeknupucjvlixhskfjqgidrbfmlwjtgtlcuzem
+      base-url: https://api.siliconflow.cn
+      chat:
+        options:
+          model: Qwen/Qwen3-8B
+  thymeleaf:
+    cache: false
+
