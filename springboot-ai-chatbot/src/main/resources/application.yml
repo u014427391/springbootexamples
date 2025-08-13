@@ -4,7 +4,7 @@ server:
 spring:
   ai:
     openai:
-      api-key: sk-zyahghonavpeknupucjvlixhskfjqgidrbfmlwjtgtlcuzem
+      api-key: your-api-key
       base-url: https://api.siliconflow.cn
       chat:
         options:
