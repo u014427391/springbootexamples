@@ -33,7 +33,7 @@ public class ChatService {
     public ChatService(ChatClient.Builder builder,
                        @Value("${spring.ai.openai.system-prompt:你是一个友好、乐于助人的AI助手。请提供简洁、准确的回答。}") String systemPrompt,
                        @Value("${spring.ai.chat.history.max-size:50}") int maxHistorySize) {
-        this.chatClient = builder.defaultSystem("你是一个AI智能应用").build();
+        this.chatClient = builder.defaultSystem(systemPrompt).build();
         this.systemPrompt = systemPrompt;
         this.maxHistorySize = maxHistorySize;
         initializeChatHistory();
