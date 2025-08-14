@@ -196,6 +196,7 @@ SpringBoot 实战教程从入门到高级，覆盖配置、数据访问、日志
 ### 6.2 消息队列之 Kafka
 
 - [集成 Kafka 实现事件发布](https://blog.csdn.net/u014427391/article/details/122091467)
+- [集成 Kafka 实现事务机制](https://smilenicky.blog.csdn.net/article/details/150220774)
 
 ---
 
