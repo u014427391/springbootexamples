@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @SpringBootTest
-class SppringbootJdbcApplicationTests {
+class SpringbootJdbcApplicationTests {
 
 	@Autowired
 	DataSource dataSource;
