@@ -1,5 +1,6 @@
 package com.example.springboot.ai;
 
+import com.example.springboot.ai.comment.DouyinAutoCommenter;
 import com.example.springboot.ai.comment.ToutiaoAutoCommenter;
 import com.example.springboot.ai.components.OpenAIHelper;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ class SpringbootAiAutocommentApplicationTests {
     @Autowired
     private ToutiaoAutoCommenter toutiaoAutoCommenter;
 
+    @Autowired
+    private DouyinAutoCommenter douyinAutoCommenter;
+
     @Test
     void contextLoads() {
     }
@@ -31,5 +35,9 @@ class SpringbootAiAutocommentApplicationTests {
         toutiaoAutoCommenter.startAutoComment();
     }
 
+    @Test
+    void testDouyinAutoComment() throws InterruptedException {
+        douyinAutoCommenter.startAutoComment();
+    }
 
 }
