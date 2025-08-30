@@ -83,7 +83,7 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-dev-shm-usage"); // 解决Docker环境下的内存问题
         options.addArguments("--no-sandbox"); // 解决Linux环境下的权限问题
-        options.addArguments("--user-data-dir=" + USER_DATA_DIR);
+        //options.addArguments("--user-data-dir=" + USER_DATA_DIR);
         options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36");
         options.addArguments("--window-size=1920,1080");
         return options;
@@ -93,7 +93,7 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
     protected boolean isLoggedIn() {
         try {
             driver.get("http://www.toutiao.com");
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3).getSeconds());
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".login-button")));
             return false;
         } catch (Exception e) {
@@ -105,7 +105,7 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
     protected boolean login() {
         try {
             driver.get("http://www.toutiao.com");
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
             WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".login-button")));
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", loginButton);
@@ -160,7 +160,7 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
             String urlType = parseUrlType(url);
             log.info("链接类型: {}", urlType);
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5).getSeconds());
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
             if (urlType.equals("视频")) {
                 WebElement commentIcon = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".comment-icon")));
