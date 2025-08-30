@@ -57,7 +57,7 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
             if (!isLoggedIn()) {
                 if (!login()) {
                     log.error("登录失败，无法执行评论操作");
-                    driver.close();
+                    driver.quit();
                     return;
                 }
             }
@@ -70,7 +70,7 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
 
             doComment(articleUrls);
         } finally {
-            driver.close();
+            driver.quit();
         }
     }
 
@@ -83,7 +83,7 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-dev-shm-usage"); // 解决Docker环境下的内存问题
         options.addArguments("--no-sandbox"); // 解决Linux环境下的权限问题
-        //options.addArguments("--user-data-dir=" + USER_DATA_DIR);
+        options.addArguments("--user-data-dir=" + USER_DATA_DIR);
         options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36");
         options.addArguments("--window-size=1920,1080");
         return options;
@@ -107,8 +107,13 @@ public class ToutiaoAutoCommenter extends AbstractAutoCommenter {
             driver.get("http://www.toutiao.com");
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
-            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".login-button")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", loginButton);
+            WebElement loginButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".login-button")));
+
+            try {
+                loginButton.click();
+            } catch (Exception e) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", loginButton);
+            }
 
             WebElement accountLoginOption = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("li[aria-label='账密登录']")));
             accountLoginOption.click();
