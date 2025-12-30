@@ -2,6 +2,7 @@ package com.example.pulsar.controller;
 
 import com.example.pulsar.model.Message;
 import com.example.pulsar.service.PulsarProducerService;
+import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,8 @@ public class PulsarController {
     }
 
     @PostMapping("/send")
-    public String sendMessage(@RequestBody Message message) {
-        producerService.send(message);
+    public String sendMessage(@RequestBody Message message) throws PulsarClientException {
+        producerService.send(message.getContent());
         return "Message sent to Pulsar successfully!";
     }
 }
