@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: springboot-pulsar
+  pulsar:
+    client:
+      service-url: pulsar://localhost:6650
+    producer:
+      topic-name: example-topic
+      batching-enabled: true
+      send-timeout: 10s
+    consumer:
+      subscription:
+        name: example-subscription
+        type: shared
+      acknowledge-mode: record
+      receiver-queue-size: 1000
+
+    listener:
+      concurrency: 2
