@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class PulsarProducerService {
 
-    private final PulsarTemplate<String> pulsarTemplate;
+    private final PulsarTemplate<Message> pulsarTemplate;
 
-    public PulsarProducerService(PulsarTemplate<String> pulsarTemplate) {
+    public PulsarProducerService(PulsarTemplate<Message> pulsarTemplate) {
         this.pulsarTemplate = pulsarTemplate;
     }
 
-    public void send(String msg) throws PulsarClientException {
-        pulsarTemplate.send("demo-topic", msg);
+    public void send(Message msg) throws PulsarClientException {
+        pulsarTemplate.send("example-topic", msg);
     }
 
 }

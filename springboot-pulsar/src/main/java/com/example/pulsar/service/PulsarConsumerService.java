@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class PulsarConsumerService {
 
     @PulsarListener(
-            subscriptionName = "my-subscription",
-            topics = "demo-topic",
+            subscriptionName = "example-subscription",
+            topics = "example-topic",
             subscriptionType = SubscriptionType.Shared,
             ackMode = AckMode.MANUAL // 手动模式
     )

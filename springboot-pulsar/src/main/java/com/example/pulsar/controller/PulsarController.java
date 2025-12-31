@@ -20,7 +20,7 @@ public class PulsarController {
 
     @PostMapping("/send")
     public String sendMessage(@RequestBody Message message) throws PulsarClientException {
-        producerService.send(message.getContent());
+        producerService.send(message);
         return "Message sent to Pulsar successfully!";
     }
 }
