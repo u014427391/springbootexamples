@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: springboot-pulsar-test
+  pulsar:
+    client:
+      service-url: pulsar://localhost:6650
+      tenant: public
+      namespace: default
+    producer:
+      send-timeout: 5000
+    consumer:
+      ack-mode: AUTO
+    defaults:
+      type-mappings:
+        - message-type: com.example.pulsar.model.Message
+          schema-info:
+            schema-type: JSON
+    listener:
+      concurrency: 1
