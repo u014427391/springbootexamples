@@ -3,7 +3,13 @@ spring:
     name: springboot-pulsar
   pulsar:
     client:
-      service-url: pulsar://localhost:6650
+      service-url: pulsar://127.0.0.1:6650
+      tenant: public
+      namespace: default
+    producer:
+      send-timeout: 5000
+    consumer:
+      ack-mode: AUTO
       #service-url: pulsar+ssl://127.0.0.1:6651 # 开启 SSL 安全通信的连接配置方式
       #auth-plugin-class-name: org.apache.pulsar.client.impl.auth.AuthenticationToken # 示例使用 JWT Token 认证插件
       #authentication:
