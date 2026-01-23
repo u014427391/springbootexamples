@@ -1,4 +1,4 @@
-package com.example.springbootloggingtraceid;
+package com.example.springboot.traceid;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

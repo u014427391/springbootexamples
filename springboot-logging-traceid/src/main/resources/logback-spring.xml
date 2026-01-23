@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    
+    <!-- 控制台输出，带颜色 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 包含traceId的日志格式，带有颜色 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%thread] [%magenta(%X{traceId})] %cyan(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 文件输出 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/springboot-logging-traceid.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天滚动 -->
+            <fileNamePattern>logs/springboot-logging-traceid-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 保留30天的日志 -->
+            <maxHistory>30</maxHistory>
+            <!-- 日志文件最大大小 -->
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <!-- 包含traceId的日志格式 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误日志单独输出 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 设置特定包的日志级别 -->
+    <logger name="com.example.springboot" level="DEBUG" />
+    <logger name="com.example.springboot.traceid.controller" level="INFO" />
+    <logger name="com.example.springboot.traceid.filter" level="INFO" />
+    <logger name="com.example.springboot.traceid.aspect" level="INFO" />
+    
+    <!-- 设置根日志级别 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+
+</configuration>
