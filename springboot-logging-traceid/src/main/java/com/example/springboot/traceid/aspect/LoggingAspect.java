@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggingAspect {
     
-    @Around("execution(* com.example.springboot.traceid.controller.*.*(..))")
+    @Around("execution(* com.example.springboot.traceid.controller.*.*(..)) || execution(* com.example.springboot.traceid.service.*.*(..))")
     public Object logMethodExecution(ProceedingJoinPoint joinPoint) throws Throwable {
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
