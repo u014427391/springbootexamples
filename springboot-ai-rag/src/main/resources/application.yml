@@ -1,0 +1,16 @@
+spring:
+  ai:
+    openai:
+      embedding:
+        # OpenAI Embedding API 密钥
+        api-key: your-api-key
+        # 自定义基础请求地址
+        base-url: https://api.siliconflow.cn/v1
+        # Embedding 相关可选配置
+        options:
+          model: Qwen/Qwen3-Embedding-0.6B
+    # Milvus 向量数据库配置
+    vectorstore:
+      milvus:
+        host: localhost
+        port: 19530
