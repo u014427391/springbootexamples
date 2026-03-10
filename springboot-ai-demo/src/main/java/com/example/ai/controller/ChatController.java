@@ -2,10 +2,8 @@ package com.example.ai.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -25,4 +23,13 @@ public class ChatController {
                 .call()
                 .content();
     }
+
+    @GetMapping("/chat/stream/{message}")
+    public Flux<String> generateStream(@PathVariable("message") String message) {
+        return chatClient.prompt()
+                .user(message)
+                .stream()
+                .content();
+    }
+
 }
