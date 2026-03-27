@@ -1,37 +1,56 @@
 package com.example.ai.controller;
 
 
+import com.example.ai.service.InMemoryChatService;
+import com.example.ai.service.JdbcChatService;
+import com.example.ai.util.ConversationIdUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.memory.ChatMemory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "*")
+@RequestMapping("/ai/chat")
 @Slf4j
 public class ChatController {
 
     @Autowired
-    private  ChatClient chatClient;
+    @Qualifier("jdbcChatService")
+    private JdbcChatService jdbcChatService;
 
     @Autowired
-    @Qualifier("jdbcChatMemory")
-    private ChatMemory chatMemory;
+    @Qualifier("inMemoryChatService")
+    private InMemoryChatService inMemoryChatService;
 
 
-    @GetMapping("/chat/memory/{message}")
-    public String chatWithMemory1(@PathVariable("message") String message) {
-        return chatClient.prompt()
-                .user(message)
-                // 传递conversationId,保持模型的历史记录连贯
-                .advisors(advisorSpec -> advisorSpec.param("conversationId", "bnA9f525-l7ae-5c66-ae21-vh53547c96cf"))
-                .call()
-                .content();
+    @GetMapping("/jdbc")
+    public String chatJdbc(
+            @RequestParam String userId,
+            @RequestParam String message) {
+        return jdbcChatService.chat(ConversationIdUtil.generate(userId), message);
     }
+
+    @GetMapping("/memory")
+    public String chatMemory(
+            @RequestParam String userId,
+            @RequestParam String message) {
+        return inMemoryChatService.chat(ConversationIdUtil.generate(userId), message);
+    }
+
+    @GetMapping("/clear")
+    public String clear(
+            @RequestParam String type,
+            @RequestParam String conversationId) {
+        if ("jdbc".equals(type)) {
+            jdbcChatService.clear(conversationId);
+        } else {
+            inMemoryChatService.clear(conversationId);
+        }
+        return "会话已清空";
+    }
+
 
 }

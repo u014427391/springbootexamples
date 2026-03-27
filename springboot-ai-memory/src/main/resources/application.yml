@@ -1,0 +1,38 @@
+spring:
+  ai:
+    openai:
+      api-key: your-api-key
+      base-url: https://api.siliconflow.cn
+      chat:
+        options:
+          model: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+          temperature: 0.7
+    chat:
+      memory:
+        type: jdbc  # 使用 JDBC 持久化，自动覆盖默认内存记忆
+        default-conversation-id: default-conversation # 默认会话ID
+        repository:
+          jdbc:
+            initialize-schema: always  # 自动建表（生产环境建议改成 embedded）
+            table-name:  SPRING_AI_CHAT_MEMORY
+            dialect: mysql
+            max-history: 100  # 保留最近10条对话（自动窗口截断）
+
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/nems?useSSL=false&serverTimez  one=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: test
+    password: test
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+#  redis:
+#    host: localhost
+#    port: 6379
+
+
+logging:
+  level:
+    org.springframework.ai: debug # 打印Spring AI 相关日志
+    org.springframework.jdbc: info # 打印JDBC 相关日志
+    com.example: debug # 打印自定义包日志
