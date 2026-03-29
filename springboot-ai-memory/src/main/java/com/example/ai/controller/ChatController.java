@@ -32,23 +32,23 @@ public class ChatController {
 
     @GetMapping("/jdbc")
     public String chatJdbc(
-            @RequestParam String userId,
+            @RequestParam String conversationId,
             @RequestParam String message) {
-        return jdbcChatService.chat(ConversationIdUtil.generate(userId), message);
+        return jdbcChatService.chat(conversationId, message);
     }
 
     @GetMapping("/memory")
     public String chatMemory(
-            @RequestParam String userId,
+            @RequestParam String conversationId,
             @RequestParam String message) {
-        return inMemoryChatService.chat(ConversationIdUtil.generate(userId), message);
+        return inMemoryChatService.chat(conversationId, message);
     }
 
     @GetMapping("/redis")
     public String chatRedis(
-            @RequestParam String userId,
+            @RequestParam String conversationId,
             @RequestParam String message) {
-        return redisChatService.chat(ConversationIdUtil.generate(userId), message);
+        return redisChatService.chat(conversationId, message);
     }
 
     @GetMapping("/clear")
