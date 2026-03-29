@@ -3,6 +3,7 @@ package com.example.ai.controller;
 
 import com.example.ai.service.InMemoryChatService;
 import com.example.ai.service.JdbcChatService;
+import com.example.ai.service.RedisChatService;
 import com.example.ai.util.ConversationIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class ChatController {
     @Qualifier("inMemoryChatService")
     private InMemoryChatService inMemoryChatService;
 
+    @Autowired
+    @Qualifier("redisChatService")
+    private RedisChatService redisChatService;
 
     @GetMapping("/jdbc")
     public String chatJdbc(
@@ -38,6 +42,13 @@ public class ChatController {
             @RequestParam String userId,
             @RequestParam String message) {
         return inMemoryChatService.chat(ConversationIdUtil.generate(userId), message);
+    }
+
+    @GetMapping("/redis")
+    public String chatRedis(
+            @RequestParam String userId,
+            @RequestParam String message) {
+        return redisChatService.chat(ConversationIdUtil.generate(userId), message);
     }
 
     @GetMapping("/clear")

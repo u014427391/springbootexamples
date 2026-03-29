@@ -21,14 +21,18 @@ spring:
 
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/nems?useSSL=false&serverTimez  one=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: test
-    password: test
+    username: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
-#  redis:
-#    host: localhost
-#    port: 6379
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3000
+      password:  # 有密码填密码
+      database: 0
 
 
 logging:
