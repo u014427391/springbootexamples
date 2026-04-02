@@ -3,7 +3,6 @@ package com.example.ai.controller;
 import com.example.ai.tool.CalcTools;
 import com.example.ai.tool.TimeTools;
 import com.example.ai.tool.WeatherTools;
-import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
