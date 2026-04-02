@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: springboot-ai-tool-calling
+  ai:
+    openai:
+      api-key: your-api-key
+      base-url: https://api.siliconflow.cn
+      chat:
+        options:
+          model: moonshotai/Kimi-K2-Thinking
+          temperature: 0.7
