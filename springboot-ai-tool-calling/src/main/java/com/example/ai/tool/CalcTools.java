@@ -46,6 +46,12 @@ public class CalcTools {
         }
     }
 
+    @Tool(description = "计算两数之和")
+    public int add(@ToolParam(description = "第一个加数") int a,
+                         @ToolParam(description = "第二个加数") int b) {
+        return a + b;
+    }
+
 
 
 }
