@@ -1,0 +1,12 @@
+Spring AI 是一个用于简化 AI 应用开发的 Spring 框架扩展。
+它提供了与多种大语言模型（LLM）和向量数据库的集成抽象，
+目前支持的模型供应商包括 OpenAI、Azure OpenAI、HuggingFace、Google Vertex AI 等。
+对于向量存储，Spring AI 支持 Milvus、Pinecone、Redis、Chroma、Qdrant、Weaviate 等多种主流向量数据库。
+
+Milvus 是一款开源的向量数据库，专为海量向量数据的存储、索引和相似性搜索而设计。
+它支持多种索引类型，如 IVF_FLAT、IVF_SQ8、HNSW 等，并提供了丰富的距离度量方式，包括欧氏距离（L2）、内积（IP）、余弦相似度（COSINE）等。
+Milvus 采用云原生架构，支持水平扩展，能够处理数十亿级别的向量数据。
+
+RAG（Retrieval-Augmented Generation，检索增强生成）是一种将信息检索与大语言模型生成相结合的技术。
+在 RAG 流程中，系统首先从向量数据库中检索与用户问题最相关的文档片段（上下文），然后将这些上下文与用户问题一起提供给大语言模型，
+使模型能够基于外部知识生成更准确、更可靠的答案。这种技术能够有效缓解大模型的幻觉问题，并使其能够处理私有或实时更新的知识。
