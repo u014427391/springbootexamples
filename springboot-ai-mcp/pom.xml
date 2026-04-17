@@ -65,6 +65,12 @@
             <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
         </dependency>
 
+        <!-- 响应式编程，高并发场景
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webflux</artifactId>
+        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-openai</artifactId>
