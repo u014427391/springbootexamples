@@ -1,31 +1,3 @@
 spring:
-  application:
-    name: springboot-ai-mcp
-  main:
-    web-application-type: none      # 禁用 Web 环境
-    banner-mode: off                # 禁用启动 Banner
-  ai:
-    openai:
-      api-key: your-api-key
-      base-url: https://api.siliconflow.cn
-      chat:
-        options:
-          model: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
-          temperature: 0.7
-    mcp:
-      server:
-        enabled: true
-        name: "天气预报 MCP 插件"
-        version: "1.0.0"
-        stdio: true  # 启用 Stdio 传输模式
-
-# 日志配置（彻底静默控制台）
-logging:
-  pattern:
-    console:                       # 清空控制台输出格式
-  level:
-    root: OFF                       # 关闭所有日志级别（包括 Spring 内部 INFO）
-    com.example: OFF                # 关闭您自己包的日志
-    org.springframework: OFF
-  file:
-    name: logs/weather-mcp-server.log
+  profiles:
+    active: stdio  # 默认使用 stdio 模式

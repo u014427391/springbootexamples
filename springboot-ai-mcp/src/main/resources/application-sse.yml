@@ -1,0 +1,28 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: springboot-ai-mcp
+  main:
+    web-application-type: servlet   # 启用 Web 环境
+    banner-mode: console
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: "天气预报 MCP 插件"
+        version: "1.0.0"
+        type: async
+        sse-endpoint: /sse           # SSE 模式（开发调试用）
+        sse-message-endpoint: /mcp/message
+
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.example: DEBUG              # 开启详细日志
+    org.springframework.ai.mcp: DEBUG
+  file:
+    name: logs/weather-mcp-server.log

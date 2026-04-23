@@ -2,13 +2,14 @@ package com.example.ai.tool;
 
 import com.example.ai.model.WeatherResponse;
 import com.example.ai.service.WeatherService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Component
+@Slf4j
 public class WeatherMcpTool {
 
     private final WeatherService weatherService;
@@ -36,7 +37,9 @@ public class WeatherMcpTool {
             @ToolParam(description = "城市名称，支持中文或英文，例如：Beijing、北京、London、New York")
             String city
     ) {
+        log.info("[MCP Tool] 收到调用请求，参数city={}", city);
         WeatherResponse weather = weatherService.getWeather(city);
+        log.info("[MCP Tool] 返回结果: {}", weather.toSummary());
         return weather.toSummary();
     }
 

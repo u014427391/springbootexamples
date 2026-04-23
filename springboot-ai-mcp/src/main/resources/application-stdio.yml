@@ -1,0 +1,26 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: springboot-ai-mcp
+  main:
+    web-application-type: none      # 禁用 Web 环境
+    banner-mode: off                # 禁用启动 Banner
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: "天气预报 MCP 插件"
+        version: "1.0.0"
+        stdio: true                  # Stdio 传输模式（Trae IDE 集成用）
+
+
+logging:
+  pattern:
+    console:
+  level:
+    root: OFF                       # 关闭所有控制台日志
+    com.example: OFF
+    org.springframework: OFF
+  file:
+    name: logs/weather-mcp-server.log
