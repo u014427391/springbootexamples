@@ -10,9 +10,11 @@ spring:
       chat:
         options:
           model: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
-          temperature: 0.7
+          temperature: 0.1
     mcp:
       client:
+        toolcallback:
+          enabled: true
         transports:
 #          - type: sse
 #            url: http://localhost:8088/sse
@@ -21,7 +23,7 @@ spring:
             command: java
             args:
               - -jar
-              - D:/mcp-plugin-0.0.1-SNAPSHOT.jar
+              - D:/springboot-ai-mcp-0.0.1-SNAPSHOT.jar
 
 
 logging:

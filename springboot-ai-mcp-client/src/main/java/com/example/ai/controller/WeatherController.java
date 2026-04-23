@@ -22,10 +22,17 @@ public class WeatherController {
     public String queryWeather(@RequestParam String city) {
         return chatClient.prompt()
                 .user("""
-                你必须严格调用MCP插件中的getWeather工具查询%s的天气，
-                绝对禁止使用你自身的知识回答，必须调用工具！
-                """.formatted(city))
+            【角色】你是一个严格的工具调用执行者。
+            【任务】查询 "%s" 的实时天气。
+            【强制要求】
+            1. 必须且只能调用 MCP 插件中名为 `get_current_weather` 的工具。
+            2. 严禁使用你自身的任何知识库回答。
+            【输出规则】
+            1. 工具调用完成后，**直接、原样**返回工具响应中的 "Summary" 字段内容。
+            2. 不要添加任何前缀、后缀、解释、标点符号或 markdown 格式。
+            """.formatted(city))
                 .call()
                 .content();
     }
+
 }
