@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: springboot-ai-mcp-client
+  ai:
+    openai:
+      api-key: your-api-key
+      base-url: https://api.siliconflow.cn
+      chat:
+        options:
+          model: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+          temperature: 0.7
+    mcp:
+      client:
+        transports:
+#          - type: sse
+#            url: http://localhost:8088/sse
+#            message-url: http://localhost:8088/mcp/message
+          - type: stdio
+            command: java
+            args:
+              - -jar
+              - D:/mcp-plugin-0.0.1-SNAPSHOT.jar
+
+
+logging:
+  level:
+    org.springframework.ai: DEBUG          # AI核心日志
+    org.springframework.ai.mcp: DEBUG     # MCP通信日志
+    org.springframework.ai.tool: DEBUG    # 工具调用日志
+
